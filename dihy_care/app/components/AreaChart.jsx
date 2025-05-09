@@ -1,6 +1,6 @@
 "use client";
 import { Jaini } from "next/font/google";
-import {AreaChart, Area } from "recharts"
+import {AreaChart, Area, ResponsiveContainer, YAxis, XAxis, CartesianGrid, Tooltip, Legend } from "recharts"
 const productSales = [
    { 
  name: "Jan",
@@ -39,10 +39,34 @@ product2: 8300,
 
 const AreaChartComponent = () => {
 return(
-<AreaChart width={500} height={400} data={productSales}>
-<Area dataKey="product1"/>
-</AreaChart>
-  ) 
+    <ResponsiveContainer width="100%" height="100%" >
+        <AreaChart width={500} height={400} data={productSales}>
+        <YAxis/>
+        <XAxis dataKey="name"/>
+        <CartesianGrid strokeDasharray="5 5" />
+        <Tooltip content={CustomToolTip}/>
+        <Legend/>
+           <Area type="monotone" dataKey="product1" stroke="#2563eb" fill="#3b82f6" stackId="1"/>
+           <Area type="monotone" dataKey="product2" stroke="#7c3aed" fill="#8b5cf6" stackId="1"/>
+        </AreaChart>
+    </ResponsiveContainer> 
+    ) 
 };
+    const CustomToolTip = ({active, payload, label}) => {
+    if (active && payload && payload.length) 
+        <div className="p-4 bg-salte-900 flex flex-col gap-4 rounded-md">
+            <p className="text-medium text-lg">{label}</p>
+            <p className="text-sm text-blue-400">
+                Product 1:
+                <span className="ml-2">${payload[0].value}</span>
+            </p>
+            <p className="text-sm text-blue-400">
+                Product 2:
+                <span className="ml-2">${payload[1].value}</span>
+            </p>
+
+        </div>
+    };
+ 
 
 export default AreaChartComponent;
