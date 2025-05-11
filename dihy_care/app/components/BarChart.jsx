@@ -39,7 +39,7 @@ profit: 8300,
 const BarChartComponent = () => {
 return(
     <ResponsiveContainer width="100%" height="100%" >
-        <BarChart width={500} height={400} data={salesData} margin={{right: 30}}>
+        <BarChart width={500} height={300} data={salesData} margin={{right: 30}}>
         <YAxis/>
         <XAxis dataKey="name"/>
         <CartesianGrid strokeDasharray="5 5" />
