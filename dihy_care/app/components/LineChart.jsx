@@ -45,7 +45,7 @@ return(
         <CartesianGrid strokeDasharray="5 5" />
         <Tooltip content={CustomToolTip}/>
         <Legend/>
-           <Line type="monotone" dataKey="revenue" stroke="#2563eb" fill="#3b82f6" stackId="1"/>
+           <Line type="monotone" dataKey="revenue" stroke="#2563eb" fill="#3b82f6" stackId=""/>
            <Line type="monotone" dataKey="profit" stroke="#7c3aed" fill="#8b5cf6" stackId="1"/>
         </LineChart>
     </ResponsiveContainer> 

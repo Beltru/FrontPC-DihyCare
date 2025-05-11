@@ -46,7 +46,7 @@ return(
         <Tooltip content={CustomToolTip}/>
         <Legend/>
            <Bar type="monotone" dataKey="revenue" stroke="#2563eb" fill="#3b82f6" stackId="1"/>
-           <Bar type="monotone" dataKey="profit" stroke="#7c3aed" fill="#8b5cf6" stackId="1"/>
+           <Bar type="monotone" dataKey="profit" stroke="#7c3aed" fill="#8b5cf6" stackId=""/>
         </BarChart>
     </ResponsiveContainer> 
     ) 
