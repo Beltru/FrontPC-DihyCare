@@ -6,46 +6,51 @@ import chart from "recharts";
 import React from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineDashboard } from "react-icons/md";
+import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
+import { RiSettings4Line } from "react-icons/ri";
+import { TbReportAnalytics } from "react-icons/tb";
+import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
+
+
+
+
 import Link from 'next/link';
 const Home = () =>{
  const menus = [
   {name:"dashboard", link:"/", icon: MdOutlineDashboard},
-  {name:"dashboard", link:"/", icon: MdOutlineDashboard},
-  {name:"dashboard", link:"/", icon: MdOutlineDashboard},
-  {name:"dashboard", link:"/", icon: MdOutlineDashboard},
-  {name:"dashboard", link:"/", icon: MdOutlineDashboard}
+  {name:"user", link:"/", icon: AiOutlineUser},
+  {name:"messages", link:"/", icon: FiMessageSquare},
+  {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
+  {name:"Agenda", link:"/", icon: FiFolder},
+  {name:"Alimentacion", link:"/", icon: FiShoppingCart},
+  {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
+  {name:"Configuracion", link:"/", icon: RiSettings4Line},
 
-
-
- ]
+ ];
+ const [open, setOpen] = useState(true);
 return(
   
       <main className="flex gap-6 min-h-screen bg-[#d9d9d9]">
      
      {/* Esto es la sidebar*/} 
-        <div className='bg-[#0e0e0e] min-h-screen w-[20vw] rounded-r-3xl text-gray-100 px-4'>
+        <div className={`bg-[#0e0e0e] min-h-screen rounded-r-3xl text-gray-100 px-4 ${open? 'w-[20vw]': "w-[5vw]"} duration-500 `}>
           <div className='py-3 flex justify-end'>
-            <HiMenuAlt3 size={26} className="cursor-pointer"/>
+            <HiMenuAlt3 size={26} className="cursor-pointer"onClick={()=>setOpen(!open)}/>
           </div>
           <div className='mt-4 flex flex-col gap-4 relative'>
-            <Link href="/Dashboard">
+            {
+              menus?.map((menu,i)=>(
+                <Link href={menu?.link} key={i} className={`${menu?.margin && "mt-5"} flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md`}>
+       
             <div>
-              {React.createElement(HiMenuAlt3,{size:"20"})}
+              {React.createElement(menu?.icon,{size:"20"})}
             </div>
-             <h2>Datos</h2>
-            </Link>
-             <Link href="/charts">
-             <h2>Graficos</h2>
-            </Link>
-             <Link href="/Dashboard">
-             <h2>Agenda</h2>
-            </Link>
-             <Link href="/Dashboard">
-             <h2>Ejercicio</h2>
-             </Link>
-              <Link href="/Dashboard">
-             <h2>Alimentacion</h2>
-            </Link>
+          
+             <h2 className={`whitespace-pre duration-500 ${!open && "opacity-0 -translate-x-28 overflow-hidden"}`}>{menu?.name}</h2>
+            </Link> 
+              ))        
+}
+
           </div>
         </div>
 
