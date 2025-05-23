@@ -71,6 +71,6 @@ return(
 };
 
 
-export default BarChartComponent;
+export default  BarChartComponent;
 
 

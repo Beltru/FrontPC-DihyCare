@@ -71,6 +71,6 @@ return(
 };
 
 
-export default LineChartComponent;
+export default  LineChartComponent;
 
 
