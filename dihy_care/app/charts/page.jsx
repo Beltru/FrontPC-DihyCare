@@ -16,9 +16,9 @@ import React from "react";
 
 export default function Charts () {
   const menus = [
-    {name:"dashboard", link:"/", icon: MdOutlineDashboard},
-    {name:"user", link:"/", icon: AiOutlineUser},
-    {name:"messages", link:"/", icon: FiMessageSquare},
+    {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
+    {name:"User", link:"/", icon: AiOutlineUser},
+    {name:"Messages", link:"/", icon: FiMessageSquare},
     {name:"Agenda", link:"/", icon: FiFolder},
     {name:"Alimentacion", link:"/", icon: FiShoppingCart},
     {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
@@ -31,7 +31,7 @@ export default function Charts () {
     <main className="flex gap-6 min-h-screen bg-radial from-[#254A7F] to-[#140850] ">
   
     {/* Esto es la sidebar*/} 
-        <div className={`bg-[#0e0e0e] min-h-screen rounded-r-3xl text-gray-100 px-4 ${open? 'w-[20vw]': "w-[5vw]"} duration-500 `}>
+        <div className={`bg-[#0e0e0e] min-h-screen rounded-r-3xl text-gray-100 px-4 ${open? 'w-[27vw]': "w-[5vw]"} duration-500 `}>
           <div className='py-3 flex justify-end'>
             <HiMenuAlt3 size={26} className="cursor-pointer"onClick={()=>setOpen(!open)}/>
           </div>

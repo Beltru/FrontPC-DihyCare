@@ -15,9 +15,9 @@ import Link from 'next/link';
 
 const Home = () =>{
  const menus = [
-  {name:"dashboard", link:"/", icon: MdOutlineDashboard},
-  {name:"user", link:"/", icon: AiOutlineUser},
-  {name:"messages", link:"/", icon: FiMessageSquare},
+  {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
+  {name:"User", link:"/", icon: AiOutlineUser},
+  {name:"Messages", link:"/", icon: FiMessageSquare},
   {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
   {name:"Agenda", link:"/", icon: FiFolder},
   {name:"Alimentacion", link:"/", icon: FiShoppingCart},
