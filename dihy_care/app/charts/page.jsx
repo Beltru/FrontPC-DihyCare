@@ -17,7 +17,7 @@ import React from "react";
 export default function Charts () {
   const menus = [
     {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
-    {name:"User", link:"/", icon: AiOutlineUser},
+    {name:"User", link:"/datos", icon: AiOutlineUser},
     {name:"Messages", link:"/", icon: FiMessageSquare},
     {name:"Agenda", link:"/", icon: FiFolder},
     {name:"Alimentacion", link:"/", icon: FiShoppingCart},
@@ -55,7 +55,8 @@ export default function Charts () {
 
           </div>
         </div>
-    
+        
+        {/*esto es el resto de la pagina*/} 
      <div className='grid items-center xl:grid-cols-3 lg:grid-cols-2 w-full gap-10 max-w-[1400px] m-10'>
     
     <GridItem title="AreaChart"> <AreaChartComponent/> </GridItem>

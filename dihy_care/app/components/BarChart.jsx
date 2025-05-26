@@ -25,20 +25,20 @@ const BarChartComponent = () => {
   const maxProfit = Math.max(...salesData.map((item) => item.profit));
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="100%" height={300}>
       <BarChart data={salesData} margin={{ right: 30 }}>
         <YAxis />
         <XAxis dataKey="name" />
         <CartesianGrid strokeDasharray="5 5" />
         <Tooltip content={CustomToolTip} />
-        <Legend />
+        <Legend/>
 
         {/* Revenue Bar */}
         <Bar dataKey="revenue" name="Revenue" stackId="">
           {salesData.map((entry, index) => (
             <Cell
               key={`revenue-cell-${index}`}
-              fill={entry.revenue === maxRevenue ? "#df0026" : "#3b82f6"} // amarillo o azul
+              fill={entry.revenue === maxRevenue ? "#03f1dd" : "#3b82f6"} 
             />
           ))}
         </Bar>
@@ -48,7 +48,7 @@ const BarChartComponent = () => {
           {salesData.map((entry, index) => (
             <Cell
               key={`profit-cell-${index}`}
-              fill={entry.profit === maxProfit ? "#df0026" : "#8b5cf6"} // amarillo o morado
+              fill={entry.profit === maxProfit ? "#f103f1" : "#8b5cf6"} 
             />
           ))}
         </Bar>
@@ -62,7 +62,7 @@ const CustomToolTip = ({ active, payload, label }) => {
     return (
       <div className="p-4 bg-slate-900 flex flex-col gap-4 rounded-md">
         <p className="text-medium text-lg">{label}</p>
-        <p className="text-sm text-blue-400">
+        <p className="text-sm text-blue-400"> 
           Revenue:
           <span className="ml-2">${payload[0]?.value ?? "N/A"}</span>
         </p>

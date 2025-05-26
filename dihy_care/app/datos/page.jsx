@@ -1,22 +1,18 @@
 "use client";
 import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
-import Image from "next/image";
-import chart from "recharts";
 import React from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineDashboard } from "react-icons/md";
-import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart } from "react-icons/ai";
 import { RiSettings4Line } from "react-icons/ri";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
-import Link from 'next/link';
+import Link from 'next/link';   
 
+const Datos = () => {
+     const menus = [
 
-const Home = () =>{
- const menus = [
   {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
-  {name:"User", link:"/datos", icon: AiOutlineUser},
   {name:"Messages", link:"/", icon: FiMessageSquare},
   {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
   {name:"Agenda", link:"/", icon: FiFolder},
@@ -58,10 +54,10 @@ return(
 
        {/*esto es el resto de la pagina*/} 
         <div className='m-3 text-xl text-gray-900 font-semibold'>
-          REACT TAILWIND
+          Datos
         </div>
        </main>
 
   );
 }
-export default Home;
+export default Datos;
