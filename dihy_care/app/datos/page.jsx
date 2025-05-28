@@ -10,6 +10,29 @@ import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
 import Link from 'next/link';   
 
 const Datos = () => {
+  const [values, setValues] = useState({
+  name: '',
+  lastName: '',
+  email: '',
+  password: '',
+  peso: '',
+  genero: '',
+  reference: '',
+});
+
+const handleInputChange = (event)=> {
+  const{name, value} = event.target;
+  setValues({
+    ...values,
+    [name]:value,
+  })
+};
+
+const handleForm = (event) => {
+  event.preventDefault()
+  console.log(values)
+};
+
      const menus = [
 
   {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
@@ -53,8 +76,22 @@ return(
         </div>
 
        {/*esto es el resto de la pagina*/} 
-        <div className='m-3 text-xl text-gray-900 font-semibold'>
-          Datos
+        <div className='m-3 text-slate-900'>
+          <form action="" onSubmit={handleForm}>
+            <h1>Form</h1>
+            <input type="text" name='name' value={values.name} placeholder='Ingrse su nombre' onChange={handleInputChange}  />
+
+            <input type="text" name='lastName' value={values.lastName} placeholder='Ingrse su apellido' onChange={handleInputChange}  />
+
+            <input type="email" name='email' value={values.email} placeholder='Ingrse su email' onChange={handleInputChange}  />
+
+            <input type="password" name='password' value={values.password} placeholder='Ingrse su contraseña' onChange={handleInputChange}  />
+
+            <input type="number" name='peso' value={values.peso} placeholder='Ingrese su peso' onChange={handleInputChange}  />
+
+            <input type="text" name='genero' value={values.genero} placeholder='Ingrse su genero' onChange={handleInputChange} />
+          <button type='submit'>Enviar</button>
+          </form>
         </div>
        </main>
 
