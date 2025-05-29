@@ -19,7 +19,7 @@ export default function Charts () {
     {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
     {name:"User", link:"/datos", icon: AiOutlineUser},
     {name:"Messages", link:"/", icon: FiMessageSquare},
-    {name:"Agenda", link:"/", icon: FiFolder},
+    {name:"Agenda", link:"/calendario", icon: FiFolder},
     {name:"Alimentacion", link:"/", icon: FiShoppingCart},
     {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
     {name:"Configuracion", link:"/", icon: RiSettings4Line},

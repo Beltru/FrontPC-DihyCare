@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@schedule-x/react": "^2.31.1",
+    "@schedule-x/theme-default": "^2.31.1"
+  }
+}

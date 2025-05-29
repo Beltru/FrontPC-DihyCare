@@ -38,7 +38,7 @@ const handleForm = (event) => {
   {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
   {name:"Messages", link:"/", icon: FiMessageSquare},
   {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
-  {name:"Agenda", link:"/", icon: FiFolder},
+  {name:"Agenda", link:"/calendario", icon: FiFolder},
   {name:"Alimentacion", link:"/", icon: FiShoppingCart},
   {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
   {name:"Configuracion", link:"/", icon: RiSettings4Line},
