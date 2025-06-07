@@ -16,7 +16,7 @@ import {ScheduleXCalendar, usCalendarApp} from "@schedule-x/react";
 const Calendario = () =>{
  const menus = [
   {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
-  {name:"User", link:"/datos", icon: AiOutlineUser},
+  {name:"Datos", link:"/datos", icon: AiOutlineUser},
   {name:"Messages", link:"/", icon: FiMessageSquare},
   {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
   {name:"Alimentacion", link:"/", icon: FiShoppingCart},

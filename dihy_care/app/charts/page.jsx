@@ -17,7 +17,7 @@ import React from "react";
 export default function Charts () {
   const menus = [
     {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
-    {name:"User", link:"/datos", icon: AiOutlineUser},
+    {name:"Datos", link:"/datos", icon: AiOutlineUser},
     {name:"Messages", link:"/", icon: FiMessageSquare},
     {name:"Agenda", link:"/calendario", icon: FiFolder},
     {name:"Alimentacion", link:"/", icon: FiShoppingCart},

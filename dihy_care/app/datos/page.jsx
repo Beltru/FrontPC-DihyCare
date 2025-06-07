@@ -75,96 +75,94 @@ return(
           </div>
         </div>
 
-       {/*esto es el resto de la pagina*/} 
-        <div className='m-3 text-slate-900'>
-          <form onSubmit={handleForm} className="flex flex-col gap-4 max-w-md mx-auto mt-10">
-  <h1 className="text-2xl font-bold mb-4">Formulario</h1>
+    {/*esto es el resto de la pagina*/} 
+      <div className='flex flex-col m-3 text-slate-900 items-center justify-center min-h-screen w-full overflow-hidden'>
+        <h1 className="text-2xl font-bold mb-4">Datos del usuario</h1>
+        <form onSubmit={handleForm} className="flex flex-col gap-4 max-w-md mx-auto mt-10 w-full items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <input
+        type="text"
+        name="name"
+        value={values.name}
+        placeholder="Nombre"
+        onChange={handleInputChange}
+        className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
+            />
 
-  <input
-    type="text"
-    name="name"
-    value={values.name}
-    placeholder="Ingreso"
-    onChange={handleInputChange}
-    className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-  />
+            <input
+        type="text"
+        name="lastName"
+        value={values.lastName}
+        placeholder="Apellido"
+        onChange={handleInputChange}
+        className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
+            />
 
-  <input
-    type="text"
-    name="lastName"
-    value={values.lastName}
-    placeholder="Ingreso"
-    onChange={handleInputChange}
-    className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-  />
+            <input
+        type="email"
+        name="email"
+        value={values.email}
+        placeholder="Email"
+        onChange={handleInputChange}
+        className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
+            />
 
-  <input
-    type="email"
-    name="email"
-    value={values.email}
-    placeholder="Ingreso"
-    onChange={handleInputChange}
-    className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-  />
+            <input
+        type="password"
+        name="password"
+        value={values.password}
+        placeholder="Contraseña"
+        onChange={handleInputChange}
+        className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
+            />
 
-  <input
-    type="password"
-    name="password"
-    value={values.password}
-    placeholder="Ingreso"
-    onChange={handleInputChange}
-    className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-  />
+            <input
+        type="number"
+        name="peso"
+        value={values.peso}
+        placeholder="Peso"
+        onChange={handleInputChange}
+        className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
+            />
 
-  <input
-    type="number"
-    name="peso"
-    value={values.peso}
-    placeholder="Ingreso"
-    onChange={handleInputChange}
-    className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-  />
-
-  <input
-    type="text"
-    name="genero"
-    value={values.genero}
-    placeholder="Ingreso"
-    onChange={handleInputChange}
-    className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-  />
-
-  {/* Botones */}
-  <div className="flex gap-4 mt-4">
-    <button
-      type="submit"
-      className="bg-[#3b8494] text-black px-6 py-2 rounded-full font-bold"
-    >
-      Botón
-    </button>
-    <button
-      type="button"
-      onClick={() =>
-        setValues({
-          name: '',
-          lastName: '',
-          email: '',
-          password: '',
-          peso: '',
-          genero: '',
-          reference: '',
-        })
-      }
-      className="bg-[#3b8494] text-black px-6 py-2 rounded-full font-bold"
-    >
-      Limpiar
-    </button>
-  </div>
-</form>
-
-        </div>
-       </main>
-
+            <input
+        type="text"
+        name="genero"
+        value={values.genero}
+        placeholder="Genero"
+        onChange={handleInputChange}
+        className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
+            />
+          </div>
+          {/* Botones */}
+          <div className="flex gap-4 mt-4 justify-center w-full">
+            <button
+        type="submit"
+        className="bg-[#3b8494] text-black px-6 py-2 rounded-full font-bold hover:cursor-pointer"
+            >
+        Guardar
+            </button>
+            <button
+        type="button" 
+        className="bg-[#3b8494] text-black px-6 py-2 rounded-full font-bold hover:cursor-pointer"
+        onClick={() =>
+          setValues({
+            name: '',
+            lastName: '',
+            email: '',
+            password: '',
+            peso: '',
+            genero: '',
+            reference: '',
+          })
+        }
+            >
+        Limpiar
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
   );
 }
 export default Datos;
