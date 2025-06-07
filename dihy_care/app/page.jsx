@@ -9,6 +9,8 @@ import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
 import { RiSettings4Line } from "react-icons/ri";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
+import { FaCalendarAlt } from "react-icons/fa";
+
 import Link from 'next/link';
 
 
@@ -18,7 +20,7 @@ const Home = () =>{
   {name:"Datos", link:"/datos", icon: AiOutlineUser},
   {name:"Messages", link:"/", icon: FiMessageSquare},
   {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
-  {name:"Agenda", link:"/calendario", icon: FiFolder},
+  {name:"Agenda", link:"/calendario", icon: FaCalendarAlt},
   {name:"Alimentacion", link:"/", icon: FiShoppingCart},
   {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
   {name:"Configuracion", link:"/", icon: RiSettings4Line},
