@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import Image from "next/image";
-import chart from "recharts";
 import React from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineDashboard } from "react-icons/md";
