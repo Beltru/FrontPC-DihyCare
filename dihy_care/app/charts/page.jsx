@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import Image from "next/image";
+import PieChartComponent from '../components/PieChart';
 import BarChartComponent from '../components/BarChart';
 import AreaChartComponent from '../components/AreaChart';
 import LineChartComponent from '../components/LineChart';
