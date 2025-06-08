@@ -3,19 +3,21 @@ import { useState, useEffect } from 'react'
 import React from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineDashboard } from "react-icons/md";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineUser } from "react-icons/ai";
 import { RiSettings4Line } from "react-icons/ri";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
 import { FaCalendarAlt } from "react-icons/fa";
+import { FaWpforms } from "react-icons/fa";
+import { GiForkKnifeSpoon } from "react-icons/gi";
 
 import Link from 'next/link';   
 
-const Datos = () => {
+const DatosHipertension = () => {
   const [values, setValues] = useState({
-  name: '',
-  lastName: '',
-  email: '',
+  presionarterial: '',
+  frecuanciacardiaca: '',
+  ejerciciorealizado: '',
   password: '',
   peso: '',
   genero: '',
@@ -37,11 +39,12 @@ const handleForm = (event) => {
 
      const menus = [
 
-  {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
+  {name:"Home", link:"/", icon: MdOutlineDashboard},
   {name:"Messages", link:"/", icon: FiMessageSquare},
   {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
+  {name:"Datos Diabetes", link:"/datosdiabetes", icon: FaWpforms},
   {name:"Agenda", link:"/calendario", icon: FaCalendarAlt},
-  {name:"Alimentacion", link:"/", icon: FiShoppingCart},
+  {name:"Alimentacion", link:"/", icon: GiForkKnifeSpoon},
   {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
   {name:"Configuracion", link:"/", icon: RiSettings4Line},
 
@@ -82,32 +85,32 @@ return(
 
         {/*esto es el resto de la pagina*/} 
       <div className='flex flex-col m-3 text-slate-900 items-center justify-center min-h-screen w-full overflow-hidden'>
-        <h1 className="text-2xl font-bold mb-4">Datos del usuario</h1>
+        <h1 className="text-2xl font-bold mb-4">Datos Hipertensión</h1>
         <form onSubmit={handleForm} className="flex flex-col gap-4 max-w-md mx-auto mt-10 w-full items-center">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <input
         type="text"
-        name="name"
+        name="presionarterial"
         value={values.name}
-        placeholder="Nombre"
+        placeholder="Presion arterial"
         onChange={handleInputChange}
         className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
             />
 
             <input
         type="text"
-        name="lastName"
+        name="frecuanciacardiaca"
         value={values.lastName}
-        placeholder="Apellido"
+        placeholder="Frecuenacia cardiaca"
         onChange={handleInputChange}
         className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
             />
 
             <input
-        type="email"
-        name="email"
+        type="text"
+        name="ejerciciorealizado"
         value={values.email}
-        placeholder="Email"
+        placeholder="Ejerciocio realizado"
         onChange={handleInputChange}
         className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
             />
@@ -116,7 +119,7 @@ return(
         type="password"
         name="password"
         value={values.password}
-        placeholder="Contraseña"
+        placeholder=""
         onChange={handleInputChange}
         className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
             />
@@ -125,7 +128,7 @@ return(
         type="number"
         name="peso"
         value={values.peso}
-        placeholder="Peso"
+        placeholder=""
         onChange={handleInputChange}
         className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
             />
@@ -134,7 +137,7 @@ return(
         type="text"
         name="genero"
         value={values.genero}
-        placeholder="Genero"
+        placeholder=""
         onChange={handleInputChange}
         className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
             />
@@ -170,4 +173,4 @@ return(
     </main>
   );
 }
-export default Datos;
+export default DatosHipertension;

@@ -8,17 +8,20 @@ import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
 import { RiSettings4Line } from "react-icons/ri";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
+import { FaWpforms } from "react-icons/fa";
+import { GiForkKnifeSpoon } from "react-icons/gi";
 
 import Link from 'next/link';
 import {ScheduleXCalendar, usCalendarApp} from "@schedule-x/react";
 
 const Calendario = () =>{
  const menus = [
-  {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
-  {name:"Datos", link:"/datos", icon: AiOutlineUser},
+  {name:"Home", link:"/", icon: MdOutlineDashboard},
+  {name:"Datos Diabetes", link:"/datosdiabetes", icon: FaWpforms},
+  {name:"Datos Hipertension", link:"/datoshipertension", icon: FaWpforms},
   {name:"Messages", link:"/", icon: FiMessageSquare},
   {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
-  {name:"Alimentacion", link:"/", icon: FiShoppingCart},
+  {name:"Alimentacion", link:"/", icon: GiForkKnifeSpoon},
   {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
   {name:"Configuracion", link:"/", icon: RiSettings4Line},
 

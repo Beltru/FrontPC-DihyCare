@@ -4,24 +4,25 @@ import dynamic from 'next/dynamic'
 import Image from "next/image";
 import React from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { MdOutlineDashboard } from "react-icons/md";
 import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
 import { RiSettings4Line } from "react-icons/ri";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
 import { FaCalendarAlt } from "react-icons/fa";
+import { FaWpforms } from "react-icons/fa";
+import { GiForkKnifeSpoon } from "react-icons/gi";
 
 import Link from 'next/link';
 
 
 const Home = () =>{
  const menus = [
-  {name:"Dashboard", link:"/", icon: MdOutlineDashboard},
-  {name:"Datos", link:"/datos", icon: AiOutlineUser},
+  {name:"Datos Diabetes", link:"/datosdiabetes", icon: FaWpforms},
+  {name:"Datos Hipertension", link:"/datoshipertension", icon: FaWpforms},
   {name:"Messages", link:"/", icon: FiMessageSquare},
   {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
   {name:"Agenda", link:"/calendario", icon: FaCalendarAlt},
-  {name:"Alimentacion", link:"/", icon: FiShoppingCart},
+  {name:"Alimentacion", link:"/", icon: GiForkKnifeSpoon},
   {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
   {name:"Configuracion", link:"/", icon: RiSettings4Line},
 
@@ -36,7 +37,7 @@ return(
           <div className='py-3 flex justify-end'>
             <HiMenuAlt3 size={26} className="cursor-pointer"onClick={()=>setOpen(!open)}/>
           </div>
-          <div className='mt-4 flex flex-col gap-4 relative'>
+          <div className='flex flex-col mt-4 gap-4 relative'>
             {
               menus?.map((menu,i)=>(
                 <Link href={menu?.link} key={i} className={`${menu?.margin && "mt-5"} group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md`}>
@@ -59,7 +60,7 @@ return(
 
        {/*esto es el resto de la pagina*/} 
         <div className='m-3 text-xl text-gray-900 font-semibold'>
-          REACT TAILWIND
+          Home
         </div>
        </main>
 
