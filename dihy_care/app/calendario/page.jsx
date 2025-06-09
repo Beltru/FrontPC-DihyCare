@@ -10,6 +10,8 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
 import { FaWpforms } from "react-icons/fa";
 import { GiForkKnifeSpoon } from "react-icons/gi";
+import EventCalendar from '../components/Calendario';
+import {addDays, subDays, format} from "date-fns"
 
 import Link from 'next/link';
 import {ScheduleXCalendar, usCalendarApp} from "@schedule-x/react";
@@ -58,10 +60,13 @@ return(
         </div>
 
        {/*esto es el resto de la pagina*/} 
-        <div className='m-3 text-xl text-gray-900 font-semibold'>
-          <div>
-            Calendario
-          </div>
+        <div className='flex flex-1 justify-center items-start text-slate-900 font-bold'>
+            <EventCalendar 
+            events={[
+              {date:subDays(new Date(), 6), title: "Post Video"},
+              {date:subDays(new Date(), 1), title: "Edit Video"},
+              {date:subDays(new Date(), 3), title: "Code"},
+            ]}/>
         </div>
        </main>
 

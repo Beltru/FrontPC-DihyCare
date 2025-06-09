@@ -66,6 +66,5 @@ return(
   }
 
 };
-
-
+  
 export default PieChartComponent;
