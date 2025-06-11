@@ -58,7 +58,7 @@ const EventCalendar = () => {
 
       <div ref={calendarRef} className="grid grid-cols-7 gap-2">
         {WEEKDAYS.map((day) => (
-          <div key={day} className="font-bold text-xl border text-center px-6 py-1 bg-white rounded-md">
+          <div key={day} className="font-bold text-xl border text-center px-6 py-1 bg-slate-200 rounded-md">
             {day}
           </div>
         ))}
@@ -76,9 +76,9 @@ const EventCalendar = () => {
               key={index}
               onClick={() => handleDayClick(day)}
               className={clsx(
-                "border rounded-md p-2 text-xl text-left cursor-pointer hover:bg-emerald-500",
+                "border rounded-md p-2 text-xl text-left align-text-top cursor-pointer hover:bg-emerald-700",
                 {
-                  "bg-emerald-800 text-white": isToday(day),
+                  "bg-emerald-900 text-white": isToday(day),
                 }
               )}
             >
@@ -86,7 +86,7 @@ const EventCalendar = () => {
 
               {/* Mostrar eventos */}
               {dayEvents.map((event, idx) => (
-                <div key={idx} className="mt-1 text-xs bg-emerald-400 text-slate-800 px-1 rounded">
+                <div key={idx} className="mt-1 text-xs bg-emerald-600 text-slate-800 px-1 rounded">
                   {event.title}
                 </div>
               ))}
