@@ -18,6 +18,8 @@ const lastDayOfMonth = endOfMonth(currentDate);
 const daysInMonth = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth });
 const startingDayIndex = getDay(firstDayOfMonth);
 
+const colors = ["bg-orange-200", "bg-purple-200", "bg-green-200", "bg-pink-200", "bg-blue-200"];
+
 const EventCalendar = () => {
   const [events, setEvents] = useState([]);
   const [activeDate, setActiveDate] = useState(null);
@@ -32,91 +34,124 @@ const EventCalendar = () => {
   const handleEventSubmit = (e) => {
     e.preventDefault();
     if (!eventTitle || !activeDate) return;
+    
+const handleDeleteEvent = (date, title) => {
+  setEvents((prevEvents) =>
+    prevEvents.filter(
+      (event) => !(isSameDay(event.date, date) && event.title === title)
+    )
+  );
+};
 
-    setEvents([...events, { date: activeDate, title: eventTitle }]);
+
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    setEvents([...events, { date: activeDate, title: eventTitle, color }]);
     setActiveDate(null);
     setEventTitle("");
   };
 
-  // Detectar clics fuera del calendario
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (calendarRef.current && !calendarRef.current.contains(event.target)) {
         setActiveDate(null);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <div className="p-4">
-      <h2 className="text-center text-3xl text- font-semibold mb-4">
-        {format(currentDate, "MMMM yyyy")}
-      </h2>
+<div className="min-h-screen w-full px-4 py-4 text-gray-800 overflow-hidden box-border">
+  <div className="max-w-7xl mx-auto flex flex-col h-full">
+    {/* Header */}
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-3xl font-bold">Project Calendar</h2>
+      <div className="flex items-center gap-6">
+        <span className="text-lg font-semibold">{format(currentDate, "MMMM yyyy")}</span>
+      </div>
+    </div>
 
-      <div ref={calendarRef} className="grid grid-cols-7 gap-2">
-        {WEEKDAYS.map((day) => (
-          <div key={day} className="font-bold text-xl border text-center px-6 py-1 bg-slate-200 rounded-md">
-            {day}
-          </div>
-        ))}
-
-        {Array.from({ length: startingDayIndex }).map((_, index) => (
-          <div key={`empty-${index}`} className="border rounded-md p-2" />
-        ))}
-
-        {daysInMonth.map((day, index) => {
-          const dayEvents = events.filter((event) => isSameDay(event.date, day));
-          const isActive = activeDate && isSameDay(day, activeDate);
-
-          return (
-            <div
-              key={index}
-              onClick={() => handleDayClick(day)}
-              className={clsx(
-                "border rounded-md p-2 text-xl text-left align-text-top cursor-pointer hover:bg-emerald-700",
-                {
-                  "bg-emerald-900 text-white": isToday(day),
-                }
-              )}
-            >
-              <div className="text-center font-semibold">{format(day, "d")}</div>
-
-              {/* Mostrar eventos */}
-              {dayEvents.map((event, idx) => (
-                <div key={idx} className="mt-1 text-xs bg-emerald-600 text-slate-800 px-1 rounded">
-                  {event.title}
-                </div>
-              ))}
-
-              {/* Formulario inline si el día está activo */}
-              {isActive && (
-                <form
-                  onClick={(e) => e.stopPropagation()}
-                  onSubmit={handleEventSubmit}
-                  className="mt-2"
-                >
-                  <input
-                    type="text"
-                    value={eventTitle}
-                    onChange={(e) => setEventTitle(e.target.value)}
-                    autoFocus
-                    placeholder="Nuevo evento"
-                    className="text-xs w-full border rounded px-1 py-0.5"
-                  />
-                  <button
-                    type="submit"
-                    className="mt-1 w-full text-xs bg-blue-600 text-white rounded px-1 py-0.5 hover:bg-blue-700"
-                  >
-                    Guardar
-                  </button>
-                </form>
-              )}
+    {/* Calendar Grid */}
+    <div
+      ref={calendarRef}
+      className="grid grid-cols-7 gap-3 flex-grow overflow-hidden"
+    >
+          {WEEKDAYS.map((day) => (
+            <div key={day} className="text-center text-base font-semibold text-gray-500">
+              {day}
             </div>
-          );
-        })}
+          ))}
+
+          {Array.from({ length: startingDayIndex }).map((_, index) => (
+            <div key={`empty-${index}`} />
+          ))}
+                    
+          {daysInMonth.map((day, index) => {
+            const dayEvents = events.filter((event) => isSameDay(event.date, day));
+            const isActive = activeDate && isSameDay(day, activeDate);
+
+            return (
+              <div
+                key={index}
+                onClick={() => handleDayClick(day)}
+                className={clsx(
+                  "border rounded-xl p-4 min-h-[120px] cursor-pointer transition hover:ring-2 hover:ring-emerald-500 relative bg-gray-100",
+                  {
+                    "bg-green-500 text-black": isToday(day),
+                  }
+                )}
+              >
+                <div className="absolute top-3 right-4 text-sm font-semibold">
+                  {format(day, "d")}
+                </div>
+
+                <div className="flex flex-col gap-2 mt-6">
+                  {dayEvents.map((event, idx) => (
+                   <div key={idx} className={clsx("text-xs px-2 py-1 rounded-md truncate font-medium flex justify-between items-center gap-2",
+                          event.color
+                       )}
+                      >
+                        <span className="truncate">{event.title}</span>
+                       <button
+                          onClick={(e) => {
+                            e.stopPropagation(); // evita que dispare el selector de día
+                           handleDeleteEvent(day, event.title);
+                          }}
+                          className="text-red-600 font-bold text-xs hover:text-red-800"
+                          title="Eliminar"
+                       >
+                         ×
+                       </button>
+                      </div>
+                  ))}
+                </div>
+
+                {isActive && (
+                  <form
+                    onClick={(e) => e.stopPropagation()}
+                    onSubmit={handleEventSubmit}
+                    className="absolute inset-0 bg-white bg-opacity-95 p-4 rounded-xl flex flex-col justify-center"
+                  >
+                    <input
+                      type="text"
+                      value={eventTitle}
+                      onChange={(e) => setEventTitle(e.target.value)}
+                      autoFocus
+                      placeholder="New event"
+                      className="text-sm border rounded px-3 py-2 mb-2"
+                    />
+                    <button
+                      type="submit"
+                      className="text-sm bg-black text-white rounded px-3 py-2 hover:bg-gray-800"
+                    >
+                      Save
+                    </button>
+                  </form>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
