@@ -88,32 +88,36 @@ return(
         <h1 className="text-2xl font-bold mb-4">Datos Diabetes</h1>
         <form onSubmit={handleForm} className="flex flex-col gap-4 max-w-md mx-auto mt-10 w-full items-center">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-            <input
-        type="text"
-        name="glucosa"
-        value={values.name}
-        placeholder="Glucosa"
-        onChange={handleInputChange}
-        className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
-            />
+           <input
+  type="text"
+  name="glucosa"
+  value={values.glucosa}
+  placeholder="Glucosa"
+  onChange={handleInputChange}
+  className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
 
-            <input
-        type="text"
-        name="carbohidratos"
-        value={values.lastName}
-        placeholder="Carbohidratos"
-        onChange={handleInputChange}
-        className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
-            />
+/>
 
-            <input
-        type="text"
-        name="insulina"
-        value={values.email}
-        placeholder="Insulina"
-        onChange={handleInputChange}
-        className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
-            />
+<input
+  type="text"
+  name="carbohidratos"
+  value={values.carbohidratos}
+  placeholder="Carbohidratos"
+  onChange={handleInputChange}
+  className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
+
+/>
+
+<input
+  type="text"
+  name="insulina"
+  value={values.insulina}
+  placeholder="Insulina"
+  onChange={handleInputChange}
+ className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
+
+/>
+
 
             <input
         type="password"
@@ -153,17 +157,17 @@ return(
             <button
         type="button" 
         className="bg-[#3b8494] text-black px-6 py-2 rounded-full font-bold hover:cursor-pointer"
-        onClick={() =>
-          setValues({
-            name: '',
-            lastName: '',
-            email: '',
-            password: '',
-            peso: '',
-            genero: '',
-            reference: '',
-          })
-        }
+       onClick={() =>
+  setValues({
+    glucosa: '',
+    carbohidratos: '',
+    insulina: '',
+    password: '',
+    peso: '',
+    genero: '',
+    reference: '',
+  })
+}
             >
         Limpiar
             </button>

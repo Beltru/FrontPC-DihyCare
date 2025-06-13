@@ -65,7 +65,7 @@ export default function Charts () {
         {/*esto es el resto de la pagina*/} 
      <div className='grid items-center xl:grid-cols-3 lg:grid-cols-2 w-full gap-10 max-w-[1400px] m-10'>
     
-    <GridItem title="Line Chart"> <PieChartComponent/> </GridItem>
+    <GridItem title="Area Chart"> <AreaChartComponent/> </GridItem>
     <GridItem title="Bar Chart"><BarChartComponent/></GridItem>
     <GridItem title="Line Chart"><LineChartComponent/></GridItem>
 

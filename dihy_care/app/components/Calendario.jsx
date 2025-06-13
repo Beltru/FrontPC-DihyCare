@@ -30,11 +30,7 @@ const EventCalendar = () => {
     setActiveDate(day);
     setEventTitle("");
   };
-
-  const handleEventSubmit = (e) => {
-    e.preventDefault();
-    if (!eventTitle || !activeDate) return;
-    
+  
 const handleDeleteEvent = (date, title) => {
   setEvents((prevEvents) =>
     prevEvents.filter(
@@ -42,6 +38,11 @@ const handleDeleteEvent = (date, title) => {
     )
   );
 };
+
+  const handleEventSubmit = (e) => {
+    e.preventDefault();
+    if (!eventTitle || !activeDate) return;
+    
 
 
     const color = colors[Math.floor(Math.random() * colors.length)];
