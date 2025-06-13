@@ -15,7 +15,7 @@ return(
     <main className="min-h-screen bg-gradient-to-r from-[#0b1781] via-[#1a235e] to-black overflow-hidden">
       <section className="h-[100vh] w-[100vw] flex justify-between items-center gap-20">
          <div className="h-[100vh] w-[60vw] flex justify-end items-center pr-[17%]">
-            <a href="" className="cursor-pointer">
+            <a href="/landing" className="cursor-pointer">
               <Image src={"/CorazonClaro.png"} alt="" width={280} height={280} />
             </a>
           </div>
