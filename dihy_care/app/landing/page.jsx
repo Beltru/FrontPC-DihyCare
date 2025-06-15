@@ -2,7 +2,7 @@ import Link from "next/link"
 
 const Landing = () => {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-radial from-blue-400 to-blue-700">
+    <main className="flex flex-col items-center justify-center min-h-screen bg-radial from-[#6bb4bc] to-[#228eb9]">
       <div className="flex flex-col items-center gap-6">
         <img src="/CorazonOscuro.png" alt="" className="h-[30vh]"/>
         

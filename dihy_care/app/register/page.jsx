@@ -5,8 +5,9 @@ import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link"
 
-const Login = () =>{
-     
+const Register = () =>{
+const [name, setName] = useState("");
+const [lastname, setLastname] = useState("");
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 
@@ -21,8 +22,26 @@ return(
           </div>
    <div className="flex justify-center items-center w-[50vw] h-[100vh] bg-black hover:w-[85vw] transition-all duration-500">
             <form className="w-[50%] flex h-[50vh] justify-around flex-col">
-              <h2>Login</h2>
+              <h2>Register</h2>
               <div>
+                 <div className="input-field mb-[2vw]">
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)} // Captura del email
+                  />
+                  <label>Name</label>
+                </div>
+                 <div className="input-field mb-[2vw]">
+                  <input
+                    type="text"
+                    required
+                    value={lastname}
+                    onChange={(e) => setLastname(e.target.value)} // Captura del email
+                  />
+                  <label>Last Name</label>
+                </div>
                 <div className="input-field mb-[2vw]">
                   <input
                     type="email"
@@ -41,26 +60,17 @@ return(
                   />
                   <label>Password</label>
                 </div>
-                <div className="forget">
-                  <label htmlFor="remember">
-                    <input
-                      type="checkbox"
-                      id="remember"
-                    />
-                    <p>Remember me</p>
-                  </label>
-                  <Link href="/forgot">Forgot password?</Link>
-                </div>
               </div>
               <div className="flex justify-center items-center flex-col w-[100%]">
-              <Link href="/"> 
+                <Link href="/form"> 
                 <button type="submit" className="w-[100%]">
                   Next
                 </button>
                 </Link>
+               
                 <div className="register">
-                  <p>Don't have an account?</p>
-                 <Link href="/register">
+                  <p>Already have an account?</p>
+                 <Link href="/login">
                     <p className="hover:text-[#ffffff] transition-all duration-300"> Register </p>
                  </Link>  
                 </div>
@@ -73,4 +83,4 @@ return(
  ) 
 }
 
-export default Login
+export default Register
