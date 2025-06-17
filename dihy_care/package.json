@@ -9,11 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroui/dropdown": "^2.3.21",
+    "@heroui/system": "^2.4.17",
+    "@heroui/theme": "^2.4.17",
+    "@nextui-org/react": "^2.6.11",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.18.1",
     "next": "15.3.2",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
     "react-link": "^1.0.3",
     "recharts": "^2.15.3"

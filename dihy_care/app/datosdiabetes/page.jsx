@@ -10,19 +10,29 @@ import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
 import { FaCalendarAlt } from "react-icons/fa";
 import { FaWpforms } from "react-icons/fa";
 import { GiForkKnifeSpoon } from "react-icons/gi";
-
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem } from "@heroui/dropdown";
 import Link from 'next/link';   
+import { Button } from "@nextui-org/react";
 
-const DatosDiabetes = () => {
+  const DatosDiabetes = () => {
+  const [selectedKeys, setSelectedKeys] = React.useState(new Set(["text"]));
+
+  const selectedValue = React.useMemo(
+    () => Array.from(selectedKeys).join(", ").replace(/_/g, ""),
+    [selectedKeys],
+  );
+
   const [values, setValues] = useState({
-  glucosa: '',
-  carbohidratos: '',
-  insulina: '',
-  password: '',
-  peso: '',
-  genero: '',
-  reference: '',
-});
+    glucosa: '',
+    carbohidratos: '',
+    insulina: '',
+    password: '',
+    peso: '',
+    genero: '',
+    reference: '',
+  });
+
+  // ...
 
 const handleInputChange = (event)=> {
   const{name, value} = event.target;
@@ -107,16 +117,29 @@ return(
   className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
 
 />
+   
+          <Dropdown className='rounded-xl'>
+              <DropdownTrigger>
+                <Button className='border border-black rounded-xl w-full text-left' color="primary" variant="bordered">
+                  {selectedValue || "Insulina"}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                disallowEmptySelection
+                aria-label="Single selection example"
+                selectedKeys={selectedKeys}
+                selectionMode="single"
+                onSelectionChange={setSelectedKeys}
+                className='text-slate-200  bg-stone-950 rounded-xl p-2' color="primary"
+              >
+                <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Insulina">Insulina</DropdownItem>
+                <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Rapid Acting">Rapid Acting</DropdownItem>
+                <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Short Acting">Short Acting</DropdownItem>
+                <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Intermediate Acting">Intermediate Acting</DropdownItem>
+                <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Long Acting">Long Acting</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
 
-<input
-  type="text"
-  name="insulina"
-  value={values.insulina}
-  placeholder="Insulina"
-  onChange={handleInputChange}
- className="px-4 py-2 border border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#339a89]"
-
-/>
 
 
             <input
