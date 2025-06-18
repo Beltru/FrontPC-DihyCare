@@ -121,7 +121,7 @@ return(
 <Dropdown className='rounded-xl'>
   <DropdownTrigger>
     <Button className='border border-black rounded-xl w-full text-left' color="primary" variant="bordered">
-      {selectedValue || "Insulina"}
+        {selectedValue !== "text" && selectedValue !== "" ? selectedValue : "Insulina"}
     </Button>
   </DropdownTrigger>
 
@@ -143,7 +143,6 @@ return(
     className='text-slate-200 bg-stone-950 rounded-xl p-2'
     color="primary"
   >
-                <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Insulina">Insulina</DropdownItem>
                 <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Rapid Acting">Rapid Acting</DropdownItem>
                 <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Short Acting">Short Acting</DropdownItem>
                 <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Intermediate Acting">Intermediate Acting</DropdownItem>

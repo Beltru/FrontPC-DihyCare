@@ -17,10 +17,10 @@ import Link from 'next/link';
 import {ScheduleXCalendar, usCalendarApp} from "@schedule-x/react";
 
 const Calendario = () =>{
+const [dataOpen, setDataOpen] = useState(false);
+
  const menus = [
   {name:"Home", link:"/", icon: MdOutlineDashboard},
-  {name:"Datos Diabetes", link:"/datosdiabetes", icon: FaWpforms},
-  {name:"Datos Hipertension", link:"/datoshipertension", icon: FaWpforms},
   {name:"Messages", link:"/", icon: FiMessageSquare},
   {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
   {name:"Alimentacion", link:"/", icon: GiForkKnifeSpoon},
@@ -38,25 +38,35 @@ return(
           <div className='py-3 flex justify-end'>
             <HiMenuAlt3 size={26} className="cursor-pointer"onClick={()=>setOpen(!open)}/>
           </div>
-          <div className='mt-4 flex flex-col gap-4 relative'>
-            {
-              menus?.map((menu,i)=>(
-                <Link href={menu?.link} key={i} className={`${menu?.margin && "mt-5"} group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md`}>
-       
-            <div>
-              {React.createElement(menu?.icon,{size:"20"})}
+                <div className='flex flex-col mt-4 gap-4 relative'>
+          {/* Dropdown Data */}
+          <div onClick={() => setDataOpen(!dataOpen)} className="flex items-center justify-between text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md cursor-pointer">
+            <div className="flex items-center gap-3">
+              <FaWpforms size={20} />
+              {open && <span>Data</span>}
             </div>
-          
-             <h2 style={{transitionDelay: `${i + 3}00ms`,}} className={`whitespace-pre duration-500 ${!open && "opacity-0 -translate-x-28 overflow-hidden"}`}>{menu?.name}
-             </h2>
-             <h2 className={`${open && "hidden"} absolute left-48 bg-white font-semibold  whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit`}>
-              {menu?.name}
-             </h2>
-            </Link> 
-              ))        
-}
-
+            {open && <span className="ml-auto">{dataOpen ? "▲" : "▼"}</span>}
           </div>
+
+          {dataOpen && open && (
+            <div className="ml-4 flex flex-col gap-1 text-sm">
+              <Link href="/datoshipertension" className="hover:bg-slate-800 rounded-md pl-4">↳ Hipertensión</Link>
+              <Link href="/datosdiabetes" className="hover:bg-slate-800 rounded-md pl-4">↳ Diabetes</Link>
+            </div>
+          )}
+
+          {/* Otros menús */}
+          {menus.map((menu, i) => (
+            <Link
+              href={menu.link}
+              key={i}
+              className={`${menu?.margin && "mt-5"} group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md`}
+            >
+              <div>{React.createElement(menu.icon, { size: 20 })}</div>
+              {open && <span>{menu.name}</span>}
+            </Link>
+          ))}
+        </div>
         </div>
 
        {/*esto es el resto de la pagina*/} 
