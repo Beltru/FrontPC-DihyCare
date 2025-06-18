@@ -118,20 +118,31 @@ return(
 
 />
    
-          <Dropdown className='rounded-xl'>
-              <DropdownTrigger>
-                <Button className='border border-black rounded-xl w-full text-left' color="primary" variant="bordered">
-                  {selectedValue || "Insulina"}
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Single selection example"
-                selectedKeys={selectedKeys}
-                selectionMode="single"
-                onSelectionChange={setSelectedKeys}
-                className='text-slate-200  bg-stone-950 rounded-xl p-2' color="primary"
-              >
+<Dropdown className='rounded-xl'>
+  <DropdownTrigger>
+    <Button className='border border-black rounded-xl w-full text-left' color="primary" variant="bordered">
+      {selectedValue || "Insulina"}
+    </Button>
+  </DropdownTrigger>
+
+  <DropdownMenu
+    disallowEmptySelection
+    aria-label="Single selection example"
+    selectedKeys={selectedKeys}
+    selectionMode="single"
+    onSelectionChange={(keys) => {
+      setSelectedKeys(keys);
+
+      // ✅ Actualizar también el campo insulina
+      const selected = Array.from(keys)[0];
+      setValues((prev) => ({
+        ...prev,
+        insulina: selected,
+      }));
+    }}
+    className='text-slate-200 bg-stone-950 rounded-xl p-2'
+    color="primary"
+  >
                 <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Insulina">Insulina</DropdownItem>
                 <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Rapid Acting">Rapid Acting</DropdownItem>
                 <DropdownItem className='text-slate-200 hover:bg-gray-800 rounded-md' key="Short Acting">Short Acting</DropdownItem>
