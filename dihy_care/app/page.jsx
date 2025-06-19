@@ -13,6 +13,7 @@ import AreaChartComponent from './components/AreaChart';
 import BarChartComponent from './components/BarChart';
 import EventCalendar from './components/Calendario';
 import { subDays } from 'date-fns';
+
 const Home = () => {
   const [open, setOpen] = useState(true);
   const [dataOpen, setDataOpen] = useState(false);
@@ -27,14 +28,14 @@ const Home = () => {
   ];
 
   return (
-    <main className="flex gap-6 min-h-screen bg-[#d9d9d9]">
+    <main className="flex h-screen overflow-hidden bg-[#d9d9d9]">
       {/* Sidebar */}
-      <div className={`bg-[#0e0e0e] min-h-screen rounded-r-3xl text-gray-100 px-4 ${open ? 'w-[20vw]' : "w-[5vw]"} duration-500`}>
-        <div className='py-3 flex justify-end'>
+      <div className={`bg-[#0e0e0e] min-h-full rounded-r-3xl text-gray-100 px-4 ${open ? 'w-[20vw]' : "w-[5vw]"} duration-500`}>
+        <div className="py-3 flex justify-end">
           <HiMenuAlt3 size={26} className="cursor-pointer" onClick={() => setOpen(!open)} />
         </div>
 
-        <div className='flex flex-col mt-4 gap-4 relative'>
+        <div className="flex flex-col mt-4 gap-4">
           {/* Dropdown Data */}
           <div onClick={() => setDataOpen(!dataOpen)} className="flex items-center justify-between text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md cursor-pointer">
             <div className="flex items-center gap-3">
@@ -65,45 +66,39 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Contenido principal */}
-      <div className="flex flex-col lg:flex-row flex-grow p-6 gap-6 w-full text-black bg-[#d9d9d9]">
-      {/* IZQUIERDA - Bienvenida y gráficos */}
-      <div className="flex flex-col flex-1">
-        {/* Gráfico principal */}
-        <div className="w-full h-[400px]">
-          <GridItem title="Area Chart">
-           <AreaChartComponent/>
-         </GridItem>
+      {/* Main Content */}
+      <div className="flex flex-grow overflow-hidden p-2 w-[50vw]">
+        {/* LEFT CONTENT */}
+        <div className="flex flex-col flex-1 gap-2 overflow-hidden">
+          <h1 className="text-3xl text-black font-bold">Welcome!</h1>
+
+          {/* Main Graph */}
+          <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center h-[30vh] w-[30vw]">
+            <div className="w-full h-full px-2 py-2">
+              <AreaChartComponent />
+            </div>
+          </div>
+
+         <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center w-[30vw]">
+            <div className="w-full h-full px-2 py-2">
+              <BarChartComponent />
+            </div>
+          </div>
         </div>
 
-        {/* Calorías y últimos registros */}
-        <div>
-          {/* Calorías */}
-          <div className="w-full h-[400px]">
-          <GridItem title="Area Chart">
-           <BarChartComponent/>
-         </GridItem>
-          </div> 
+        {/* RIGHT CONTENT: AGENDA */}
+        <div className="bg-gradient-to-b from-[#9fd1d1] to-[#b8e0df] rounded-xl p-4 w-[60%] h-full overflow-y-auto">
+          <EventCalendar
+            events={[
+              { date: subDays(new Date(), 6), title: "Pill 1 (hs)" },
+              { date: subDays(new Date(), 1), title: "Insulin (hs)" },
+              { date: subDays(new Date(), 0), title: "Exercise (hs)" },
+            ]}
+          />
         </div>
       </div>
-
-      {/* DERECHA - Agenda */}
-      <div className="bg-[#9fd1d1] rounded-xl p-1 w-[50vw]">
-        <EventCalendar/>
-      </div>
-    </div>
     </main>
   );
 };
 
-function GridItem({ title, children }) {
-  return (
-    <div className="p-4 bg-slate-800 text-white rounded-lg shadow-md  h-[350px]">
-      <h2 className="text-lg font-semibold mb-2">{title}</h2>
-        <div className="h-full w-full flex items-center justify-center">
-      {children}
-    </div>
- </div>
-  );
-}
 export default Home;
