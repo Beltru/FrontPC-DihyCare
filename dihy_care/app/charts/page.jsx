@@ -86,7 +86,7 @@ const [dataOpen, setDataOpen] = useState(false);
 
 function GridItem({ title, children }) {
   return (
-    <div className="p-4 bg-slate-800 text-white rounded-lg shadow-md  h-[350px]">
+    <div className="p-4 bg-slate-800 text-white rounded-lg shadow-md w-full h-[350px]">
       <h2 className="text-lg font-semibold mb-2">{title}</h2>
         <div className="h-full w-full flex items-center justify-center">
       {children}

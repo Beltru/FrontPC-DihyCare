@@ -10,6 +10,7 @@ import { FiMessageSquare } from "react-icons/fi";
 import { FaCalendarAlt, FaWpforms } from "react-icons/fa";
 import { GiForkKnifeSpoon } from "react-icons/gi";
 import AreaChartComponent from './components/AreaChart';
+import BarChartComponent from './components/BarChart';
 import EventCalendar from './components/Calendario';
 import { subDays } from 'date-fns';
 const Home = () => {
@@ -67,55 +68,28 @@ const Home = () => {
       {/* Contenido principal */}
       <div className="flex flex-col lg:flex-row flex-grow p-6 gap-6 w-full text-black bg-[#d9d9d9]">
       {/* IZQUIERDA - Bienvenida y gráficos */}
-      <div className="flex flex-col flex-1 gap-6">
-        <h1 className="text-3xl font-bold">Welcome!</h1>
-
+      <div className="flex flex-col flex-1">
         {/* Gráfico principal */}
-        <div className="flex items-center justify-center h-[50vh] w-[50vw] rounded-xl">
-          <GridItem title="Area Chart"> <AreaChartComponent /> </GridItem>
+        <div className="w-full h-[400px]">
+          <GridItem title="Area Chart">
+           <AreaChartComponent/>
+         </GridItem>
         </div>
 
         {/* Calorías y últimos registros */}
-        <div className="grid grid-cols-2 gap-4">
+        <div>
           {/* Calorías */}
-          <div className="bg-white p-4 rounded-xl shadow-md">
-            <h3 className="font-semibold text-lg mb-2">Calories</h3>
-            <div className="flex justify-between items-end h-24">
-              {[3, 5, 4, 2, 3].map((val, i) => (
-                <div key={i} className="flex flex-col items-center">
-                  <div
-                    className="w-4 bg-[#48b4b7] rounded"
-                    style={{ height: `${val * 10}px` }}
-                  />
-                  <span className="text-xs mt-1">txt</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Últimos Registros */}
-          <div className="bg-white p-4 rounded-xl shadow-md">
-            <h3 className="font-semibold text-lg mb-2">Latest Records</h3>
-            <div className="grid grid-cols-2 gap-y-1 text-sm">
-              <span>txt</span>
-              <span>txt</span>
-              <span>txt</span>
-              <span>txt</span>
-              <span>txt</span>
-              <span>txt</span>
-            </div>
-          </div>
+          <div className="w-full h-[400px]">
+          <GridItem title="Area Chart">
+           <BarChartComponent/>
+         </GridItem>
+          </div> 
         </div>
       </div>
 
       {/* DERECHA - Agenda */}
-      <div className="bg-gradient-to-b from-[#9fd1d1] to-[#b8e0df] rounded-xl p-4 w-[50vw]">
-        <EventCalendar 
-            events={[
-              {date:subDays(new Date(), 6), title: "Post Video"},
-              {date:subDays(new Date(), 1), title: "Edit Video"},
-              {date:subDays(new Date(), 3), title: "Code"},
-            ]}/>
+      <div className="bg-[#9fd1d1] rounded-xl p-1 w-[50vw]">
+        <EventCalendar/>
       </div>
     </div>
     </main>
