@@ -1,4 +1,5 @@
 "use client";
+import RightSideBar from "./RightSidebar";
 import { useState, useEffect, useRef } from "react";
 import {
   format,
@@ -18,7 +19,7 @@ const lastDayOfMonth = endOfMonth(currentDate);
 const daysInMonth = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth });
 const startingDayIndex = getDay(firstDayOfMonth);
 
-const colors = ["bg-orange-200", "bg-purple-200", "bg-green-200", "bg-pink-200", "bg-blue-200"];
+const colors = ["bg-yellow-200", "bg-purple-200", "bg-blue-200"];
 
 const EventCalendar = () => {
   const [events, setEvents] = useState([]);
@@ -30,21 +31,18 @@ const EventCalendar = () => {
     setActiveDate(day);
     setEventTitle("");
   };
-  
-const handleDeleteEvent = (date, title) => {
-  setEvents((prevEvents) =>
-    prevEvents.filter(
-      (event) => !(isSameDay(event.date, date) && event.title === title)
-    )
-  );
-};
+
+  const handleDeleteEvent = (date, title) => {
+    setEvents((prevEvents) =>
+      prevEvents.filter(
+        (event) => !(isSameDay(event.date, date) && event.title === title)
+      )
+    );
+  };
 
   const handleEventSubmit = (e) => {
     e.preventDefault();
     if (!eventTitle || !activeDate) return;
-    
-
-
     const color = colors[Math.floor(Math.random() * colors.length)];
     setEvents([...events, { date: activeDate, title: eventTitle, color }]);
     setActiveDate(null);
@@ -61,22 +59,23 @@ const handleDeleteEvent = (date, title) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  return (
-<div className="min-h-screen w-full px-4 py-4 text-gray-800 overflow-hidden box-border">
-  <div className="max-w-7xl mx-auto flex flex-col h-full">
-    {/* Header */}
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="text-3xl font-bold">Project Calendar</h2>
-      <div className="flex items-center gap-6">
-        <span className="text-lg font-semibold">{format(currentDate, "MMMM yyyy")}</span>
-      </div>
-    </div>
+  const todayEvents = events.filter((event) => isToday(event.date));
 
-    {/* Calendar Grid */}
-    <div
-      ref={calendarRef}
-      className="grid grid-cols-7 gap-3 flex-grow overflow-hidden"
-    >
+  return (
+    <div className="min-h-screen w-full px-4 py-4 text-gray-800 overflow-hidden box-border flex">
+      {/* MAIN WRAPPER */}
+      <div className="flex flex-col flex-1 max-w-6xl">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-3xl font-bold">Agenda</h2>
+          <span className="text-lg font-semibold">{format(currentDate, "MMMM yyyy")}</span>
+        </div>
+
+        {/* Calendar Grid */}
+        <div
+          ref={calendarRef}
+          className="grid grid-cols-7 gap-3 flex-grow overflow-hidden"
+        >
           {WEEKDAYS.map((day) => (
             <div key={day} className="text-center text-base font-semibold text-gray-500">
               {day}
@@ -86,7 +85,7 @@ const handleDeleteEvent = (date, title) => {
           {Array.from({ length: startingDayIndex }).map((_, index) => (
             <div key={`empty-${index}`} />
           ))}
-                    
+
           {daysInMonth.map((day, index) => {
             const dayEvents = events.filter((event) => isSameDay(event.date, day));
             const isActive = activeDate && isSameDay(day, activeDate);
@@ -108,22 +107,25 @@ const handleDeleteEvent = (date, title) => {
 
                 <div className="flex flex-col gap-2 mt-6">
                   {dayEvents.map((event, idx) => (
-                   <div key={idx} className={clsx("text-xs px-2 py-1 rounded-md truncate font-medium flex justify-between items-center gap-2",
-                          event.color
-                       )}
+                    <div
+                      key={idx}
+                      className={clsx(
+                        "text-xs px-2 py-1 rounded-md truncate font-medium flex justify-between items-center gap-2",
+                        event.color
+                      )}
+                    >
+                      <span className="truncate">{event.title}</span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteEvent(day, event.title);
+                        }}
+                        className="text-red-600 font-bold text-xs hover:text-red-800"
+                        title="Eliminar"
                       >
-                        <span className="truncate">{event.title}</span>
-                       <button
-                          onClick={(e) => {
-                            e.stopPropagation(); // evita que dispare el selector de día
-                           handleDeleteEvent(day, event.title);
-                          }}
-                          className="text-red-600 font-bold text-xs hover:text-red-800"
-                          title="Eliminar"
-                       >
-                         ×
-                       </button>
-                      </div>
+                        ×
+                      </button>
+                    </div>
                   ))}
                 </div>
 
@@ -138,14 +140,14 @@ const handleDeleteEvent = (date, title) => {
                       value={eventTitle}
                       onChange={(e) => setEventTitle(e.target.value)}
                       autoFocus
-                      placeholder="New event"
+                      placeholder="Nuevo evento"
                       className="text-sm border rounded px-3 py-2 mb-2"
                     />
                     <button
                       type="submit"
                       className="text-sm bg-black text-white rounded px-3 py-2 hover:bg-gray-800"
                     >
-                      Save
+                      Guardar
                     </button>
                   </form>
                 )}
@@ -154,7 +156,10 @@ const handleDeleteEvent = (date, title) => {
           })}
         </div>
       </div>
-    </div>
+
+      {/* RIGHT SIDEBAR */}
+      <RightSideBar events={events} />
+      </div>
   );
 };
 

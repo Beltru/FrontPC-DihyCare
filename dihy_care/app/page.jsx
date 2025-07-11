@@ -12,11 +12,13 @@ import { GiForkKnifeSpoon } from "react-icons/gi";
 import AreaChartComponent from './components/AreaChart';
 import BarChartComponent from './components/BarChart';
 import EventCalendar from './components/Calendario';
+import RightSideBar from './components/RightSidebar';
 import { subDays } from 'date-fns';
 
 const Home = () => {
   const [open, setOpen] = useState(true);
   const [dataOpen, setDataOpen] = useState(false);
+  const [events, setEvents] = useState([]);
 
   const menus = [
     { name: "Messages", link: "/", icon: FiMessageSquare },
@@ -67,19 +69,19 @@ const Home = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-grow overflow-hidden p-2 w-[50vw]">
+      <div className="flex flex-grow overflow-hidden ml-6 p-2 w-[50vw]">
         {/* LEFT CONTENT */}
-        <div className="flex flex-col flex-1 gap-2 overflow-hidden">
+        <div className="flex flex-col flex-1 gap-6 overflow-hidden">
           <h1 className="text-3xl text-black font-bold">Welcome!</h1>
 
           {/* Main Graph */}
-          <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center h-[30vh] w-[30vw]">
+          <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center h-[30vh] w-[40vw]">
             <div className="w-full h-full px-2 py-2">
               <AreaChartComponent />
             </div>
           </div>
 
-         <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center w-[30vw]">
+         <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center w-[40vw]">
             <div className="w-full h-full px-2 py-2">
               <BarChartComponent />
             </div>
@@ -87,14 +89,8 @@ const Home = () => {
         </div>
 
         {/* RIGHT CONTENT: AGENDA */}
-        <div className="bg-gradient-to-b from-[#9fd1d1] to-[#b8e0df] rounded-xl p-4 w-[60%] h-full overflow-y-auto">
-          <EventCalendar
-            events={[
-              { date: subDays(new Date(), 6), title: "Pill 1 (hs)" },
-              { date: subDays(new Date(), 1), title: "Insulin (hs)" },
-              { date: subDays(new Date(), 0), title: "Exercise (hs)" },
-            ]}
-          />
+        <div className="bg-gradient-to-b from-[#9fd1d1] to-[#b8e0df] rounded-xl p-4 w-[40%] h-full overflow-y-auto">
+        <RightSideBar events={events}/>
         </div>
       </div>
     </main>
