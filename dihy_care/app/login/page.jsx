@@ -25,7 +25,7 @@ const Login = () => {
     const data = await res.json();
 
     if (res.ok) {
-      router.push("/landing");
+      router.push("/");
     } else {
       setErrorMsg(data.message);
     }
