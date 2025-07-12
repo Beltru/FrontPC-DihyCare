@@ -1,15 +1,7 @@
 "use client";
 import RightSideBar from "./RightSidebar";
 import { useState, useEffect, useRef } from "react";
-import {
-  format,
-  startOfMonth,
-  endOfMonth,
-  eachDayOfInterval,
-  getDay,
-  isToday,
-  isSameDay,
-} from "date-fns";
+import {format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, isToday, isSameDay } from "date-fns";
 import clsx from "clsx";
 
 const currentDate = new Date();
@@ -19,7 +11,7 @@ const lastDayOfMonth = endOfMonth(currentDate);
 const daysInMonth = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth });
 const startingDayIndex = getDay(firstDayOfMonth);
 
-const colors = ["bg-yellow-200", "bg-purple-200", "bg-blue-200"];
+const colors = ["bg-[#F4C20B]", "bg-[#377A95]", "bg-[#B081E9]"];
 
 const EventCalendar = () => {
   const [events, setEvents] = useState([]);
