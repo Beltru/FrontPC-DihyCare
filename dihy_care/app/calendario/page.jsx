@@ -31,7 +31,7 @@ const [dataOpen, setDataOpen] = useState(false);
  const [open, setOpen] = useState(true);
 return(
   
-      <main className="flex gap-6 min-h-screen bg-[#d9d9d9]">
+      <main className="flex gap-6 min-h-screen bg-[#AACBC4]">
      
      {/* Esto es la sidebar*/} 
         <div className={`bg-[#0e0e0e] min-h-screen rounded-r-3xl text-gray-100 px-4 ${open? 'w-[20vw]': "w-[5vw]"} duration-500 `}>

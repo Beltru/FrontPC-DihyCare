@@ -26,8 +26,8 @@ const BarChartComponent = () => {
   const maxProfit = Math.max(...salesData.map((item) => item.profit ?? 0));
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={salesData} margin={{ right: 30 }}>
+    <ResponsiveContainer width="100%" height="100%">
+      <BarChart width={500} height={400} data={salesData} margin={{ right: 30 }}>
         <YAxis />
         <XAxis dataKey="name" />
         <CartesianGrid strokeDasharray="5 5" />

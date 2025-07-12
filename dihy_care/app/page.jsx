@@ -12,6 +12,8 @@ import { GiForkKnifeSpoon } from "react-icons/gi";
 import AreaChartComponent from './components/AreaChart';
 import BarChartComponent from './components/BarChart';
 import EventCalendar from './components/Calendario';
+import MiniCalendar from './components/MiniCalendario';
+
 import RightSideBar from './components/RightSidebar';
 import { subDays } from 'date-fns';
 
@@ -75,23 +77,25 @@ const Home = () => {
           <h1 className="text-3xl text-black font-bold">Welcome!</h1>
 
           {/* Main Graph */}
-          <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center h-[30vh] w-[40vw]">
+        <div className='flex flex-wrap gap-4 justify-center items-center w-[90%]'>
+          <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center h-[40vh] w-full">
             <div className="w-full h-full px-2 py-2">
               <AreaChartComponent />
             </div>
           </div>
 
-         <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center w-[40vw]">
+         <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center h-[40vh] w-full">
             <div className="w-full h-full px-2 py-2">
               <BarChartComponent />
             </div>
           </div>
+      </div>
+        </div>
+        {/* RIGHT CONTENT: AGENDA */}
+        <div className="flex flex-col bg-gradient-to-b from-[#9fd1d1] to-[#b8e0df] rounded-xl p-4 w-[55%] overflow-y-auto gap-0">
+          <MiniCalendar/>
         </div>
 
-        {/* RIGHT CONTENT: AGENDA */}
-        <div className="bg-gradient-to-b from-[#9fd1d1] to-[#b8e0df] rounded-xl p-4 w-[40%] h-full overflow-y-auto">
-        <RightSideBar events={events}/>
-        </div>
       </div>
     </main>
   );

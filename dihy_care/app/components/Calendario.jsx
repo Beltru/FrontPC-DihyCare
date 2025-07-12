@@ -69,7 +69,7 @@ const EventCalendar = () => {
           className="grid grid-cols-7 gap-3 flex-grow overflow-hidden"
         >
           {WEEKDAYS.map((day) => (
-            <div key={day} className="text-center text-base font-semibold text-gray-500">
+            <div key={day} className="text-center text-base bg-[#F5F5F5] rounded-md font-semibold text-gray-500">
               {day}
             </div>
           ))}
