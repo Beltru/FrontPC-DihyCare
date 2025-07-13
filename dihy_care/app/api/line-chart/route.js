@@ -1,14 +1,20 @@
 import { NextResponse } from "next/server";
 
-const salesData = [
-  { name: "Jan", revenue: 4000, profit: 3000 },
-  { name: "Feb", revenue: 5000, profit: 2000 },
-  { name: "Mar", revenue: 2000, profit: 1000 },
-  { name: "Apr", revenue: 2000, profit: 6000 },
-  { name: "May", revenue: 7800, profit: 9500 },
-  { name: "Jun", revenue: 2900, profit: 8300 },
+const presion = [
+  { name: "00:00", presion: 40, },
+  { name: "01:00", presion: 50, },
+  { name: "02:00", presion: 20, },
+  { name: "03:00", presion: 20, },
+  { name: "04:00", presion: 78, },
+  { name: "05:00", presion: 29, },
+  { name: "06:00", presion: 40, },
+  { name: "07:00", presion: 50, },
+  { name: "08:00", presion: 20, },
+  { name: "09:00", presion: 20, },
+  { name: "10:00", presion: 78, },
+  { name: "11:00", presion: 29, },
 ];
 
 export async function GET() {
-  return NextResponse.json(salesData);
+  return NextResponse.json(presion);
 }

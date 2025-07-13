@@ -10,8 +10,8 @@ import { FiMessageSquare } from "react-icons/fi";
 import { FaCalendarAlt, FaWpforms } from "react-icons/fa";
 import { GiForkKnifeSpoon } from "react-icons/gi";
 import AreaChartComponent from './components/AreaChart';
+import LineChartComponent from './components/LineChart';
 import BarChartComponent from './components/BarChart';
-import EventCalendar from './components/Calendario';
 import MiniCalendar from './components/MiniCalendario';
 
 import RightSideBar from './components/RightSidebar';
@@ -87,13 +87,13 @@ const Home = () => {
 
          <div className="bg-[#5bbec3] rounded-xl flex items-center justify-center h-[40vh] w-full">
             <div className="w-full h-full px-2 py-2">
-              <BarChartComponent />
+              <LineChartComponent />
             </div>
           </div>
       </div>
         </div>
         {/* RIGHT CONTENT: AGENDA */}
-        <div className="flex flex-col bg-gradient-to-b from-[#9fd1d1] to-[#b8e0df] rounded-xl p-4 w-[55%] overflow-y-auto gap-0">
+        <div className="flex flex-col bg-gradient-to-b bg-[#AACBC4] rounded-xl p-4 w-[55%] overflow-y-auto gap-0">
           <MiniCalendar/>
         </div>
 

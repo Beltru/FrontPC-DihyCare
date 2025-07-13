@@ -23,8 +23,8 @@ const AreaChartComponent = () => {
         <CartesianGrid strokeDasharray="5 5" />
         <Tooltip content={CustomToolTip} />
         <Legend />
-        <Area type="monotone" dataKey="product1" stroke="#2563eb" fill="#3b82f6" stackId="1" />
-        <Area type="monotone" dataKey="product2" stroke="#7c3aed" fill="#8b5cf6" stackId="1" />
+        <Area type="monotone" dataKey="glucosatisular" stroke="#2563eb" fill="#3b82f6" stackId="1" />
+        <Area type="monotone" dataKey="plasmaglucosa" stroke="#7c3aed" fill="#8b5cf6" stackId="1" />
       </AreaChart>
     </ResponsiveContainer>
   );
@@ -36,10 +36,10 @@ const CustomToolTip = ({ active, payload, label }) => {
       <div className="p-4 bg-slate-900 flex flex-col gap-4 rounded-md">
         <p className="text-medium text-lg">{label}</p>
         <p className="text-sm text-blue-400">
-          Product 1: <span className="ml-2">${payload[0].value}</span>
+          Glucosa-Tisular: <span className="ml-2">g/dl {payload[0].value}</span>
         </p>
         <p className="text-sm text-blue-400">
-          Product 2: <span className="ml-2">${payload[1].value}</span>
+          Plasma-Glucosa: <span className="ml-2">g/dl {payload[1].value}</span>
         </p>
       </div>
     );
