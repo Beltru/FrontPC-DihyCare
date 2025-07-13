@@ -21,7 +21,6 @@ const [dataOpen, setDataOpen] = useState(false);
 
  const menus = [
   {name:"Home", link:"/", icon: MdOutlineDashboard},
-  {name:"Messages", link:"/", icon: FiMessageSquare},
   {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
   {name:"Alimentacion", link:"/", icon: GiForkKnifeSpoon},
   {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
@@ -35,9 +34,10 @@ return(
      
      {/* Esto es la sidebar*/} 
         <div className={`bg-[#0e0e0e] min-h-screen rounded-r-3xl text-gray-100 px-4 ${open? 'w-[20vw]': "w-[5vw]"} duration-500 `}>
-          <div className='py-3 flex justify-end'>
-            <HiMenuAlt3 size={26} className="cursor-pointer"onClick={()=>setOpen(!open)}/>
-          </div>
+           <div className="py-3 flex justify-between items-center">
+                     <img src="/sidedihy.svg" className="cursor-pointer" onClick={() => setOpen(!open)}/>
+                     <HiMenuAlt3 size={26} className="cursor-pointer" onClick={() => setOpen(!open)} />
+                   </div>
                 <div className='flex flex-col mt-4 gap-4 relative'>
           {/* Dropdown Data */}
           <div onClick={() => setDataOpen(!dataOpen)} className="flex items-center justify-between text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md cursor-pointer">

@@ -22,12 +22,12 @@ form {
 h2 {
   font-size: 2vw;
   margin-bottom: .5vw;
-  color: #fff;
+  color: black;
 }
 
 .input-field {
   position: relative;
-  border-bottom: .1vw solid #ccc;
+  border-bottom: .1vw solid #000;
   margin-bottom: 1.5vw;
 }
 
@@ -36,7 +36,7 @@ h2 {
   top: 50%;
   left: 0;
   transform: translateY(-50%);
-  color: #fff;
+  color: #000;
   font-size: .9vw;
   pointer-events: none;
   transition: 0.15s ease;
@@ -49,13 +49,13 @@ h2 {
   border: none;
   outline: none;
   font-size: .8vw;
-  color: #fff;
+  color: #000;
   
 }
 
 .input-field input:focus~label,
 .input-field input:valid~label {
-  color: #ccc;
+  color: #000;
   font-size: 0.6vw;
   top: 0.3vw;
   transform: translateY(-120%);
@@ -66,11 +66,11 @@ h2 {
   align-items: center;
   justify-content: space-between;
   margin: .8vw 0 1.2vw 0;
-  color: #fff;
+  color: #000;
 }
 
 #remember {
-  accent-color: #fff;
+  accent-color: #000;
   font-family: "Raleway", sans-serif;
   cursor: pointer;
 }
@@ -98,7 +98,7 @@ button {
 }
 
 button:hover {
-  color: #fff;
+  color: #000;
   border-color: #fff;
   background: rgba(255, 255, 255, 0.15);
 }
@@ -106,5 +106,5 @@ button:hover {
 .register {
   text-align: center;
   margin-top: 30px;
-  color: #ffffffaf;
+  color: #000;
 }

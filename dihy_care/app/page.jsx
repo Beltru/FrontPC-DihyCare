@@ -34,8 +34,9 @@ const Home = () => {
   return (
     <main className="flex h-screen overflow-hidden bg-[#d9d9d9]">
       {/* Sidebar */}
-      <div className={`bg-[#0e0e0e] min-h-full rounded-r-3xl text-gray-100 px-4 ${open ? 'w-[20vw]' : "w-[5vw]"} duration-500`}>
-        <div className="py-3 flex justify-end">
+      <div className={`bg-[#0e0e0e] min-h-full rounded-r-3xl text-gray-100 px-4 ${open ? 'w-[20vw]' : 'w-[5vw]' } duration-500`}>
+        <div className="py-3 flex justify-between items-center">
+          <img src="/sidedihy.svg" className="cursor-pointer" onClick={() => setOpen(!open)}/>
           <HiMenuAlt3 size={26} className="cursor-pointer" onClick={() => setOpen(!open)} />
         </div>
 
@@ -78,13 +79,13 @@ const Home = () => {
 
           {/* Main Graph */}
         <div className='flex flex-wrap gap-4 justify-center items-center w-[90%]'>
-          <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center h-[40vh] w-full">
+          <div className="bg-[#5bbec3] rounded-xl flex items-center justify-center h-[40vh] w-full">
             <div className="w-full h-full px-2 py-2">
               <AreaChartComponent />
             </div>
           </div>
 
-         <div className="bg-[#5bbec3] text-black rounded-xl flex items-center justify-center h-[40vh] w-full">
+         <div className="bg-[#5bbec3] rounded-xl flex items-center justify-center h-[40vh] w-full">
             <div className="w-full h-full px-2 py-2">
               <BarChartComponent />
             </div>

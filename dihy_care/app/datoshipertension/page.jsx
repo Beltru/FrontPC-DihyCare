@@ -40,7 +40,6 @@ const handleForm = (event) => {
      const menus = [
 
   {name:"Home", link:"/", icon: MdOutlineDashboard},
-  {name:"Messages", link:"/", icon: FiMessageSquare},
   {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
   {name:"Datos Diabetes", link:"/datosdiabetes", icon: FaWpforms},
   {name:"Agenda", link:"/calendario", icon: FaCalendarAlt},
@@ -52,16 +51,17 @@ const handleForm = (event) => {
  const [open, setOpen] = useState(true);
 return(
   
-      <main className="flex gap-6 min-h-screen bg-[#d9d9d9]">
+      <main className="flex gap-6 min-h-screen bg-[#AACBC4]">
      
     {/* Esto es la sidebar*/} 
       <div
         className={`bg-[#0e0e0e] min-h-screen rounded-r-3xl text-gray-100 px-4 ${open ? 'w-[20vw]' : "w-[5vw]"} duration-500`}
         style={{ position: 'fixed', top: 0, left: 0, height: '100vh', zIndex: 50 }}
       >
-        <div className='py-3 flex justify-end'>
-          <HiMenuAlt3 size={26} className="cursor-pointer" onClick={() => setOpen(!open)} />
-        </div>
+        <div className="py-3 flex justify-between items-center">
+                  <img src="/sidedihy.svg" className="cursor-pointer" onClick={() => setOpen(!open)}/>
+                  <HiMenuAlt3 size={26} className="cursor-pointer" onClick={() => setOpen(!open)} />
+                </div>
         <div className='mt-4 flex flex-col gap-4 relative'>
           {
             menus?.map((menu, i) => (
