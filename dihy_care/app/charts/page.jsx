@@ -25,9 +25,9 @@ const [dataOpen, setDataOpen] = useState(false);
   const menus = [
     {name:"Home", link:"/", icon: MdOutlineDashboard},
     {name:"Agenda", link:"/calendario", icon: FaCalendarAlt},
-    {name:"Alimentacion", link:"/", icon: GiForkKnifeSpoon},
-    {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
-    {name:"Configuracion", link:"/", icon: RiSettings4Line},
+    {name:"Nutrition", link:"/", icon: GiForkKnifeSpoon},
+    {name:"Exercise", link:"/", icon: AiOutlineHeart, margin: true},
+    {name:"Settings", link:"/", icon: RiSettings4Line},
   
    ];
    const [open, setOpen] = useState(true);
@@ -82,11 +82,9 @@ const [dataOpen, setDataOpen] = useState(false);
         
         {/*esto es el resto de la pagina*/} 
      <div className='grid items-center xl:grid-cols-3 lg:grid-cols-2 w-full gap-10 max-w-[1400px] m-10'>
-    
     <GridItem title="Glucosa en Sangre"> <AreaChartComponent/> </GridItem>
     <GridItem title="Bar Chart"><BarChartComponent/></GridItem>
-    <GridItem title="Line Chart"><LineChartComponent/></GridItem>
-
+    <GridItem title="Presión"><LineChartComponent/></GridItem>
      </div>
     </main>
   );

@@ -40,12 +40,12 @@ const handleForm = (event) => {
      const menus = [
 
   {name:"Home", link:"/", icon: MdOutlineDashboard},
-  {name:"Graficos", link:"/charts", icon: TbReportAnalytics, margin: true},
-  {name:"Datos Diabetes", link:"/datosdiabetes", icon: FaWpforms},
+  {name:"Charts", link:"/charts", icon: TbReportAnalytics, margin: true},
+  {name:"Diabetes Data", link:"/datosdiabetes", icon: FaWpforms},
   {name:"Agenda", link:"/calendario", icon: FaCalendarAlt},
-  {name:"Alimentacion", link:"/", icon: GiForkKnifeSpoon},
-  {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
-  {name:"Configuracion", link:"/", icon: RiSettings4Line},
+  {name:"Nutrition", link:"/", icon: GiForkKnifeSpoon},
+  {name:"Exercise", link:"/", icon: AiOutlineHeart, margin: true},
+  {name:"Settings", link:"/", icon: RiSettings4Line},
 
  ];
  const [open, setOpen] = useState(true);

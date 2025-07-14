@@ -23,12 +23,11 @@ const Home = () => {
   const [events, setEvents] = useState([]);
 
   const menus = [
-    { name: "Messages", link: "/", icon: FiMessageSquare },
-    { name: "Graficos", link: "/charts", icon: TbReportAnalytics, margin: true },
+    { name: "Charts", link: "/charts", icon: TbReportAnalytics, margin: true },
     { name: "Agenda", link: "/calendario", icon: FaCalendarAlt },
     { name: "Alimentacion", link: "/", icon: GiForkKnifeSpoon },
     { name: "Ejercicio", link: "/", icon: AiOutlineHeart, margin: true },
-    { name: "Configuracion", link: "/configuracion", icon: RiSettings4Line },
+    { name: "Settings", link: "/configuracion", icon: RiSettings4Line },
   ];
 
   return (
