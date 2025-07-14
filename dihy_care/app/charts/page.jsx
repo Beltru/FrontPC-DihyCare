@@ -24,7 +24,6 @@ const [dataOpen, setDataOpen] = useState(false);
 
   const menus = [
     {name:"Home", link:"/", icon: MdOutlineDashboard},
-    {name:"Messages", link:"/", icon: FiMessageSquare},
     {name:"Agenda", link:"/calendario", icon: FaCalendarAlt},
     {name:"Alimentacion", link:"/", icon: GiForkKnifeSpoon},
     {name:"Ejercicio", link:"/", icon: AiOutlineHeart, margin: true},
@@ -39,9 +38,17 @@ const [dataOpen, setDataOpen] = useState(false);
     {/* Esto es la sidebar*/} 
         <div className={`bg-[#0e0e0e] min-h-screen rounded-r-3xl text-gray-100 px-4 ${open? 'w-[27vw]': "w-[5vw]"} duration-500 `}>
           <div className="py-3 flex justify-between items-center">
-                    <img src="/sidedihy.svg" className="cursor-pointer" onClick={() => setOpen(!open)}/>
-                    <HiMenuAlt3 size={26} className="cursor-pointer" onClick={() => setOpen(!open)} />
-                  </div>
+                     {/* Logo */}
+                              <div className="flex items-center gap-2 cursor-pointer transition-all duration-300" onClick={() => setOpen(!open)}>
+                                <img src="/CorazonClaro.png" alt="Logo" className="w-9 h-8 transition-all duration-300"/>
+                                <span className={`text-[#5bbec3] text-lg font-semibold transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`}>
+                                  DiHy Care
+                               </span>
+                              </div>
+                    
+                              {/* Botón de menú siempre visible */}
+                              <HiMenuAlt3 size={26} className="cursor-pointer transition-transform duration-300 hover:scale-110" onClick={() => setOpen(!open)}/>
+                            </div>
                <div className='flex flex-col mt-4 gap-4 relative'>
                    {/* Dropdown Data */}
                    <div onClick={() => setDataOpen(!dataOpen)} className="flex items-center justify-between text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md cursor-pointer">

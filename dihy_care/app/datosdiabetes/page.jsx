@@ -69,9 +69,17 @@ return(
         style={{ position: 'fixed', top: 0, left: 0, height: '100vh', zIndex: 50 }}
       >
         <div className="py-3 flex justify-between items-center">
-                  <img src="/sidedihy.svg" className="cursor-pointer" onClick={() => setOpen(!open)}/>
-                  <HiMenuAlt3 size={26} className="cursor-pointer" onClick={() => setOpen(!open)} />
-                </div>
+                 {/* Logo */}
+                          <div className="flex items-center gap-2 cursor-pointer transition-all duration-300" onClick={() => setOpen(!open)}>
+                            <img src="/CorazonClaro.png" alt="Logo" className="w-9 h-8 transition-all duration-300"/>
+                            <span className={`text-[#5bbec3] text-lg font-semibold transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`}>
+                              DiHy Care
+                           </span>
+                          </div>
+                
+                          {/* Botón de menú siempre visible */}
+                          <HiMenuAlt3 size={26} className="cursor-pointer transition-transform duration-300 hover:scale-110" onClick={() => setOpen(!open)}/>
+                        </div>
         <div className='mt-4 flex flex-col gap-4 relative'>
           {
             menus?.map((menu, i) => (
