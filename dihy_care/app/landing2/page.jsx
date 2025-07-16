@@ -6,6 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Squares from '../reactbits/squares';
 import Particles from '../reactbits/particles';
+import Aurora from '../reactbits/aurora';
+
 
 export default function Landing2() {
   const [isFooterVisible, setFooterVisible] = useState(false);
@@ -27,11 +29,11 @@ export default function Landing2() {
   }, []);
 
   return (
-    <div className="h-[532vh] bg-gradient-to-r from-[#07df9b] via-[#07a49c] to-[#069bd6] overflow-hidden">
+    <div className="h-[532vh]  overflow-hidden">
       
       <main className="flex min-h-screen flex-col relative">
-  {/* Fondo de cuadrados */}
-  <div className="absolute top-0 left-0 w-full h-full z-0">
+  {/* Fondo de reactbits */}
+  <div className="absolute top-0 left-0 w-full h-full z-0 bg-gradient-to-r from-[#07df9b] via-[#07a49c] to-[#069bd6]">
   <Particles particleColors={['#ffffff', '#ffffff']} particleCount={300} particleSpread={10} speed={0.5} particleBaseSize={100}moveParticlesOnHover={true} alphaParticles={false} disableRotation={false}/>
   </div>
 
@@ -50,11 +52,9 @@ export default function Landing2() {
     </section>
 
     <section className="w-[100vw] h-[20vw] my-[10vw] flex items-start" />
-
-    <footer
-      ref={footerRef}
-      className="flex flex-row items-center justify-center w-full bg-neutral-900 h-[100vh] px-[4%] py-[10%]"
-    >
+  <Aurora colorStops={["#3A29FF", "#FF94B4", "#FF3232"]} blend={0.5} amplitude={1.0} speed={0.5}/>
+    <footer ref={footerRef} className="flex flex-row items-center justify-center w-full bg-neutral-900 h-[100vh] px-[4%] py-[10%]"
+>
       <div className="m-4 w-[70%] h-[75vh] rounded-md p-10">
         <div className="text-[4.1vw] text-[#c2c1c1] leading-[0.7] flex flex-row items-center justify-center">
           The best way
