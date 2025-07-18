@@ -6,6 +6,7 @@ import Image from "next/image";
 import Squares from "../reactbits/squares";
 import Particles from "../reactbits/particles";
 import Aurora from "../reactbits/aurora";
+import GlareHover from "../reactbits/glare";
 
 export default function Landing2() {
   const footerRef = useRef(null);
@@ -27,11 +28,16 @@ export default function Landing2() {
           <div className="flex flex-col items-center justify-center w-full h-full">
             <h1 className="text-5xl text-white font-bold mb-4">Welcome to Dihy Care</h1>
             <p className="text-xl text-gray-300 mb-8">Your health, our priority.</p>
-            <Link href="/register">
-              <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
-                Get Started
-              </button>
-            </Link>
+            <div>
+              <GlareHover glareColor="#ffffff" glareOpacity={0.3} glareAngle={-30} glareSize={300} transitionDuration={800}playOnce={false}>
+                  <Link href="/register">
+                    <button className="px-6 py-3 bg-blue-600 text-white rounded-lg">
+                      Get Started
+                    </button>
+                  </Link>
+              </GlareHover>
+            </div>
+            
           </div>
         </section>
 
