@@ -7,18 +7,28 @@ import Squares from "../reactbits/squares";
 import Particles from "../reactbits/particles";
 import Aurora from "../reactbits/aurora";
 import GlareHover from "../reactbits/glare";
+import GooeyNav from "../reactbits/gooey";
 
 export default function Landing2() {
   const footerRef = useRef(null);
 
+  const items = [
+    { label: "Login", href: "/login" },
+    { label: "Sign Up", href: "/register" },
+    { label: "Contact", href: "#" },
+  ];
+
   return (
-    <div className="relative overflow-hidden bg-black">
+    <div>
+      
       {/* FONDO GENERAL: se mantiene solo para el main */}
       <div className="absolute inset-0 z-[-20] bg-gradient-to-b from-[#07df9b] via-[#07a49c] to-[#069bd6]" />
-
+        <header>
+           <div style={{  position: 'relative' }}>
+             <GooeyNav items={items} particleCount={15} particleDistances={[90, 10]} particleR={100} initialActiveIndex={0} animationTime={600} timeVariance={300} colors={[1, 2, 3, 1, 2, 3, 1, 4]}/>
+           </div>
+        </header>
       {/* PARTICULAS EN TODA LA PÁGINA */}
-      
-
       {/* MAIN */}
       <main className="relative z-10 flex min-h-screen flex-col bg-gradient-to-b from-[#07df9b] via-[#07a49c] to-[#069bd6]">
         {/* HERO */}<div className="absolute inset-0 z-[-10] pointer-events-none">
@@ -31,13 +41,13 @@ export default function Landing2() {
             <div>
               <GlareHover glareColor="#ffffff" glareOpacity={0.3} glareAngle={-30} glareSize={300} transitionDuration={800}playOnce={false}>
                   <Link href="/register">
-                    <button className="px-6 py-3 bg-blue-600 text-white rounded-lg">
+                    <button className="px-6 py-3 bg-[#066ccc] text-white rounded-lg hover:cursor-pointer">
                       Get Started
                     </button>
                   </Link>
               </GlareHover>
             </div>
-            
+
           </div>
         </section>
 

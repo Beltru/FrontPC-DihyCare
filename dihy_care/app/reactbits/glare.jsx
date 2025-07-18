@@ -3,9 +3,9 @@ import { useRef } from "react";
 const GlareHover = ({
   width = "",
   height = "",
-  background = "#000",
+  background = "#0671d6",
   borderRadius = "10px",
-  borderColor = "#333",
+  borderColor = "#0671d6",
   children,
   glareColor = "#ffffff",
   glareOpacity = 0.5,
