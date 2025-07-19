@@ -57,7 +57,7 @@ const GooeyNav = ({
         particle.style.setProperty("--scale", `${p.scale}`);
         particle.style.setProperty(
           "--color",
-          `var(--color-${p.color}, magenta)`
+          `var(--color-${p.color}, white)`
         );
         particle.style.setProperty("--rotate", `${p.rotate}deg`);
         point.classList.add("point");
@@ -256,6 +256,7 @@ const GooeyNav = ({
         li.active {
           color: black;
           text-shadow: none;
+          hover: cursor; pointer;
         }
         li.active::after {
           opacity: 1;
@@ -276,7 +277,7 @@ const GooeyNav = ({
 
       <div
         ref={containerRef}
-        className="fixed bottom-0 left-0 right-0  z-50"
+        className="fixed bottom-10 left-0 right-0  z-50"
       >
         <nav
           className="flex justify-center"

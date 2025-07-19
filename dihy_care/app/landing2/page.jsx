@@ -8,7 +8,8 @@ import Particles from "../reactbits/particles";
 import Aurora from "../reactbits/aurora";
 import GlareHover from "../reactbits/glare";
 import GooeyNav from "../reactbits/gooey";
-
+import GradientText from "../reactbits/gradientext";
+import AreaChartComponentLand from "../components/AreaChartLand";
 export default function Landing2() {
   const footerRef = useRef(null);
 
@@ -22,12 +23,13 @@ export default function Landing2() {
     <div>
       
       {/* FONDO GENERAL: se mantiene solo para el main */}
-      <div className="absolute inset-0 z-[-20] bg-gradient-to-b from-[#07df9b] via-[#07a49c] to-[#069bd6]" />
-        <header>
+      <div className="absolute max-w-screen inset-0 z-[-20] bg-gradient-to-b from-[#07df9b] via-[#07a49c] to-[#069bd6] overflow-x-hidden" />
+       {/*<header>
+          
            <div style={{  position: 'relative' }}>
              <GooeyNav items={items} particleCount={15} particleDistances={[90, 10]} particleR={100} initialActiveIndex={0} animationTime={600} timeVariance={300} colors={[1, 2, 3, 1, 2, 3, 1, 4]}/>
            </div>
-        </header>
+        </header> */} 
       {/* PARTICULAS EN TODA LA PÁGINA */}
       {/* MAIN */}
       <main className="relative z-10 flex min-h-screen flex-col bg-gradient-to-b from-[#07df9b] via-[#07a49c] to-[#069bd6]">
@@ -47,9 +49,14 @@ export default function Landing2() {
                   </Link>
               </GlareHover>
             </div>
-
           </div>
         </section>
+          <section className="w-full flex items-center justify-center">
+            <div className="w-[50vw] h-[20vw] flex items-center justify-center bg-slate-800 p-5 rounded-xl">
+              <AreaChartComponentLand/>
+            </div>
+          </section>
+
 
         {/* TRANSICIÓN SUAVE ENTRE MAIN Y FOOTER */}
         <div className="w-full h-[12vh] bg-gradient-to-b from-transparent to-[#069bd6]" />
@@ -72,12 +79,13 @@ export default function Landing2() {
 
         {/* CONTENIDO */}
         <div className="relative z-10 m-4 w-[70%] h-[75vh] rounded-md p-10">
-          <div className="text-[4.1vw] text-[#c2c1c1] leading-[0.7] flex flex-row items-center justify-center">
-            The best way
-            <p className="font-[300] text-[1.5rem] mx-2 mr-4 text-neutral-500 w-[6vw]">――――</p>
-            To track
-          </div>
-          <div className="text-[4.1vw] ml-24 text-[#c2c1c1]">Your finances</div>
+          <GradientText colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]} animationSpeed={3} showBorder={false} className="custom-class">
+            <p className="text-[4.1vw] leading-[0.7] flex flex-row items-center justify-center">
+                        The best way to track
+                        </p>
+            <p className="text-[4.1vw]">Your health</p>
+          </GradientText>         
+          
           <div className="flex items-center justify-around mt-28 border border-gray-600 hover:border-gray-400 duration-300 h-[30%]">
             <p className="text-3xl">Start here</p>
             <Link href="./register">
