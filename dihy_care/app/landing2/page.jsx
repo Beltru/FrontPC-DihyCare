@@ -51,11 +51,14 @@ export default function Landing2() {
             </div>
           </div>
         </section>
-          <section className="w-full flex items-center justify-center">
+         
+          {/*   <section className="w-full flex items-center justify-center">
             <div className="w-[50vw] h-[20vw] flex items-center justify-center bg-slate-800 p-5 rounded-xl">
               <AreaChartComponentLand/>
             </div>
-          </section>
+          </section>*/}
+
+        
 
 
         {/* TRANSICIÓN SUAVE ENTRE MAIN Y FOOTER */}
