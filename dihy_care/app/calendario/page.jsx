@@ -4,50 +4,97 @@ import Image from "next/image";
 import React from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineDashboard } from "react-icons/md";
-import {  AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart } from "react-icons/ai";
 import { RiSettings4Line } from "react-icons/ri";
 import { TbReportAnalytics } from "react-icons/tb";
-import { FiMessageSquare } from "react-icons/fi";
 import { FaWpforms } from "react-icons/fa";
 import { GiForkKnifeSpoon } from "react-icons/gi";
 import EventCalendar from '../components/Calendario';
-import {addDays, subDays, format} from "date-fns"
-
 import Link from 'next/link';
-import {ScheduleXCalendar, usCalendarApp} from "@schedule-x/react";
 
-const Calendario = () =>{
-const [dataOpen, setDataOpen] = useState(false);
+const Calendario = () => {
+  const [dataOpen, setDataOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [events, setEvents] = useState([]);
 
- const menus = [
-  {name:"Home", link:"/", icon: MdOutlineDashboard},
-  {name:"Charts", link:"/charts", icon: TbReportAnalytics, margin: true},
-  {name:"Nutrition", link:"/", icon: GiForkKnifeSpoon},
-  {name:"Exercise", link:"/", icon: AiOutlineHeart, margin: true},
-  {name:"Settings", link:"/", icon: RiSettings4Line},
+  // ⚡️ cambiar si usas auth/login
+  const userId = 1;
 
- ];
- const [open, setOpen] = useState(true);
-return(
-  
-      <main className="flex gap-6 min-h-screen bg-[#AACBC4]">
-     
-     {/* Esto es la sidebar*/} 
-        <div className={`bg-[#0e0e0e] min-h-screen rounded-r-3xl text-gray-100 px-4 ${open? 'w-[20vw]': "w-[5vw]"} duration-500 `}>
-           <div className="py-3 flex justify-between items-center">
-                      {/* Logo */}
-                               <div className="flex items-center gap-2 cursor-pointer transition-all duration-300" onClick={() => setOpen(!open)}>
-                                 <img src="/CorazonClaro.png" alt="Logo" className="w-9 h-8 transition-all duration-300"/>
-                                 <span className={`text-[#5bbec3] text-lg font-semibold transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`}>
-                                   DiHy Care
-                                </span>
-                               </div>
-                     
-                               {/* Botón de menú siempre visible */}
-                               <HiMenuAlt3 size={26} className="cursor-pointer transition-transform duration-300 hover:scale-110" onClick={() => setOpen(!open)}/>
-                             </div>
-                <div className='flex flex-col mt-4 gap-4 relative'>
-          {/* Dropdown Data */}
+  const menus = [
+    {name:"Home", link:"/", icon: MdOutlineDashboard},
+    {name:"Charts", link:"/charts", icon: TbReportAnalytics, margin: true},
+    {name:"Nutrition", link:"/", icon: GiForkKnifeSpoon},
+    {name:"Exercise", link:"/", icon: AiOutlineHeart, margin: true},
+    {name:"Settings", link:"/", icon: RiSettings4Line},
+  ];
+
+  // 🔹 Cargar eventos del backend filtrados por userId
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const res = await fetch("https://dihycare-backend.vercel.app/calendar/user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId })
+        });
+
+        const data = await res.json();
+
+        // Adaptar al formato que usa tu calendario
+        const formatted = data.map(ev => ({
+          date: new Date(ev.date),
+          title: ev.event,
+          description: ev.description,
+          type: ev.type,
+          userId: ev.userId
+        }));
+
+        setEvents(formatted);
+      } catch (err) {
+        console.error("Error fetching events:", err);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  // 🔹 Guardar evento nuevo
+  const addEvent = async (newEvent) => {
+    try {
+      const res = await fetch("https://dihycare-backend.vercel.app/calendar/", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          ...newEvent,
+          userId
+        })
+      });
+
+      if (!res.ok) throw new Error("Error saving event");
+
+      // añadir al estado local
+      setEvents([...events, { ...newEvent, date: new Date(newEvent.date), userId }]);
+    } catch (err) {
+      console.error("Error adding event:", err);
+    }
+  };
+
+  return (
+    <main className="flex gap-6 min-h-screen bg-[#AACBC4]">
+      {/* Sidebar */}
+      <div className={`bg-[#0e0e0e] min-h-screen rounded-r-3xl text-gray-100 px-4 ${open? 'w-[20vw]': "w-[5vw]"} duration-500 `}>
+        <div className="py-3 flex justify-between items-center">
+          {/* Logo */}
+          <div className="flex items-center gap-2 cursor-pointer transition-all duration-300" onClick={() => setOpen(!open)}>
+            <img src="/CorazonClaro.png" alt="Logo" className="w-9 h-8 transition-all duration-300"/>
+            <span className={`text-[#5bbec3] text-lg font-semibold transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`}>
+              DiHy Care
+            </span>
+          </div>
+          <HiMenuAlt3 size={26} className="cursor-pointer transition-transform duration-300 hover:scale-110" onClick={() => setOpen(!open)}/>
+        </div>
+
+        {/* Menu */}
+        <div className='flex flex-col mt-4 gap-4 relative'>
           <div onClick={() => setDataOpen(!dataOpen)} className="flex items-center justify-between text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md cursor-pointer">
             <div className="flex items-center gap-3">
               <FaWpforms size={20} />
@@ -63,7 +110,6 @@ return(
             </div>
           )}
 
-          {/* Otros menús */}
           {menus.map((menu, i) => (
             <Link
               href={menu.link}
@@ -75,19 +121,17 @@ return(
             </Link>
           ))}
         </div>
-        </div>
+      </div>
 
-       {/*esto es el resto de la pagina*/} 
-        <div className='flex flex-1 justify-center items-start text-slate-900 font-bold'>
-            <EventCalendar 
-            events={[
-              {date:subDays(new Date(), 6), title: "Post Video"},
-              {date:subDays(new Date(), 1), title: "Edit Video"},
-              {date:subDays(new Date(), 3), title: "Code"},
-            ]}/>
-        </div>
-       </main>
-
+      {/* Contenido */}
+      <div className='flex flex-1 justify-center items-start text-slate-900 font-bold'>
+        <EventCalendar 
+          events={events}
+          onAddEvent={addEvent} // 👈 para que el calendario pueda agregar
+        />
+      </div>
+    </main>
   );
 }
+
 export default Calendario;
