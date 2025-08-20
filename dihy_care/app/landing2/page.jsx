@@ -9,7 +9,7 @@ import Aurora from "../reactbits/aurora";
 import GlareHover from "../reactbits/glare";
 import GooeyNav from "../reactbits/gooey";
 import GradientText from "../reactbits/gradientext";
-import AreaChartComponentLand from "../components/AreaChartLand";
+import AreaChartComponent from "../components/AreaChart";
 export default function Landing2() {
   const footerRef = useRef(null);
 
@@ -52,11 +52,12 @@ export default function Landing2() {
           </div>
         </section>
          
-          {/*   <section className="w-full flex items-center justify-center">
-            <div className="w-[50vw] h-[20vw] flex items-center justify-center bg-slate-800 p-5 rounded-xl">
-              <AreaChartComponentLand/>
+        <section className="w-full flex items-center justify-center">
+            <div className="w-[50vw] h-[20vw] flex items-center justify-center bg-slate-800/70 backdrop-blur-l p-5 rounded-xl shadow-lg">
+             <AreaChartComponent/>
             </div>
-          </section>*/}
+          </section>
+
 
         
 
