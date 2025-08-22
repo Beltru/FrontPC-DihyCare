@@ -12,7 +12,9 @@ import GradientText from "../reactbits/gradientext";
 import AreaChartComponent from "../components/AreaChart";
 export default function Landing2() {
   const footerRef = useRef(null);
-
+    
+  const [active, setActive] = useState("left");
+  
   const items = [
     { label: "Login", href: "/login" },
     { label: "Sign Up", href: "/register" },
@@ -53,14 +55,20 @@ export default function Landing2() {
         </section>
          
         <section className="w-full flex items-center justify-center">
-            <div className="w-[50vw] h-[20vw] flex items-center justify-center bg-slate-800/70 backdrop-blur-l p-5 rounded-xl shadow-lg">
+            <div className="w-[50vw] h-[50vh] flex items-center justify-center m-2 bg-slate-800/70 backdrop-blur-l p-5 rounded-xl shadow-lg">
              <AreaChartComponent/>
             </div>
           </section>
+          
+          <section className="w-full flex items-center justify-center gap-2">
+      {/* Carta Izquierda */}
+      <div onMouseEnter={() => setActive("left")} className={`h-[80vh] rounded-2xl transition-all duration-300 ${active === "left" ? "w-[70vw]" : "w-[20vw]"} bg-slate-900`}></div>
 
-
-        
-
+      {/* Carta Derecha */}
+      <div onMouseEnter={() => setActive("right")} className={`h-[80vh] rounded-2xl transition-all duration-300 ${active === "right" ? "w-[70vw]" : "w-[20vw]"} bg-neutral-950`}>
+        <h1 className="m-2 text-5xl">Dr. Gabriel Lijteroff </h1>
+      </div>
+    </section>
 
         {/* TRANSICIÓN SUAVE ENTRE MAIN Y FOOTER */}
         <div className="w-full h-[12vh] bg-gradient-to-b from-transparent to-[#069bd6]" />
