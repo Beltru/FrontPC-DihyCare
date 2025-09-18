@@ -1,0 +1,6 @@
+{
+    "dependencies":{
+ "react-link": "^1.0.3",
+    "recharts": "^2.15.3"
+}
+}
