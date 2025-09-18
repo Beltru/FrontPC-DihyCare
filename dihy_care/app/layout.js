@@ -1,4 +1,4 @@
-import { Poppins, Poppins_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 
 const poppinsMono = Poppins({
