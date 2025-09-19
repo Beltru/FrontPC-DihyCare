@@ -2,12 +2,12 @@ import CountUp from 'react-countup';
 
 export default function Uptime({ number, unit, secondaryNumber, secondaryUnit, name }) {
   return (
-    <div className="flex flex-col w-full p-4 rounded-lg bg-green-100 text-black shadow-md">
+    <div className="flex flex-col w-full text-black ">
      
       {/* Valores principales */}
       <div className="flex items-baseline justify-center gap-5 w-full">
         {/* Valor principal */}
-        <div className="flex items-baseline space-x-1">
+        <div className="flex items-baseline space-x-1 p-4 rounded-lg bg-cyan-100 shadow-md">
           <CountUp 
             end={number} 
             duration={2} 
@@ -19,7 +19,7 @@ export default function Uptime({ number, unit, secondaryNumber, secondaryUnit, n
 
         {/* Valor secundario */}
         {secondaryNumber !== undefined && (
-          <div className="flex items-baseline space-x-1">
+          <div className="flex items-baseline space-x-1 p-4 rounded-lg bg-cyan-100 shadow-md">
             <CountUp 
               end={secondaryNumber} 
               duration={2} 

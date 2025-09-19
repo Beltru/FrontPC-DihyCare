@@ -21,11 +21,10 @@ const Home = () => {
   const [events, setEvents] = useState([]);
 
   const menus = [
-    {name: "Home", link: "/", icon: MdOutlineDashboard },
+    { name: "Home", link: "/", icon: MdOutlineDashboard },
     { name: "Charts", link: "/charts", icon: TbReportAnalytics, margin: true },
-    { name: "Agenda", link: "/calendario", icon: FaCalendarAlt },
-    { name: "Alimentacion", link: "/", icon: GiForkKnifeSpoon },
-    { name: "Ejercicio", link: "/", icon: AiOutlineHeart, margin: true },
+    { name: "Calendar", link: "/calendario", icon: FaCalendarAlt },
+    { name: "Nutrition", link: "/", icon: GiForkKnifeSpoon },
     { name: "Settings", link: "/configuracion", icon: RiSettings4Line },
   ];
 
@@ -108,14 +107,19 @@ const Home = () => {
            
             <div className="w-full h-full px-2 py-2"> 
                 <Uptime name="Uptime" number={60} unit="min" secondaryNumber={4.33} secondaryUnit="km"/>
-
             </div>
           </div>
       </div>
         </div>
         {/* RIGHT CONTENT: AGENDA */}
-        <div className="flex flex-col bg-gradient-to-b bg-[#AACBC4] rounded-xl p-4 w-[55%] overflow-y-auto gap-0">
-          
+        <div className="flex flex-col items-center justify-center border-l-2 border-black p-4 w-[45vw]">
+          <ul className='flex flex-col gap-5'>
+            <li className='bg-blue-300 rounded-xl w-[15vw] h-[12vh] flex flex-row items-center gap-2'><img src="pushups.png" className='p-2 rounded-xl bg-gray-100 w-[5vw] h-[10vh] ml-2'/><p className='text-[85%] font-bold text-black flex flex-col'>Push Up <p className='text-[80%]'>20 push up a day</p></p></li>
+            <li className='bg-blue-300 rounded-xl w-[15vw] h-[12vh] flex flex-row items-center gap-2'><img src="pushups.png" className='p-2 rounded-xl bg-gray-100 w-[5vw] h-[10vh] ml-2'/><p className='text-[85%] font-bold text-black flex flex-col'>Squats <p className='text-[80%]'>10 minutes a day</p></p></li>
+            <li className='bg-blue-300 rounded-xl w-[15vw] h-[12vh] flex flex-row items-center gap-2'><img src="pushups.png" className='p-2 rounded-xl bg-gray-100 w-[5vw] h-[10vh] ml-2'/><p className='text-[85%] font-bold text-black flex flex-col'>Sit up <p className='text-[80%]'>30 sit up a day</p></p></li>
+            <li className='bg-blue-300 rounded-xl w-[15vw] h-[12vh] flex flex-row items-center gap-2'><img src="pushups.png" className='p-2 rounded-xl bg-gray-100 w-[5vw] h-[10vh] ml-2'/><p className='text-[85%] font-bold text-black flex flex-col'>Bridge <p className='text-[80%]'>30 bridge a day</p></p></li>
+            <li className='bg-blue-300 rounded-xl w-[15vw] h-[12vh] flex flex-row items-center gap-2'><img src="pushups.png" className='p-2 rounded-xl bg-gray-100 w-[5vw] h-[10vh] ml-2'/><p className='text-[85%] font-bold text-black flex flex-col'>Crab walk <p className='text-[80%]'>7 minutes a day</p></p></li>
+          </ul>
         </div>
 
       </div>

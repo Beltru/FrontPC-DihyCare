@@ -16,12 +16,11 @@ const Configuracion = () => {
   const [events, setEvents] = useState([]);
 
   const menus = [
-    {name:"Home", link:"/", icon: MdOutlineDashboard},
-    { name: "Messages", link: "/", icon: FiMessageSquare },
-    { name: "Graficos", link: "/charts", icon: TbReportAnalytics, margin: true },
-    { name: "Agenda", link: "/calendario", icon: FaCalendarAlt },
-    { name: "Alimentacion", link: "/", icon: GiForkKnifeSpoon },
-    { name: "Ejercicio", link: "/", icon: AiOutlineHeart, margin: true },
+    { name:"Home", link:"/", icon: MdOutlineDashboard},
+    { name: "Charts", link: "/charts", icon: TbReportAnalytics, margin: true },
+    { name: "Calendar", link: "/calendario", icon: FaCalendarAlt },
+    { name: "Nutrition", link: "/", icon: GiForkKnifeSpoon },
+    { name: "Exercise", link: "/ejercicio", icon: AiOutlineHeart, margin: true },
   ];
 
   return (

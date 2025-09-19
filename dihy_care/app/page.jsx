@@ -24,9 +24,9 @@ const Home = () => {
 
   const menus = [
     { name: "Charts", link: "/charts", icon: TbReportAnalytics, margin: true },
-    { name: "Agenda", link: "/calendario", icon: FaCalendarAlt },
+    { name: "Calendar", link: "/calendario", icon: FaCalendarAlt },
     { name: "Alimentacion", link: "/", icon: GiForkKnifeSpoon },
-    { name: "Ejercicio", link: "/", icon: AiOutlineHeart, margin: true },
+    { name: "Exercise", link: "/ejercicio", icon: AiOutlineHeart, margin: true },
     { name: "Settings", link: "/configuracion", icon: RiSettings4Line },
   ];
 

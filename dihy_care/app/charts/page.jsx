@@ -26,7 +26,7 @@ const [dataOpen, setDataOpen] = useState(false);
     {name:"Home", link:"/", icon: MdOutlineDashboard},
     {name:"Agenda", link:"/calendario", icon: FaCalendarAlt},
     {name:"Nutrition", link:"/", icon: GiForkKnifeSpoon},
-    {name:"Exercise", link:"/", icon: AiOutlineHeart, margin: true},
+    {name:"Exercise", link:"/ejercicio", icon: AiOutlineHeart, margin: true},
     {name:"Settings", link:"/", icon: RiSettings4Line},
   
    ];

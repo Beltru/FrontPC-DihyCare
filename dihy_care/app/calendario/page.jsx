@@ -17,18 +17,17 @@ const Calendario = () => {
   const [open, setOpen] = useState(true);
   const [events, setEvents] = useState([]);
 
-  // ⚡️ cambiar si usas auth/login
   const userId = 1;
 
   const menus = [
     {name:"Home", link:"/", icon: MdOutlineDashboard},
     {name:"Charts", link:"/charts", icon: TbReportAnalytics, margin: true},
     {name:"Nutrition", link:"/", icon: GiForkKnifeSpoon},
-    {name:"Exercise", link:"/", icon: AiOutlineHeart, margin: true},
-    {name:"Settings", link:"/", icon: RiSettings4Line},
+    {name:"Exercise", link:"/ejercicio", icon: AiOutlineHeart, margin: true},
+    {name:"Settings", link:"/configuracion", icon: RiSettings4Line},
   ];
 
-  // 🔹 Cargar eventos del backend filtrados por userId
+  //  Cargar eventos del backend filtrados por userId
   useEffect(() => {
     const fetchEvents = async () => {
       try {
