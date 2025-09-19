@@ -19,7 +19,7 @@ const Configuracion = () => {
     { name:"Home", link:"/", icon: MdOutlineDashboard},
     { name: "Charts", link: "/charts", icon: TbReportAnalytics, margin: true },
     { name: "Calendar", link: "/calendario", icon: FaCalendarAlt },
-    { name: "Nutrition", link: "/", icon: GiForkKnifeSpoon },
+    { name: "Nutrition", link: "/recetas", icon: GiForkKnifeSpoon },
     { name: "Exercise", link: "/ejercicio", icon: AiOutlineHeart, margin: true },
   ];
 

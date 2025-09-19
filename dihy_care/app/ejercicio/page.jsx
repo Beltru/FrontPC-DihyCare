@@ -24,7 +24,7 @@ const Home = () => {
     { name: "Home", link: "/", icon: MdOutlineDashboard },
     { name: "Charts", link: "/charts", icon: TbReportAnalytics, margin: true },
     { name: "Calendar", link: "/calendario", icon: FaCalendarAlt },
-    { name: "Nutrition", link: "/", icon: GiForkKnifeSpoon },
+    { name: "Nutrition", link: "/recetas", icon: GiForkKnifeSpoon },
     { name: "Settings", link: "/configuracion", icon: RiSettings4Line },
   ];
 

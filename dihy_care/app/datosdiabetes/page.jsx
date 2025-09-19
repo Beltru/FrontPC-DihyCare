@@ -53,9 +53,9 @@ const handleForm = (event) => {
   {name:"Charts", link:"/charts", icon: TbReportAnalytics, margin: true},
   {name:"Hypertension Data", link:"/datoshipertension", icon: FaWpforms},
   {name:"Agenda", link:"/calendario", icon: FaCalendarAlt},
-  {name:"Nutrition", link:"/", icon: GiForkKnifeSpoon},
+  {name:"Nutrition", link:"/recetas", icon: GiForkKnifeSpoon},
   {name:"Exercise", link:"/ejercicio", icon: AiOutlineHeart, margin: true},
-  {name:"Settings", link:"/", icon: RiSettings4Line},
+  {name:"Settings", link:"/configuracion", icon: RiSettings4Line},
 
  ];
  const [open, setOpen] = useState(true);

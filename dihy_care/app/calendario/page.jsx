@@ -22,7 +22,7 @@ const Calendario = () => {
   const menus = [
     {name:"Home", link:"/", icon: MdOutlineDashboard},
     {name:"Charts", link:"/charts", icon: TbReportAnalytics, margin: true},
-    {name:"Nutrition", link:"/", icon: GiForkKnifeSpoon},
+    {name:"Nutrition", link:"/recetas", icon: GiForkKnifeSpoon},
     {name:"Exercise", link:"/ejercicio", icon: AiOutlineHeart, margin: true},
     {name:"Settings", link:"/configuracion", icon: RiSettings4Line},
   ];
