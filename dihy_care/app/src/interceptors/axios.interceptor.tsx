@@ -1,35 +1,38 @@
 //interceptior para la llamada del backend
-import axios ,{ AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
-export const AxiosInterceptor = () => {
-    const updateHeader = (request: AxiosRequestConfig) =>{
-        const token = '1232312312313112';//insert token del back; 
-        const newHeaders = {
-        authorization: token,
-        "Content-Type":"application/json", 
+export const AxiosInterceptor = (instance: AxiosInstance) => {
+  const updateHeader = (request: InternalAxiosRequestConfig) => {
+    // localStorage solo está disponible en el cliente
+    const token =
+      typeof window !== 'undefined' ? localStorage.getItem('token') || '' : '';
 
-    }; 
-        request.headers = newHeaders;   
-        return request;
+    if (!request.headers) {
+      request.headers = {} as any;
     }
 
-    axios.interceptors.request.use((request)=>{
+    if (token) {
+      (request.headers as any)['Authorization'] = `Bearer ${token}`;
+    }
 
-        return updateHeader(request);
+    (request.headers as any)['Content-Type'] = 'application/json';
 
-    }); 
+    return request;
+  };
 
-    axios.interceptors.response.use(
-        
-        (response)=>{
-            
-        console.log('interceptor de respuesta', response);
-        return response;
+  instance.interceptors.request.use(
+    updateHeader,
+    (error) => Promise.reject(error)
+  );
 
-        },
-        
-        (error)=>{}
-
-    );
-
-}
+  instance.interceptors.response.use(
+    (response) => {
+      console.log('Respuesta interceptada', response);
+      return response;
+    },
+    (error) => {
+      console.error('Error interceptado', error);
+      return Promise.reject(error);
+    }
+  );
+};
