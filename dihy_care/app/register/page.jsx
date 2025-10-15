@@ -4,6 +4,8 @@ import "./login.css";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import api from "../src/api"; 
+
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -11,27 +13,30 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setErrorMsg("");
+  setLoading(true);
+  try {
+    const response = await api.post("/register", { name, lastname, email, password });
 
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, lastname, email, password }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      router.push("/form");
-    } else {
-      setErrorMsg(data.message);
+    const token = response?.data?.token;
+    if (token && typeof window !== "undefined") {
+      localStorage.setItem("token", token);
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
-  };
+
+    router.push("/form");
+  } catch (error) {
+    const message = error?.response?.data?.message || error?.message || "Error al registrar el usuario";
+    setErrorMsg(message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-[#2c6d8d]  to-[#1a235e] overflow-hidden">
@@ -86,8 +91,8 @@ const Register = () => {
             {errorMsg && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
 
             <div className="flex justify-center items-center flex-col w-[100%]">
-              <button type="submit" className="w-[100%]">
-                Next
+              <button type="submit" className="w-[100%]" disabled={loading}>
+                {loading ? 'Registrando...' : 'Next'}
               </button>
               <div className="register">
                 <p>Already have an account?</p>
