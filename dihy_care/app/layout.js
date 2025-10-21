@@ -1,5 +1,6 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import Sidebar from "./components/Sidebar";
 
 const poppinsMono = Poppins({
   variable: "--font-poppins-mono",
@@ -12,8 +13,6 @@ const poppinsSans = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
-
-
 
 export const metadata = {
   title: "DiHy Care",
@@ -28,9 +27,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${poppinsSans.variable} ${poppinsMono.variable} antialiased`}
+        className={`${poppinsSans.variable} ${poppinsMono.variable} antialiased flex bg-[#d9d9d9] h-screen overflow-hidden`}
       >
-        {children}
+        {/* 🔹 Sidebar visible en todas las páginas */}
+        <Sidebar />
+
+        {/* 🔹 Contenido principal */}
+        <main className="flex-1 overflow-y-hidden">{children}</main>
       </body>
     </html>
   );
