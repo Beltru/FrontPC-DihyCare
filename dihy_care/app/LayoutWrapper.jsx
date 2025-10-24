@@ -15,7 +15,7 @@ export default function LayoutWrapper({ children }) {
   }
 
   return (
-    <div className="flex min-h-screen w-screen m-0 p-0 ">
+    <div className="flex min-h-screen w-screen m-0 p-0 overflow-x-hidden">
       <Sidebar />
       <main className="flex-1 m-0 p-0">{children}</main>
     </div>
