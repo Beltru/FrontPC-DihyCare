@@ -14,19 +14,16 @@ import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
 import { FaCalendarAlt } from "react-icons/fa";
 import { FaWpforms } from "react-icons/fa";
 import { GiForkKnifeSpoon } from "react-icons/gi";
-
 import Link from 'next/link';
 import React from "react";
-
 
 export default function Charts () {
 const [dataOpen, setDataOpen] = useState(false);
 
-
    const [open, setOpen] = useState(true);
 
   return (
-    <main className="flex gap-6 min-h-screen bg-radial from-[#254A7F] to-[#140850] ">   
+    <main className="flex  min-h-screen bg-radial from-[#254A7F] to-[#140850] ">   
         {/*esto es el resto de la pagina*/} 
      <div className='grid items-center xl:grid-cols-3 lg:grid-cols-2 w-full gap-10 max-w-[1400px] m-10'>
     <GridItem title="Glucosa en Sangre"> <AreaChartComponent/> </GridItem>

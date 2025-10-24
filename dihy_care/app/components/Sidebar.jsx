@@ -20,7 +20,7 @@ const Sidebar = () => {
   const menus = [
     { name: "Charts", link: "/charts", icon: TbReportAnalytics },
     { name: "Calendar", link: "/calendario", icon: FaCalendarAlt },
-    { name: "Alimentacion", link: "/recetas", icon: GiForkKnifeSpoon },
+    { name: "Nutrition", link: "/recetas", icon: GiForkKnifeSpoon },
     { name: "Exercise", link: "/ejercicio", icon: AiOutlineHeart },
     { name: "Settings", link: "/configuracion", icon: RiSettings4Line },
   ];
@@ -56,7 +56,7 @@ const Sidebar = () => {
       {/* 🔹 Dashboard separado arriba */}
       <div className="mt-2 mb-6">
         <Link
-          href="/"
+          href="/home"
           className={`group flex items-center text-sm gap-3.5 font-medium p-2 rounded-md ${
             pathname === "/"
               ? "bg-gray-700 text-[#5bbec3]"

@@ -1,6 +1,6 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import ClientLayout from "./components/ClientLayout"; // nuevo componente cliente
+import LayoutWrapper from "./LayoutWrapper"; // nuevo archivo cliente
 
 const poppinsMono = Poppins({
   variable: "--font-poppins-mono",
@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${poppinsSans.variable} ${poppinsMono.variable} antialiased`}
       >
-        <ClientLayout>{children}</ClientLayout>
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );
