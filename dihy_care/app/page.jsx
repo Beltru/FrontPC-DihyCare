@@ -8,6 +8,8 @@ import Aurora from ".//reactbits/aurora";
 import GlareHover from ".//reactbits/glare";
 import GradientText from ".//reactbits/gradientext";
 import AreaChartComponent from "./components/AreaChart";
+import LineChartComponent from "./components/LineChart";
+
 export default function Landing2() {
   const footerRef = useRef(null);
     
@@ -36,8 +38,8 @@ export default function Landing2() {
         {/* HERO */}<div className="absolute inset-0 z-[-10] pointer-events-none">
         <Particles particleColors={["#ffffff", "#ffffff"]} particleCount={200} particleSpread={10} speed={0.3} particleBaseSize={80} moveParticlesOnHover={true} alphaParticles={false} disableRotation={true} />
       </div>
-        <section className="mt-10 w-full h-[70vh] flex items-center flex-col mb-[10vw]">
-          <div className="flex flex-col items-center justify-center w-full h-full">
+        <section className="mt-10 w-full h-[100vh] flex items-center flex-col mb-[10vw]">
+          <div className="flex flex-col items-center w-full h-full mt-30">
             <h1 className="text-5xl text-white font-bold mb-4">Welcome to Dihy Care</h1>
             <p className="text-xl text-gray-300 mb-8">Your health, our priority.</p>
             <div>
@@ -52,19 +54,33 @@ export default function Landing2() {
           </div>
         </section>
          
-        <section className="w-full flex items-center justify-center">
-            <div className="w-[50vw] h-[50vh] flex items-center justify-center m-2 bg-slate-800/70 backdrop-blur-l p-5 rounded-xl shadow-lg">
-             <AreaChartComponent/>
+        <section className="w-full h-[100vh] flex items-center justify-center">
+          <div className="flex-col flex">
+            <div className="mb-2 bg-slate-600/30 rounded-2xl p-3"><p className="text-7xl">Charts to display information</p></div>
+            <div className="flex flex-row gap-4 items-center justify-center m-6 w-[80vw]">
+            <GridItem title="Glucosa en Sangre">
+          <AreaChartComponent />
+        </GridItem>
+
+        <GridItem title="Presión">
+          <LineChartComponent />
+        </GridItem>
             </div>
+          </div>
+            
           </section>
           
-          <section className="w-full flex items-center justify-center gap-2">
+          <section className="w-full h-[100vh] flex items-center justify-center gap-2">
       {/* Carta Izquierda */}
       <div onMouseEnter={() => setActive("left")} className={`h-[80vh] rounded-2xl transition-all duration-300 ${active === "left" ? "w-[70vw]" : "w-[20vw]"} bg-slate-900`}></div>
 
       {/* Carta Derecha */}
-      <div onMouseEnter={() => setActive("right")} className={`h-[80vh] rounded-2xl transition-all duration-300 ${active === "right" ? "w-[70vw]" : "w-[20vw]"} bg-neutral-950`}>
-        <h1 className="m-2 text-5xl">Dr. Gabriel Lijteroff </h1>
+      <div onMouseEnter={() => setActive("right")} className={`h-[80vh] rounded-2xl transition-all duration-300 ${active === "right" ? "w-[70vw]" : "w-[20vw]"} bg-white/90`}>
+           <h1 className="m-2 text-5xl text-slate-800">Dr. Gabriel Lijteroff </h1>
+          <div className="flex items-center flex-row ml-8">
+           <img src="/gabriel.png"/>
+           <p className="m-4 text-2xl text-gray-800">Endocrinology and diabetes specialist with over 15 years of experience helping patients manage their health conditions. Passionate about patient education and empowerment.</p>
+           </div>
       </div>
     </section>
 
@@ -109,6 +125,14 @@ export default function Landing2() {
           <Image src={"/CorazonClaro.png"} alt="" width={500} height={500} />
         </div>
       </footer>
+    </div>
+  );
+}
+function GridItem({ title, children }) {
+  return (
+    <div className="p-4 bg-slate-800/90 text-white rounded-lg shadow-md w-full h-[350px] flex flex-col">
+      <h2 className="text-lg font-semibold mb-2">{title}</h2>
+      <div className="flex-1 flex items-center justify-center">{children}</div>
     </div>
   );
 }
