@@ -70,19 +70,54 @@ export default function Landing2() {
             
           </section>
           
-          <section className="w-full h-[100vh] flex items-center justify-center gap-2">
-      {/* Carta Izquierda */}
-      <div onMouseEnter={() => setActive("left")} className={`h-[80vh] rounded-2xl transition-all duration-300 ${active === "left" ? "w-[70vw]" : "w-[20vw]"} bg-slate-900`}></div>
+          
+   <section className="w-full h-[100vh] flex items-center justify-center px-8 gap-2">
+      {/* ====== Carta Izquierda ====== */}
+      <div onMouseEnter={() => setActive("left")} onMouseLeave={() => setActive(null)} className={`h-[80vh] rounded-2xl transition-all duration-500 flex flex-col items-center justify-center bg-slate-900 overflow-hidden ${  active === "left" ? "flex-[7]"  : active === "right"  ? "flex-[2]"  : "flex-[1]" }`}>
+        {/* Título (siempre visible) */}
+        <h1 className="text-4xl font-semibold text-white text-center mb-6">
+          Left Title
+        </h1>
 
-      {/* Carta Derecha */}
-      <div onMouseEnter={() => setActive("right")} className={`h-[80vh] rounded-2xl transition-all duration-300 ${active === "right" ? "w-[70vw]" : "w-[20vw]"} bg-white/90`}>
-           <h1 className="m-2 text-5xl text-slate-800">Dr. Gabriel Lijteroff </h1>
-          <div className="flex items-center flex-row ml-8">
-           <img src="/gabriel.png"/>
-           <p className="m-4 text-2xl text-gray-800">Endocrinology and diabetes specialist with over 15 years of experience helping patients manage their health conditions. Passionate about patient education and empowerment.</p>
-           </div>
+        {/* Contenido visible sólo al hover */}
+        <div className="flex flex-col items-center text-center px-6 transition-all duration-500 overflow-hidden" style={{ maxHeight: active === "left" ? "1000px" : "0px",  opacity: active === "left" ? 1 : 0, }}>
+          <img  src="/example-left.png"  alt="Left"  className="w-48 h-auto rounded-xl mb-4 transition-transform duration-500"  style={{
+              transform: active === "left" ? "scale(1)" : "scale(0.8)",
+            }}
+          />
+          <p className="text-gray-300 text-lg leading-relaxed w-3/4">
+            Information about the left card’s content. This section expands
+            smoothly when hovered, but the card’s outer position stays fixed.
+          </p>
+        </div>
+      </div>
+
+      {/* ====== Carta Derecha ====== */}
+      <div onMouseEnter={() => setActive("right")} onMouseLeave={() => setActive(null)} className={`h-[80vh] rounded-2xl transition-all duration-500 flex flex-col items-center justify-center bg-white/90 overflow-hidden ${  active === "right"   ? "flex-[7]"  : active === "left"  ? "flex-[2]" : "flex-[1]" }`}>
+        {/* Título (siempre visible) */}
+        <h1 className="text-4xl font-semibold text-slate-800 text-center mb-6">
+          Dr. Gabriel Lijteroff
+        </h1>
+
+        {/* Contenido visible sólo al hover */}
+        <div className="flex flex-col items-center text-center px-6 transition-all duration-500 overflow-hidden"  style={{  maxHeight: active === "right" ? "1000px" : "0px",  opacity: active === "right" ? 1 : 0,}} >
+          <img
+            src="/gabriel.png"
+            alt="Dr. Gabriel Lijteroff"
+            className="w-40 h-auto rounded-xl mb-4 transition-transform duration-500"
+            style={{
+              transform: active === "right" ? "scale(1)" : "scale(0.8)",
+            }}
+          />
+          <p className="text-gray-800 text-xl leading-relaxed w-3/4">
+            Endocrinology and diabetes specialist with over 15 years of
+            experience helping patients manage their health conditions.
+            Passionate about patient education and empowerment.
+          </p>
+        </div>
       </div>
     </section>
+
 
         {/* TRANSICIÓN SUAVE ENTRE MAIN Y FOOTER */}
         <div className="w-full h-[12vh] bg-gradient-to-b from-transparent to-[#069bd6]" />
@@ -130,7 +165,7 @@ export default function Landing2() {
 }
 function GridItem({ title, children }) {
   return (
-    <div className="p-4 bg-slate-800/90 text-white rounded-lg shadow-md w-full h-[350px] flex flex-col">
+    <div className="p-4 bg-slate-800 text-white rounded-lg shadow-md w-full h-[350px] flex flex-col">
       <h2 className="text-lg font-semibold mb-2">{title}</h2>
       <div className="flex-1 flex items-center justify-center">{children}</div>
     </div>
