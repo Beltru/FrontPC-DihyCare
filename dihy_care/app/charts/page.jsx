@@ -1,102 +1,69 @@
 "use client";
-import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
-import Image from "next/image";
-import PieChartComponent from '../components/PieChart';
-import BarChartComponent from '../components/BarChart';
-import AreaChartComponent from '../components/AreaChart';
-import LineChartComponent from '../components/LineChart';
-import { HiMenuAlt3 } from "react-icons/hi";
-import { MdOutlineDashboard } from "react-icons/md";
-import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
-import { RiSettings4Line } from "react-icons/ri";
-import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
-import { FaCalendarAlt } from "react-icons/fa";
-import { FaWpforms } from "react-icons/fa";
-import { GiForkKnifeSpoon } from "react-icons/gi";
-
-import Link from 'next/link';
+import { useState } from "react";
+import AreaChartComponent from "../components/AreaChart";
+import LineChartComponent from "../components/LineChart";
 import React from "react";
+import { FiActivity, FiDroplet, FiHeart, FiThermometer } from "react-icons/fi";
 
-
-export default function Charts () {
-const [dataOpen, setDataOpen] = useState(false);
-
-  const menus = [
-    {name:"Home", link:"/", icon: MdOutlineDashboard},
-    {name:"Agenda", link:"/calendario", icon: FaCalendarAlt},
-    {name:"Nutrition", link:"/recetas", icon: GiForkKnifeSpoon},
-    {name:"Exercise", link:"/ejercicio", icon: AiOutlineHeart, margin: true},
-    {name:"Settings", link:"/configuracion", icon: RiSettings4Line},
-  
-   ];
-   const [open, setOpen] = useState(true);
+export default function Charts() {
+  const [open, setOpen] = useState(true);
 
   return (
-    <main className="flex gap-6 min-h-screen bg-radial from-[#254A7F] to-[#140850] ">
-  
-    {/* Esto es la sidebar*/} 
-        <div className={`bg-[#0e0e0e] min-h-screen rounded-r-3xl text-gray-100 px-4 ${open? 'w-[27vw]': "w-[5vw]"} duration-500 `}>
-          <div className="py-3 flex justify-between items-center">
-                     {/* Logo */}
-                              <div className="flex items-center gap-2 cursor-pointer transition-all duration-300" onClick={() => setOpen(!open)}>
-                                <img src="/CorazonClaro.png" alt="Logo" className="w-9 h-8 transition-all duration-300"/>
-                                <span className={`text-[#5bbec3] text-lg font-semibold transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`}>
-                                  DiHy Care
-                               </span>
-                              </div>
-                    
-                              {/* Botón de menú siempre visible */}
-                              <HiMenuAlt3 size={26} className="cursor-pointer transition-transform duration-300 hover:scale-110" onClick={() => setOpen(!open)}/>
-                            </div>
-               <div className='flex flex-col mt-4 gap-4 relative'>
-                   {/* Dropdown Data */}
-                   <div onClick={() => setDataOpen(!dataOpen)} className="flex items-center justify-between text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md cursor-pointer">
-                     <div className="flex items-center gap-3">
-                       <FaWpforms size={20} />
-                       {open && <span>Data</span>}
-                     </div>
-                     {open && <span className="ml-auto">{dataOpen ? "▲" : "▼"}</span>}
-                   </div>
-         
-                   {dataOpen && open && (
-                     <div className="ml-4 flex flex-col gap-1 text-sm">
-                       <Link href="/datoshipertension" className="hover:bg-slate-800 rounded-md pl-4">↳ Hipertensión</Link>
-                       <Link href="/datosdiabetes" className="hover:bg-slate-800 rounded-md pl-4">↳ Diabetes</Link>
-                     </div>
-                   )}
-         
-                   {/* Otros menús */}
-                   {menus.map((menu, i) => (
-                     <Link
-                       href={menu.link}
-                       key={i}
-                       className={`${menu?.margin && "mt-5"} group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md`}
-                     >
-                       <div>{React.createElement(menu.icon, { size: 20 })}</div>
-                       {open && <span>{menu.name}</span>}
-                     </Link>
-                   ))}
-                 </div>
-        </div>
-        
-        {/*esto es el resto de la pagina*/} 
-     <div className='grid items-center xl:grid-cols-3 lg:grid-cols-2 w-full gap-10 max-w-[1400px] m-10'>
-    <GridItem title="Glucosa en Sangre"> <AreaChartComponent/> </GridItem>
-    <GridItem title="Bar Chart"><BarChartComponent/></GridItem>
-    <GridItem title="Presión"><LineChartComponent/></GridItem>
-     </div>
+    <main className="flex min-h-screen bg-radial from-[#254A7F] to-[#140850]">
+      <div className="grid items-center xl:grid-cols-3 lg:grid-cols-2 w-full gap-10 max-w-[1400px] m-10">
+        <GridItem title="Glucosa en Sangre">
+          <AreaChartComponent />
+        </GridItem>
+
+        <GridItem title="Presión">
+          <LineChartComponent />
+        </GridItem>
+
+        <GridItem title="Resumen Diario">
+          <SummaryMenu />
+        </GridItem>
+      </div>
     </main>
   );
 }
 
 function GridItem({ title, children }) {
   return (
-    <div className="p-4 bg-slate-800 text-white rounded-lg shadow-md w-full h-[350px]">
+    <div className="p-4 bg-slate-800 text-white rounded-lg shadow-md w-full h-[350px] flex flex-col">
       <h2 className="text-lg font-semibold mb-2">{title}</h2>
-        <div className="h-full w-full flex items-center justify-center">
-      {children}
+      <div className="flex-1 flex items-center justify-center">{children}</div>
     </div>
- </div>
+  );
+}
+
+function SummaryMenu() {
+  const resumen = [
+    { icon: <FiDroplet size={22} />, label: "Glucosa", value: "108 mg/dL", status: "Normal" },
+    { icon: <FiHeart size={22} />, label: "Presión", value: "118/75 mmHg", status: "Estable" },
+    { icon: <FiThermometer size={22} />, label: "Temperatura", value: "36.6 °C", status: "Normal" },
+    { icon: <FiActivity size={22} />, label: "Actividad", value: "6,230 pasos", status: "Buena" },
+  ];
+
+  return (
+    <div className="flex flex-col gap-2 w-full h-full justify-between text-slate-300">
+      <div className="grid grid-cols-2 gap-3 text-center">
+        {resumen.map((item, i) => (
+          <div
+            key={i}
+            className="flex flex-col items-center justify-center bg-slate-700/40 rounded-lg p-3 hover:bg-slate-700/60 transition hover:cursor-default">
+            <div className="text-blue-300">{item.icon}</div>
+            <p className="text-sm font-medium">{item.label}</p>
+            <p className="text-base font-semibold text-white">{item.value}</p>
+            <p className="text-xs text-slate-400">{item.status}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-slate-700/30 rounded-lg py-2 text-sm text-center border border-slate-600">
+        <p className="text-slate-400 ">
+          Última actualización: <span className="text-blue-300">hace 10 min</span>
+        </p>
+      </div>
+    </div>
   );
 }

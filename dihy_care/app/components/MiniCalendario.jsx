@@ -60,7 +60,7 @@ const MiniCalendar = () => {
   const todayEvents = events.filter((event) => isToday(event.date));
 
   return (
-    <div className="min-h-screen w-full px-4 py-4 text-gray-800 overflow-hidden box-border flex flex-col items-center">
+    <div className="min-h-full w-full px-4 py-4 text-gray-800 overflow-y-hidden box-border flex flex-col items-center">
       {/* Header */}
       <div className="w-full max-w-6xl mb-4 flex justify-between items-center">
         <h2 className="text-3xl font-bold">Agenda</h2>

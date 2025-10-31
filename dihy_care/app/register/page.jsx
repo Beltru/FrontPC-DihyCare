@@ -42,7 +42,7 @@ const handleSubmit = async (e) => {
     <main className="min-h-screen bg-gradient-to-r from-[#2c6d8d]  to-[#1a235e] overflow-hidden">
       <section className="h-[100vh] w-[100vw] flex justify-between items-center gap-20">
         <div className="h-[100vh] w-[60vw] flex justify-end items-center pr-[17%]">
-          <a href="/landing2" className="cursor-pointer">
+          <a href="/" className="cursor-pointer">
             <Image src={"/CorazonClaro.png"} alt="" width={280} height={280} />
           </a>
         </div>
