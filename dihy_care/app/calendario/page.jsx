@@ -6,18 +6,18 @@ const Calendario = () => {
   const [events, setEvents] = useState([]);
   const userId = 1;
 
-  // Cargar eventos del backend
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const res = await fetch("https://dihycare-backend.vercel.app/calendar/user", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId }),
-        });
+  const fetchEvents = async () => {
+    try {
+      const res = await fetch("https://dihycare-backend.vercel.app/calendar/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+
+      if(res.ok) {
 
         const data = await res.json();
-
+  
         const formatted = data.map((ev) => ({
           date: new Date(ev.date),
           title: ev.event,
@@ -25,12 +25,19 @@ const Calendario = () => {
           type: ev.type,
           userId: ev.userId,
         }));
-
+  
         setEvents(formatted);
-      } catch (err) {
-        console.error("Error fetching events:", err);
+      } else {
+        throw new Error("Error fetching events");
       }
-    };
+
+    } catch (err) {
+      console.error("Error fetching events:", err);
+    }
+  };
+
+  // Cargar eventos del backend
+  useEffect(() => {
     fetchEvents();
   }, []);
 
