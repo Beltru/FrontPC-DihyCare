@@ -329,12 +329,16 @@ export default function SettingsPage() {
                         Exporta o elimina tus datos de forma permanente
                       </p>
                       <div className="flex gap-3">
-                        <button className="px-4 py-2 bg-white border border-amber-300 text-amber-900 rounded-lg hover:bg-amber-100 transition-colors font-medium">
+                        <button className="px-4 py-2 bg-white border border-amber-300 text-amber-900 rounded-lg hover:bg-amber-100 cursor-pointer transition-colors font-medium">
                           Exportar datos
+                        </button> 
+                        <button className="px-4 py-2 bg-black text-white rounded-lg hover:bg-slate-900 cursor-pointer transition-colors font-medium">
+                          Cerrar sesion
                         </button>
-                        <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+                        <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-00 cursor-pointer transition-colors font-medium">
                           Eliminar cuenta
                         </button>
+                       
                       </div>
                     </div>
                   </div>
