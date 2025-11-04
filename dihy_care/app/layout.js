@@ -2,6 +2,8 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "./LayoutWrapper"; // nuevo archivo cliente
 
+
+
 const poppinsMono = Poppins({
   variable: "--font-poppins-mono",
   subsets: ["latin"],

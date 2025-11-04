@@ -5,29 +5,50 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+const BACKEND_URL = 'https://dihycare-backend.vercel.app';
+
+export function Login() {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setError(''); // Clear previous errors
+    setLoading(true);
+    
+    try {
+      // Making a POST request to your backend
+      const response = await fetch(`${BACKEND_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      });
 
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+      const data = await response.json();
 
-    const data = await res.json();
-
-    if (res.ok) {
-      router.push("/");
-    } else {
-      setErrorMsg(data.message);
+      if (response.ok) {
+        // Success! Save the token for later use
+        localStorage.setItem('token', data.token);
+        console.log('Login successful!');
+        
+        // Redirect to dashboard (change '/dashboard' to your actual dashboard route)
+        router.push('/home');
+      } else {
+        setError(data.error || 'Invalid email or password');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Connection error. Please check your internet and try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,7 +62,7 @@ const Login = () => {
         </div>
 
         <div className="flex justify-center items-center w-[50vw] h-[100vh] bg-[#89bccb] hover:w-[85vw] transition-all duration-500">
-          <form onSubmit={handleSubmit} className="w-[50%] flex h-[50vh] justify-around flex-col">
+          <form onSubmit={handleLogin} className="w-[50%] flex h-[50vh] justify-around flex-col">
             <h2>Login</h2>
             <div>
               <div className="input-field mb-[2vw]">
@@ -50,6 +71,7 @@ const Login = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
                 />
                 <label>Email</label>
               </div>
@@ -59,6 +81,7 @@ const Login = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
                 />
                 <label>Password</label>
               </div>
@@ -71,11 +94,15 @@ const Login = () => {
               </div>
             </div>
 
-            {errorMsg && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
+            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
             <div className="flex justify-center items-center flex-col w-[100%]">
-              <button type="submit" className="w-[100%]">
-                Next
+              <button 
+                type="submit" 
+                className="w-[100%]"
+                disabled={loading}
+              >
+                {loading ? 'Logging in...' : 'Next'}
               </button>
               <div className="register">
                 <p>Don't have an account?</p>
@@ -89,6 +116,6 @@ const Login = () => {
       </section>
     </main>
   );
-};
+}
 
 export default Login;
