@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 const BACKEND_URL = 'https://dihycare-backend.vercel.app';
 
-export function Login() {
+export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,11 +16,10 @@ export function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError('');
     setLoading(true);
     
     try {
-      // Making a POST request to your backend
       const response = await fetch(`${BACKEND_URL}/auth/login`, {
         method: 'POST',
         headers: {
@@ -35,11 +34,8 @@ export function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // Success! Save the token for later use
         localStorage.setItem('token', data.token);
         console.log('Login successful!');
-        
-        // Redirect to dashboard (change '/dashboard' to your actual dashboard route)
         router.push('/home');
       } else {
         setError(data.error || 'Invalid email or password');
@@ -117,5 +113,3 @@ export function Login() {
     </main>
   );
 }
-
-export default Login;

@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 
 const BACKEND_URL = 'https://dihycare-backend.vercel.app';
 
-export function Register() {
+export default function Register() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
-    surname: '', // Your backend expects 'surname', not 'lastname'
+    surname: '',
     email: '',
     password: ''
   });
@@ -20,7 +20,7 @@ export function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setErrorMsg(''); // Clear previous errors
+    setErrorMsg('');
     setLoading(true);
 
     try {
@@ -36,7 +36,6 @@ export function Register() {
 
       if (response.ok) {
         console.log('User registered successfully!', data);
-        // Redirect to login page after successful registration
         router.push('/login');
       } else {
         setErrorMsg(data.error || 'Registration failed. Please try again.');
@@ -122,5 +121,3 @@ export function Register() {
     </main>
   );
 }
-
-export default Register;
