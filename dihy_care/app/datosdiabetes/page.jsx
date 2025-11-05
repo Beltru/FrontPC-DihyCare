@@ -1,256 +1,154 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
 import { Button } from "@nextui-org/react";
 
-// ============================================
-// STEP 1: Define your backend URL
-// ============================================
-const BACKEND_URL = 'https://dihycare-backend.vercel.app';
+const BACKEND_URL = "https://dihycare-backend.vercel.app";
 
 const DatosDiabetes = () => {
   const router = useRouter();
-  
-  // ============================================
-  // STEP 2: State for form data
-  // ============================================
-  const [values, setValues] = useState({
-    glucosa: "",
-    carbohidratos: "",
-    insulina: "",
-    password: "",
-  });
 
   // ============================================
-  // STEP 3: State for UI feedback
+  // STEP 1: States for each input
+  // ============================================
+  const [glucosa, setGlucosa] = useState("");
+  const [carbohidratos, setCarbohidratos] = useState("");
+  const [insulina, setInsulina] = useState("");
+
+  // ============================================
+  // STEP 2: States for feedback and loading
   // ============================================
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
-  const [selectedKeys, setSelectedKeys] = useState({
-    glucosa: new Set([]),
-    carbohidratos: new Set([]),
-    insulina: new Set([]),
-    password: new Set([]),
-    peso: new Set([]),
-    genero: new Set([]),
-  });
-
-  // Manejador genérico para dropdowns
-  const handleSelect = (field, keys) => {
-    const selected = Array.from(keys)[0];
-    setValues((prev) => ({ ...prev, [field]: selected }));
-  };
-
-  const getSelectedValue = (field) =>
-    Array.from(selectedKeys[field]).join(", ").replace(/_/g, " ");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   // ============================================
-  // STEP 4: Function to save data to backend
+  // STEP 3: Submit handler
   // ============================================
   const handleForm = async (event) => {
     event.preventDefault();
-    
-    // Clear previous messages
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
     setLoading(true);
-
+  
     try {
-      // ============================================
-      // STEP 4A: Get the authentication token
-      // ============================================
-      // The token proves who the user is
-      const token = localStorage.getItem('token');
-      
+      // Token del usuario
+      const token = localStorage.getItem("token");
       if (!token) {
-        // If no token, user is not logged in
-        setError('Please login first');
-        router.push('/login');
+        setError("Por favor, inicia sesión primero.");
+        router.push("/login");
         return;
       }
-
-      // ============================================
-      // STEP 4B: Prepare the data to send
-      // ============================================
-      // Your backend expects specific field names
-      // Look at data.controller.ts - it expects a "Data" object
-      const dataToSend = {
-        dataType: 'diabetes', // Type of data (you can customize this)
-        value: JSON.stringify(values), // Convert form data to string
-        // The backend will automatically add userId from the token
-      };
-
-      console.log('Sending data:', dataToSend);
-
-      // ============================================
-      // STEP 4C: Make the HTTP request
-      // ============================================
-      // POST = Create new data
-      // URL: /data endpoint
-      // Headers: Tell server what format we're sending + authentication
-      // Body: The actual data
-      const response = await fetch(`${BACKEND_URL}/data`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // We're sending JSON
-          'Authorization': `Bearer ${token}` // Proof of who we are
-        },
-        body: JSON.stringify(dataToSend) // Convert JS object to JSON string
-      });
-
-      // ============================================
-      // STEP 4D: Handle the response
-      // ============================================
-      const responseData = await response.json();
-
-      if (response.ok) {
-        // Success! (status 200-299)
-        console.log('Data saved successfully:', responseData);
-        setSuccess('¡Datos guardados exitosamente!');
-        
-        // Optional: Clear form after successful save
-        setTimeout(() => {
-          handleReset();
-        }, 2000);
-        
-      } else {
-        // Error from server (status 400-599)
-        console.error('Server error:', responseData);
-        setError(responseData.error || 'Error al guardar los datos');
-        
-        // If unauthorized, redirect to login
-        if (response.status === 401) {
-          localStorage.removeItem('token');
-          router.push('/login');
+  
+      const dataToSend = [
+        { dataType: "GLUCOSE", value: parseFloat(glucosa) },
+        { dataType: "INSULIN", value: parseFloat(insulina) },
+        { dataType: "CARBS", value: parseFloat(carbohidratos) },
+      ];
+  
+      console.log("Enviando:", dataToSend);
+  
+      for (const dataItem of dataToSend) {
+        const response = await fetch(`${BACKEND_URL}/data`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(dataItem),
+        });
+  
+        const responseData = await response.json();
+  
+        if (!response.ok) {
+          console.error("Error del servidor:", responseData);
+          setError(responseData.error || "Error al guardar los datos");
+          if (response.status === 401) {
+            localStorage.removeItem("token");
+            router.push("/login");
+          }
+          return; // detener si uno falla
         }
       }
-
+  
+      // Si todos los fetch salieron bien:
+      setSuccess("¡Datos guardados exitosamente!");
+      setTimeout(() => handleReset(), 2000);
     } catch (err) {
-      // Network error or other unexpected error
-      console.error('Error saving data:', err);
-      setError('Error de conexión. Por favor intenta de nuevo.');
+      console.error("Error al guardar:", err);
+      setError("Error de conexión. Por favor intenta de nuevo.");
     } finally {
-      // Always stop loading, whether success or error
       setLoading(false);
     }
   };
+  
 
+  // ============================================
+  // STEP 4: Reset form
+  // ============================================
   const handleReset = () => {
-    setValues({
-      glucosa: "",
-      carbohidratos: "",
-      insulina: "",
-      password: "",
-      peso: "",
-      genero: "",
-    });
-    setSelectedKeys({
-      glucosa: new Set([]),
-      carbohidratos: new Set([]),
-      insulina: new Set([]),
-      password: new Set([]),
-      peso: new Set([]),
-      genero: new Set([]),
-    });
-    setSuccess('');
-    setError('');
+    setGlucosa("");
+    setCarbohidratos("");
+    setInsulina("");
+    setError("");
+    setSuccess("");
   };
 
+  // ============================================
+  // STEP 5: Render UI
+  // ============================================
   return (
     <main className="flex gap-6 min-h-screen bg-[#AACBC4]">
       <div className="flex flex-col m-3 text-slate-900 items-center justify-center min-h-screen w-full overflow-hidden">
         <h1 className="text-2xl font-bold mb-4">Datos Diabetes</h1>
 
-        {/* ============================================ */}
-        {/* STEP 5: Show feedback messages to user */}
-        {/* ============================================ */}
+        {/* Mensajes de error o éxito */}
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 max-w-md">
             {error}
           </div>
         )}
-        
         {success && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 max-w-md">
             {success}
           </div>
         )}
 
-        <form onSubmit={handleForm} className="flex flex-col gap-4 max-w-md mx-auto mt-10 w-full items-center">
+        <form
+          onSubmit={handleForm}
+          className="flex flex-col gap-4 max-w-md mx-auto mt-10 w-full items-center"
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-
             {/* Glucosa */}
-            <Dropdown>
-              <DropdownTrigger>
-                <Button className="border border-black rounded-xl w-full text-left" variant="bordered">
-                  {getSelectedValue("glucosa") || "Nivel de Glucosa"}
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Glucosa"
-                selectionMode="single"
-                selectedKeys={selectedKeys.glucosa}
-                onSelectionChange={(keys) => {
-                  setSelectedKeys((prev) => ({ ...prev, glucosa: keys }));
-                  handleSelect("glucosa", keys);
-                }}
-                className="text-slate-200 bg-stone-950 rounded-xl p-2"
-              >
-                <DropdownItem key="Bajo">Bajo (70-90 mg/dL)</DropdownItem>
-                <DropdownItem key="Normal">Normal (90-130 mg/dL)</DropdownItem>
-                <DropdownItem key="Alto">Alto (130+ mg/dL)</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <input
+              id="glucosa"
+              className="bg-gray-200 border-2 border-black rounded px-2 py-1"
+              placeholder="Glucosa"
+              type="number"
+              value={glucosa}
+              onChange={(e) => setGlucosa(e.target.value)}
+              required
+            />
 
             {/* Carbohidratos */}
-            <Dropdown>
-              <DropdownTrigger>
-                <Button className="border border-black rounded-xl w-full text-left" variant="bordered">
-                  {getSelectedValue("carbohidratos") || "Carbohidratos ingeridos"}
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Carbohidratos"
-                selectionMode="single"
-                selectedKeys={selectedKeys.carbohidratos}
-                onSelectionChange={(keys) => {
-                  setSelectedKeys((prev) => ({ ...prev, carbohidratos: keys }));
-                  handleSelect("carbohidratos", keys);
-                }}
-                className="text-slate-200 bg-stone-950 rounded-xl p-2"
-              >
-                <DropdownItem key="Bajo">Bajo (0-20g)</DropdownItem>
-                <DropdownItem key="Moderado">Moderado (20-50g)</DropdownItem>
-                <DropdownItem key="Alto">Alto (50+g)</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <input
+              id="carbohidratos"
+              className="bg-gray-200 border-2 border-black rounded px-2 py-1"
+              placeholder="Carbohidratos"
+              type="number"
+              value={carbohidratos}
+              onChange={(e) => setCarbohidratos(e.target.value)}
+            />
 
             {/* Insulina */}
-            <Dropdown>
-              <DropdownTrigger>
-                <Button className="border border-black rounded-xl w-full text-left" variant="bordered">
-                  {getSelectedValue("insulina") || "Tipo de Insulina"}
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Insulina"
-                selectionMode="single"
-                selectedKeys={selectedKeys.insulina}
-                onSelectionChange={(keys) => {
-                  setSelectedKeys((prev) => ({ ...prev, insulina: keys }));
-                  handleSelect("insulina", keys);
-                }}
-                className="text-slate-200 bg-stone-950 rounded-xl p-2"
-              >
-                <DropdownItem key="Rápida">Rápida</DropdownItem>
-                <DropdownItem key="Corta">Corta</DropdownItem>
-                <DropdownItem key="Intermedia">Intermedia</DropdownItem>
-                <DropdownItem key="Larga">Larga</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>       
+            <input
+              id="insulina"
+              className="bg-gray-200 border-2 border-black rounded px-2 py-1"
+              placeholder="Insulina"
+              type="number"
+              value={insulina}
+              onChange={(e) => setInsulina(e.target.value)}
+            />
           </div>
 
           {/* Botones */}
@@ -260,8 +158,9 @@ const DatosDiabetes = () => {
               className="bg-[#3b8494] text-black px-6 py-2 rounded-full font-bold hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
             >
-              {loading ? 'Guardando...' : 'Guardar'}
+              {loading ? "Guardando..." : "Guardar"}
             </button>
+
             <button
               type="button"
               className="bg-[#3b8494] text-black px-6 py-2 rounded-full font-bold hover:cursor-pointer"
@@ -278,42 +177,3 @@ const DatosDiabetes = () => {
 };
 
 export default DatosDiabetes;
-
-/*
-============================================
-SUMMARY: How to Connect Any Form to Backend
-============================================
-
-1. DEFINE BACKEND URL
-   const BACKEND_URL = 'your-backend-url';
-
-2. ADD STATE FOR FEEDBACK
-   const [loading, setLoading] = useState(false);
-   const [error, setError] = useState('');
-   const [success, setSuccess] = useState('');
-
-3. IN YOUR SUBMIT HANDLER:
-   a) Get token: const token = localStorage.getItem('token');
-   b) Check if logged in: if (!token) redirect to login
-   c) Prepare data: const dataToSend = { your data };
-   d) Make request:
-      const response = await fetch(`${BACKEND_URL}/endpoint`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(dataToSend)
-      });
-   e) Handle response:
-      if (response.ok) { success }
-      else { error }
-
-4. SHOW FEEDBACK TO USER
-   Display error/success messages
-
-5. HANDLE LOADING STATE
-   Disable button while loading
-
-THAT'S IT! You can apply this pattern to ANY form.
-*/
