@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Bell,
   User,
@@ -10,13 +11,26 @@ import {
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 
+const BACKEND_URL = 'https://dihycare-backend.vercel.app';
+
 export default function SettingsPage() {
+  const router = useRouter();
+  
+  // Loading states
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [saved, setSaved] = useState(false);
+  
+  // User ID (we'll get this from the token or user info)
+  const [userId, setUserId] = useState(null);
+  
   const [settings, setSettings] = useState({
     // Perfil
-    nombre: 'Juan Pérez',
-    email: 'juan.perez@email.com',
-    telefono: '541112345678', // ✅ formato correcto sin signos ni espacios
-    fechaNacimiento: '1985-05-15',
+    nombre: '',
+    email: '',
+    telefono: '',
+    fechaNacimiento: '',
 
     // Unidades de medida
     unidadGlucosa: 'mg/dL',
@@ -48,18 +62,196 @@ export default function SettingsPage() {
   });
 
   const [activeTab, setActiveTab] = useState('perfil');
-  const [saved, setSaved] = useState(false);
+
+  // ============================================
+  // STEP 1: Load user data when page opens
+  // ============================================
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      // Fetch user info
+      const userResponse = await fetch(`${BACKEND_URL}/user`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (userResponse.ok) {
+        const users = await userResponse.json();
+        if (users.length > 0) {
+          const user = users[0]; // Get first user (ideally, identify logged-in user)
+          setUserId(user.id);
+          
+          // Update settings with user data
+          setSettings(prev => ({
+            ...prev,
+            nombre: user.name + ' ' + user.surname,
+            email: user.email,
+            // Add more fields as your User model has them
+          }));
+        }
+      } else if (userResponse.status === 401) {
+        localStorage.removeItem('token');
+        router.push('/login');
+      }
+
+    } catch (err) {
+      console.error('Error loading user data:', err);
+      setError('Error al cargar datos del usuario');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (field, value) => {
     setSettings((prev) => ({ ...prev, [field]: value }));
     setSaved(false);
   };
 
-  const handleSave = () => {
-    console.log('Guardando configuración:', settings);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+  // ============================================
+  // STEP 2: Save settings to backend
+  // ============================================
+  const handleSave = async () => {
+    if (!userId) {
+      setError('No se pudo identificar el usuario');
+      return;
+    }
+
+    setSaving(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('token');
+
+      // Update user profile (name, email, etc.)
+      const [firstName, ...lastNameParts] = settings.nombre.split(' ');
+      const lastName = lastNameParts.join(' ');
+
+      const userUpdateResponse = await fetch(`${BACKEND_URL}/user/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: firstName,
+          surname: lastName,
+          email: settings.email,
+          // Add other user fields as needed
+        })
+      });
+
+      if (!userUpdateResponse.ok) {
+        throw new Error('Error al actualizar perfil');
+      }
+
+      // Save other settings as data (like preferences)
+      const settingsData = {
+        dataType: 'user_settings',
+        value: JSON.stringify({
+          unidadGlucosa: settings.unidadGlucosa,
+          unidadPresion: settings.unidadPresion,
+          unidadPeso: settings.unidadPeso,
+          glucosaMinima: settings.glucosaMinima,
+          glucosaMaxima: settings.glucosaMaxima,
+          glucosaAyunas: settings.glucosaAyunas,
+          presionSistolicaMax: settings.presionSistolicaMax,
+          presionDiastolicaMax: settings.presionDiastolicaMax,
+          notifMediciones: settings.notifMediciones,
+          notifMedicamentos: settings.notifMedicamentos,
+          notifCitas: settings.notifCitas,
+          notifAlertas: settings.notifAlertas,
+          recordatorioMedicion: settings.recordatorioMedicion,
+          frecuenciaMedicion: settings.frecuenciaMedicion,
+          compartirDatos: settings.compartirDatos,
+          backupAutomatico: settings.backupAutomatico,
+        })
+      };
+
+      const settingsResponse = await fetch(`${BACKEND_URL}/data`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(settingsData)
+      });
+
+      if (settingsResponse.ok) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      } else {
+        throw new Error('Error al guardar configuración');
+      }
+
+    } catch (err) {
+      console.error('Error saving settings:', err);
+      setError('Error al guardar la configuración. Por favor intenta de nuevo.');
+    } finally {
+      setSaving(false);
+    }
   };
+
+  // ============================================
+  // STEP 3: Handle logout
+  // ============================================
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    router.push('/login');
+  };
+
+  // ============================================
+  // STEP 4: Handle account deletion
+  // ============================================
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm(
+      '¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.'
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${BACKEND_URL}/user/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        alert('Cuenta eliminada exitosamente');
+        localStorage.removeItem('token');
+        router.push('/login');
+      } else {
+        throw new Error('Error al eliminar cuenta');
+      }
+    } catch (err) {
+      console.error('Error deleting account:', err);
+      setError('Error al eliminar la cuenta');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">Cargando configuración...</div>
+      </div>
+    );
+  }
 
   const tabs = [
     { id: 'perfil', label: 'Perfil', icon: User },
@@ -79,6 +271,13 @@ export default function SettingsPage() {
             Personaliza tu experiencia de seguimiento de salud
           </p>
         </div>
+
+        {/* Error message */}
+        {error && (
+          <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            {error}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar con tabs */}
@@ -124,7 +323,7 @@ export default function SettingsPage() {
                         </label>
                         <input
                           type="text"
-                          placeholder="Joe"
+                          placeholder="Juan Pérez"
                           value={settings.nombre}
                           onChange={(e) =>
                             handleChange('nombre', e.target.value)
@@ -140,7 +339,7 @@ export default function SettingsPage() {
                         </label>
                         <input
                           type="email"
-                          placeholder="joe@example.com"
+                          placeholder="juan@example.com"
                           value={settings.email}
                           onChange={(e) =>
                             handleChange('email', e.target.value)
@@ -332,13 +531,18 @@ export default function SettingsPage() {
                         <button className="px-4 py-2 bg-white border border-amber-300 text-amber-900 rounded-lg hover:bg-amber-100 cursor-pointer transition-colors font-medium">
                           Exportar datos
                         </button> 
-                        <button className="px-4 py-2 bg-black text-white rounded-lg hover:bg-slate-900 cursor-pointer transition-colors font-medium">
-                          Cerrar sesion
+                        <button 
+                          onClick={handleLogout}
+                          className="px-4 py-2 bg-black text-white rounded-lg hover:bg-slate-900 cursor-pointer transition-colors font-medium"
+                        >
+                          Cerrar sesión
                         </button>
-                        <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-00 cursor-pointer transition-colors font-medium">
+                        <button 
+                          onClick={handleDeleteAccount}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 cursor-pointer transition-colors font-medium"
+                        >
                           Eliminar cuenta
                         </button>
-                       
                       </div>
                     </div>
                   </div>
@@ -350,14 +554,15 @@ export default function SettingsPage() {
             <div className="mt-6 flex justify-end">
               <button
                 onClick={handleSave}
+                disabled={saving}
                 className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
                   saved
                     ? 'bg-green-600 text-white'
-                    : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl'
+                    : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl disabled:opacity-50'
                 }`}
               >
                 <Save size={20} />
-                {saved ? 'Guardado ✓' : 'Guardar cambios'}
+                {saving ? 'Guardando...' : saved ? 'Guardado ✓' : 'Guardar cambios'}
               </button>
             </div>
           </div>
