@@ -1,11 +1,19 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation"; // ADD THIS!
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
 import { Button } from "@nextui-org/react";
-import Link from "next/link";
 
+const BACKEND_URL = 'https://dihycare-backend.vercel.app';
 
 const DatosHipertension = () => {
+  const router = useRouter(); // ADD THIS!
+  
+  // State variables INSIDE the component
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  
   const [values, setValues] = useState({
     presionarterial: "",
     frecuenciacardiaca: "",
@@ -32,9 +40,74 @@ const DatosHipertension = () => {
   const getSelectedValue = (field) =>
     Array.from(selectedKeys[field]).join(", ").replace(/_/g, " ");
 
-  const handleForm = (e) => {
+  // Make this function ASYNC and put the try/catch INSIDE it
+  const handleForm = async (e) => {
     e.preventDefault();
-    console.log(values);
+    setError('');
+    setSuccess('');
+    setLoading(true);
+
+    try {
+      // Get the authentication token
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setError('Please login first');
+        router.push('/login');
+        return;
+      }
+
+      // Prepare the data to send
+      const dataToSend = {
+        dataType: 'hipertension', // Changed from 'diabetes' to 'hipertension'
+        value: JSON.stringify(values),
+      };
+
+      console.log('Sending data:', dataToSend);
+
+      // Make the HTTP request
+      const response = await fetch(`${BACKEND_URL}/data`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(dataToSend)
+      });
+
+      // Handle the response
+      const responseData = await response.json();
+
+      if (response.ok) {
+        // Success!
+        console.log('Data saved successfully:', responseData);
+        setSuccess('¡Datos guardados exitosamente!');
+        
+        // Optional: Clear form after successful save
+        setTimeout(() => {
+          handleReset();
+        }, 2000);
+        
+      } else {
+        // Error from server
+        console.error('Server error:', responseData);
+        setError(responseData.error || 'Error al guardar los datos');
+        
+        // If unauthorized, redirect to login
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          router.push('/login');
+        }
+      }
+
+    } catch (err) {
+      // Network error or other unexpected error
+      console.error('Error saving data:', err);
+      setError('Error de conexión. Por favor intenta de nuevo.');
+    } finally {
+      // Always stop loading, whether success or error
+      setLoading(false);
+    }
   };
 
   const handleReset = () => {
@@ -54,12 +127,27 @@ const DatosHipertension = () => {
       peso: new Set([]),
       genero: new Set([]),
     });
+    setSuccess('');
+    setError('');
   };
 
   return (
     <main className="flex gap-6 min-h-screen bg-[#AACBC4]">
       <div className="flex flex-col m-3 text-slate-900 items-center justify-center min-h-screen w-full overflow-hidden">
         <h1 className="text-2xl font-bold mb-4">Datos Hipertensión</h1>
+
+        {/* Show error/success messages */}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 max-w-md">
+            {error}
+          </div>
+        )}
+        
+        {success && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 max-w-md">
+            {success}
+          </div>
+        )}
 
         <form
           onSubmit={handleForm}
@@ -212,14 +300,16 @@ const DatosHipertension = () => {
           <div className="flex gap-4 mt-6 justify-center w-full">
             <button
               type="submit"
-              className="bg-[#3b8494] text-black px-6 py-2 rounded-full font-bold hover:cursor-pointer"
+              className="bg-[#3b8494] text-black px-6 py-2 rounded-full font-bold hover:cursor-pointer disabled:opacity-50"
+              disabled={loading}
             >
-              Guardar
+              {loading ? 'Guardando...' : 'Guardar'}
             </button>
             <button
               type="button"
               className="bg-[#3b8494] text-black px-6 py-2 rounded-full font-bold hover:cursor-pointer"
               onClick={handleReset}
+              disabled={loading}
             >
               Limpiar
             </button>
