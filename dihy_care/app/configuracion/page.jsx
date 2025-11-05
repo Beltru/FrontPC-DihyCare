@@ -16,44 +16,35 @@ const BACKEND_URL = 'https://dihycare-backend.vercel.app';
 export default function SettingsPage() {
   const router = useRouter();
 
-  // Estados base
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  // Configuración del usuario
   const [settings, setSettings] = useState({
-    nombre: '',
+    name: '',
     surname: '',
     email: '',
+    age: '',
+    sex: '',      // MALE o FEMALE (según tu Prisma enum)
     weight: '',
-    sex: '',
     height: '',
 
+    // Preferencias (se guardan en Data con dataType: user_settings)
     notifMediciones: true,
     notifMedicamentos: true,
     notifCitas: true,
     notifAlertas: true,
-
-    recordatorioMedicion: '08:00',
-    frecuenciaMedicion: 'diaria',
-
     compartirDatos: false,
     backupAutomatico: true,
   });
 
   const [activeTab, setActiveTab] = useState('perfil');
-
-  // ✅ Estado de selección corregido
   const [selectedKeys, setSelectedKeys] = useState({
     sex: new Set([]),
   });
 
-  // ============================================
-  // Función: obtener texto seleccionado del dropdown
-  // ============================================
   const getSelectedValue = (field) => {
     const value = selectedKeys[field];
     if (!value || value.size === 0) return "Seleccionar sexo";
@@ -66,7 +57,7 @@ export default function SettingsPage() {
   };
 
   // ============================================
-  // Cargar datos de usuario al iniciar
+  // Cargar datos del usuario
   // ============================================
   useEffect(() => {
     loadUserData();
@@ -93,12 +84,23 @@ export default function SettingsPage() {
         if (users.length > 0) {
           const user = users[0];
           setUserId(user.id);
+          
+          // Cargar datos del User model
           setSettings((prev) => ({
             ...prev,
-            nombre: user.name,
-            surname: user.surname,
-            email: user.email,
+            name: user.name || '',
+            surname: user.surname || '',
+            email: user.email || '',
+            age: user.age || '',
+            sex: user.sex || '',        // MALE o FEMALE
+            weight: user.weight || '',
+            height: user.height || '',
           }));
+
+          // Si el sexo está guardado, actualizar el dropdown
+          if (user.sex) {
+            setSelectedKeys({ sex: new Set([user.sex]) });
+          }
         }
       } else if (userResponse.status === 401) {
         localStorage.removeItem('token');
@@ -112,83 +114,106 @@ export default function SettingsPage() {
     }
   };
 
-  // ============================================
-  // Actualizar campos locales
-  // ============================================
   const handleChange = (field, value) => {
     setSettings((prev) => ({ ...prev, [field]: value }));
     setSaved(false);
   };
 
   // ============================================
-  // Guardar configuración en backend
+  // Guardar configuración
   // ============================================
   const handleSave = async () => {
-    if (!userId) {
-      setError('No se pudo identificar el usuario');
-      return;
+  if (!userId) {
+    setError('No se pudo identificar el usuario');
+    return;
+  }
+
+  setSaving(true);
+  setError('');
+
+  try {
+    const token = localStorage.getItem('token');
+
+    // Preparar datos - solo incluir campos válidos
+    const updateData = {
+      name: settings.name,
+      surname: settings.surname,
+    };
+
+    // Solo agregar campos opcionales si tienen valor
+    if (settings.age && !isNaN(parseInt(settings.age))) {
+      updateData.age = parseInt(settings.age);
     }
 
-    setSaving(true);
-    setError('');
-
-    try {
-      const token = localStorage.getItem('token');
-
-      const userUpdateResponse = await fetch(`${BACKEND_URL}/user/${userId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          name: settings.nombre,
-          surname: settings.surname,
-          email: settings.email,
-        })
-      });
-
-      if (!userUpdateResponse.ok) throw new Error('Error al actualizar perfil');
-
-      const settingsData = {
-        dataType: 'user_settings',
-        value: JSON.stringify({
-          weight: settings.weight,
-          height: settings.height,
-          sex: settings.sex,
-          notifMediciones: settings.notifMediciones,
-          notifMedicamentos: settings.notifMedicamentos,
-          notifCitas: settings.notifCitas,
-          notifAlertas: settings.notifAlertas,
-          compartirDatos: settings.compartirDatos,
-          backupAutomatico: settings.backupAutomatico,
-        })
-      };
-
-      const settingsResponse = await fetch(`${BACKEND_URL}/data`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(settingsData)
-      });
-
-      if (!settingsResponse.ok) throw new Error('Error al guardar configuración');
-
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
-    } catch (err) {
-      console.error('Error saving settings:', err);
-      setError('Error al guardar la configuración. Por favor intenta de nuevo.');
-    } finally {
-      setSaving(false);
+    if (settings.weight && !isNaN(parseInt(settings.weight))) {
+      updateData.weight = parseInt(settings.weight);
     }
-  };
 
-  // ============================================
-  // Logout y eliminación de cuenta
-  // ============================================
+    if (settings.height && !isNaN(parseInt(settings.height))) {
+      updateData.height = parseInt(settings.height);
+    }
+
+    if (settings.sex && (settings.sex === 'MALE' || settings.sex === 'FEMALE')) {
+      updateData.sex = settings.sex;
+    }
+
+    console.log('Enviando datos:', updateData); // Para debug
+
+    const userUpdateResponse = await fetch(`${BACKEND_URL}/user/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(updateData)
+    });
+
+    // Leer la respuesta completa para ver el error
+    const responseText = await userUpdateResponse.text();
+    console.log('Respuesta del servidor:', responseText);
+
+    if (!userUpdateResponse.ok) {
+      throw new Error(`Error al actualizar perfil: ${responseText}`);
+    }
+
+    // Guardar preferencias en Data table
+  /*  const settingsData = {
+      dataType: 'user_settings',
+      value: JSON.stringify({
+        notifMediciones: settings.notifMediciones,
+        notifMedicamentos: settings.notifMedicamentos,
+        notifCitas: settings.notifCitas,
+        notifAlertas: settings.notifAlertas,
+        compartirDatos: settings.compartirDatos,
+        backupAutomatico: settings.backupAutomatico,
+      })
+    }; 
+
+    const settingsResponse = await fetch(`${BACKEND_URL}/data`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(settingsData)
+    });
+
+    if (!settingsResponse.ok) {
+      const settingsError = await settingsResponse.text();
+      console.log('Error en settings:', settingsError);
+      throw new Error('Error al guardar configuración');
+    }
+*/
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  } catch (err) {
+    console.error('Error completo:', err);
+    setError(`Error: ${err.message}`);
+  } finally {
+    setSaving(false);
+  }
+};
+     
   const handleLogout = () => {
     localStorage.removeItem('token');
     router.push('/login');
@@ -283,8 +308,8 @@ export default function SettingsPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Nombre</label>
                       <input
                         type="text"
-                        value={settings.nombre}
-                        onChange={(e) => handleChange('nombre', e.target.value)}
+                        value={settings.name}
+                        onChange={(e) => handleChange('name', e.target.value)}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
@@ -298,11 +323,21 @@ export default function SettingsPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input
+                          type="email"
+                          value={settings.email}
+                          disabled  // ✅ No se puede editar
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black bg-gray-100 cursor-not-allowed"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">El email no se puede modificar</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Edad</label>
                       <input
-                        type="email"
-                        value={settings.email}
-                        onChange={(e) => handleChange('email', e.target.value)}
+                        type="number"
+                        value={settings.age}
+                        onChange={(e) => handleChange('age', e.target.value)}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
@@ -325,13 +360,13 @@ export default function SettingsPage() {
                       />
                     </div>
 
-                    {/* ✅ Dropdown de sexo corregido */}
+                    {/* Dropdown de sexo */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Sexo</label>
                       <Dropdown>
                         <DropdownTrigger>
                           <Button
-                            className="border border-gray-300 rounded-lg w-full text-left"
+                            className="border border-gray-300 rounded-lg w-full text-left text-black justify-start"
                             variant="bordered"
                           >
                             {getSelectedValue('sex')}
@@ -347,8 +382,8 @@ export default function SettingsPage() {
                           }}
                           className="text-slate-200 bg-stone-950 rounded-xl p-2"
                         >
-                          <DropdownItem key="Masculino">Masculino</DropdownItem>
-                          <DropdownItem key="Femenino">Femenino</DropdownItem>
+                          <DropdownItem key="MALE">Masculino</DropdownItem>
+                          <DropdownItem key="FEMALE">Femenino</DropdownItem>
                         </DropdownMenu>
                       </Dropdown>
                     </div>
@@ -356,8 +391,148 @@ export default function SettingsPage() {
                 </div>
               )}
 
-              {/* NOTIFICACIONES y PRIVACIDAD quedan igual */}
-              {/* (omitidos aquí por extensión, pero no requieren cambios) */}
+              {/* NOTIFICACIONES */}
+              {activeTab === 'notificaciones' && (
+                <div className="space-y-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                    Preferencias de Notificaciones
+                  </h2>
+                  <div className="space-y-4">
+                    {[
+                      {
+                        key: 'notifMediciones',
+                        label: 'Recordatorios de mediciones',
+                        desc: 'Recibe alertas para medir tu glucosa y presión',
+                      },
+                      {
+                        key: 'notifMedicamentos',
+                        label: 'Recordatorios de medicamentos',
+                        desc: 'Te avisaremos cuando sea hora de tomar tu medicación',
+                      },
+                      {
+                        key: 'notifCitas',
+                        label: 'Recordatorios de citas médicas',
+                        desc: 'No te pierdas ninguna consulta con tu médico',
+                      },
+                      {
+                        key: 'notifAlertas',
+                        label: 'Alertas de valores anormales',
+                        desc: 'Te notificaremos si tus mediciones están fuera del rango',
+                      },
+                    ].map((item) => (
+                      <div
+                        key={item.key}
+                        className="flex items-start justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      >
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900">{item.label}</h3>
+                          <p className="text-sm text-gray-600 mt-1">{item.desc}</p>
+                        </div>
+                        <button
+                          onClick={() =>
+                            handleChange(item.key, !settings[item.key])
+                          }
+                          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                            settings[item.key] ? 'bg-blue-600' : 'bg-gray-300'
+                          }`}
+                        >
+                          <span
+                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                              settings[item.key] ? 'translate-x-6' : 'translate-x-1'
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* PRIVACIDAD */}
+              {activeTab === 'privacidad' && (
+                <div className="space-y-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                    Privacidad y Datos
+                  </h2>
+                  <div className="space-y-4">
+                    <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">
+                          Compartir datos con médicos
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Permite que tus profesionales de salud accedan a tus registros
+                        </p>
+                      </div>
+                      <button
+                        onClick={() =>
+                          handleChange('compartirDatos', !settings.compartirDatos)
+                        }
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                          settings.compartirDatos ? 'bg-blue-600' : 'bg-gray-300'
+                        }`}
+                      >
+                        <span
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                            settings.compartirDatos ? 'translate-x-6' : 'translate-x-1'
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">
+                          Backup automático
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Guarda automáticamente una copia de seguridad de tus datos
+                        </p>
+                      </div>
+                      <button
+                        onClick={() =>
+                          handleChange('backupAutomatico', !settings.backupAutomatico)
+                        }
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                          settings.backupAutomatico ? 'bg-blue-600' : 'bg-gray-300'
+                        }`}
+                      >
+                        <span
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                            settings.backupAutomatico ? 'translate-x-6' : 'translate-x-1'
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    <div className="mt-8 p-6 bg-amber-50 border border-amber-200 rounded-lg">
+                      <h3 className="font-semibold text-amber-900 mb-2">
+                        Gestión de datos
+                      </h3>
+                      <p className="text-sm text-amber-800 mb-4">
+                        Exporta o elimina tus datos de forma permanente
+                      </p>
+                      <div className="flex gap-3">
+                        <button className="px-4 py-2 bg-white border border-amber-300 text-amber-900 rounded-lg hover:bg-amber-100 cursor-pointer transition-colors font-medium">
+                          Exportar datos
+                        </button>
+                        <button 
+                          onClick={handleLogout}
+                          className="px-4 py-2 bg-black text-white rounded-lg hover:bg-slate-900 cursor-pointer transition-colors font-medium"
+                        >
+                          Cerrar sesión
+                        </button>
+                        <button 
+                          onClick={handleDeleteAccount}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 cursor-pointer transition-colors font-medium"
+                        >
+                          Eliminar cuenta
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Botón Guardar */}
