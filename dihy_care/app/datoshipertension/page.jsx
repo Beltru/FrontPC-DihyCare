@@ -201,30 +201,6 @@ const DatosHipertension = () => {
               </DropdownMenu>
             </Dropdown>
 
-            {/* Ejercicio Realizado */}
-            <Dropdown>
-              <DropdownTrigger>
-                <Button className="border border-black rounded-xl w-full text-left" variant="bordered">
-                  {getSelectedValue("ejerciciorealizado") || "Ejercicio realizado"}
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Ejercicio Realizado"
-                selectionMode="single"
-                selectedKeys={selectedKeys.ejerciciorealizado}
-                onSelectionChange={(keys) => {
-                  setSelectedKeys((prev) => ({ ...prev, ejerciciorealizado: keys }));
-                  handleSelect("ejerciciorealizado", keys);
-                }}
-                className="text-slate-200 bg-stone-950 rounded-xl p-2"
-              >
-                <DropdownItem key="Sedentario">Sedentario</DropdownItem>
-                <DropdownItem key="Ligero (1-2 días)">Ligero (1–2 días/sem)</DropdownItem>
-                <DropdownItem key="Moderado (3-4 días)">Moderado (3–4 días/sem)</DropdownItem>
-                <DropdownItem key="Intenso (5+ días)">Intenso (5+ días/sem)</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-
             {/* Medicación */}
             <Dropdown>
               <DropdownTrigger>
@@ -247,53 +223,8 @@ const DatosHipertension = () => {
                 <DropdownItem key="Betabloqueante">Betabloqueante</DropdownItem>
                 <DropdownItem key="Diurético">Diurético</DropdownItem>
               </DropdownMenu>
-            </Dropdown>
+            </Dropdown> 
 
-            {/* Peso */}
-            <Dropdown>
-              <DropdownTrigger>
-                <Button className="border border-black rounded-xl w-full text-left" variant="bordered">
-                  {getSelectedValue("peso") || "Rango de peso"}
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Peso"
-                selectionMode="single"
-                selectedKeys={selectedKeys.peso}
-                onSelectionChange={(keys) => {
-                  setSelectedKeys((prev) => ({ ...prev, peso: keys }));
-                  handleSelect("peso", keys);
-                }}
-                className="text-slate-200 bg-stone-950 rounded-xl p-2"
-              >
-                <DropdownItem key="<60kg">Menos de 60kg</DropdownItem>
-                <DropdownItem key="60-80kg">60–80kg</DropdownItem>
-                <DropdownItem key=">80kg">Más de 80kg</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-
-            {/* Género */}
-            <Dropdown>
-              <DropdownTrigger>
-                <Button className="border border-black rounded-xl w-full text-left" variant="bordered">
-                  {getSelectedValue("genero") || "Género"}
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Género"
-                selectionMode="single"
-                selectedKeys={selectedKeys.genero}
-                onSelectionChange={(keys) => {
-                  setSelectedKeys((prev) => ({ ...prev, genero: keys }));
-                  handleSelect("genero", keys);
-                }}
-                className="text-slate-200 bg-stone-950 rounded-xl p-2"
-              >
-                <DropdownItem key="Masculino">Masculino</DropdownItem>
-                <DropdownItem key="Femenino">Femenino</DropdownItem>
-                <DropdownItem key="Otro">Otro</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
           </div>
 
           {/* Botones */}
