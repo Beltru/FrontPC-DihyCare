@@ -14,38 +14,39 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    
-    try {
-      const response = await fetch(`${BACKEND_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      });
+  e.preventDefault();
+  setError('');
+  setLoading(true);
+  
+  try {
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        console.log('Login successful!');
-        router.push('/home');
-      } else {
-        setError(data.error || 'Invalid email or password');
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-      setError('Connection error. Please check your internet and try again.');
-    } finally {
-      setLoading(false);
+    if (response.ok) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('loginEmail', email);  // ✅ Guardar el email!
+      console.log('Login successful!');
+      router.push('/home');
+    } else {
+      setError(data.error || 'Invalid email or password');
     }
-  };
+  } catch (err) {
+    console.error('Login error:', err);
+    setError('Connection error. Please check your internet and try again.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-[#2c6d8d] to-[#1a235e] overflow-hidden font-['Raleway']">

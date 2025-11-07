@@ -64,55 +64,114 @@ export default function SettingsPage() {
   }, []);
 
   const loadUserData = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+      return;
+    }
 
-      const userResponse = await fetch(`${BACKEND_URL}/user`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
+    // ============================================
+    // Opción 1: Decodificar el token JWT para obtener el ID del usuario
+    // ============================================
+    // El token JWT contiene información del usuario codificada
+    const tokenParts = token.split('.');
+    if (tokenParts.length === 3) {
+      const payload = JSON.parse(atob(tokenParts[1]));
+      console.log('Token payload:', payload);
+      
+      // El payload debería contener el userId o id
+      // Ajusta según lo que tu backend ponga en el token
+      const currentUserId = payload.userId || payload.id || payload.sub;
+      
+      if (currentUserId) {
+        // Obtener el usuario específico por ID
+        const userResponse = await fetch(`${BACKEND_URL}/user/${currentUserId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
 
-      if (userResponse.ok) {
-        const users = await userResponse.json();
-        if (users.length > 0) {
-          const user = users[0];
+        if (userResponse.ok) {
+          const user = await userResponse.json();
           setUserId(user.id);
           
-          // Cargar datos del User model
           setSettings((prev) => ({
             ...prev,
             name: user.name || '',
             surname: user.surname || '',
             email: user.email || '',
             age: user.age || '',
-            sex: user.sex || '',        // MALE o FEMALE
+            sex: user.sex || '',
             weight: user.weight || '',
             height: user.height || '',
           }));
 
-          // Si el sexo está guardado, actualizar el dropdown
           if (user.sex) {
             setSelectedKeys({ sex: new Set([user.sex]) });
           }
+        } else if (userResponse.status === 401) {
+          localStorage.removeItem('token');
+          router.push('/login');
         }
-      } else if (userResponse.status === 401) {
-        localStorage.removeItem('token');
-        router.push('/login');
+        
+        setLoading(false);
+        return;
       }
-    } catch (err) {
-      console.error('Error loading user data:', err);
-      setError('Error al cargar datos del usuario');
-    } finally {
-      setLoading(false);
     }
-  };
+
+    // ============================================
+    // Opción 2: Si no pudimos decodificar, comparar por email del login
+    // ============================================
+    const loginEmail = localStorage.getItem('loginEmail');
+    
+    const userResponse = await fetch(`${BACKEND_URL}/user`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (userResponse.ok) {
+      const users = await userResponse.json();
+      
+      // Buscar el usuario que coincida con el email del login
+      const user = loginEmail 
+        ? users.find(u => u.email === loginEmail)
+        : users[0]; // Fallback al primero si no hay email guardado
+      
+      if (user) {
+        setUserId(user.id);
+        
+        setSettings((prev) => ({
+          ...prev,
+          name: user.name || '',
+          surname: user.surname || '',
+          email: user.email || '',
+          age: user.age || '',
+          sex: user.sex || '',
+          weight: user.weight || '',
+          height: user.height || '',
+        }));
+
+        if (user.sex) {
+          setSelectedKeys({ sex: new Set([user.sex]) });
+        }
+      }
+    } else if (userResponse.status === 401) {
+      localStorage.removeItem('token');
+      router.push('/login');
+    }
+  } catch (err) {
+    console.error('Error loading user data:', err);
+    setError('Error al cargar datos del usuario');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleChange = (field, value) => {
     setSettings((prev) => ({ ...prev, [field]: value }));
