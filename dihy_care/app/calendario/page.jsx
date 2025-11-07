@@ -11,7 +11,8 @@ const Calendario = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [mounted, setMounted] = useState(false);
-  const [userId, setUserId] = useState(null); // ✅ Guardar userId
+  const [userId, setUserId] = useState(null);
+  const [debugInfo, setDebugInfo] = useState(null); // Para mostrar info de debug
 
   useEffect(() => {
     setMounted(true);
@@ -23,9 +24,26 @@ const Calendario = () => {
     }
   }, [mounted]);
 
-  // ============================================
-  // ✅ Obtener userId primero
-  // ============================================
+  const normalizeEventType = (type) => {
+    const typeMapping = {
+      'reunión': 'OTHER',
+      'reunion': 'OTHER',
+      'consulta': 'OTHER',
+      'cita': 'OTHER',
+      'diabetes': 'DIABETES',
+      'hipertensión': 'HYPERTENSION',
+      'hipertension': 'HYPERTENSION',
+      'ejercicio': 'EXERCISE',
+      'medicación': 'MEDICATION',
+      'medicacion': 'MEDICATION',
+      'otro': 'OTHER',
+    };
+
+    if (!type) return 'OTHER';
+    const normalized = type.toString().toLowerCase().trim();
+    return typeMapping[normalized] || type.toUpperCase();
+  };
+
   const getUserIdAndFetchEvents = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -35,7 +53,6 @@ const Calendario = () => {
         return;
       }
 
-      // Decodificar token para obtener userId
       const tokenParts = token.split('.');
       if (tokenParts.length === 3) {
         const payload = JSON.parse(atob(tokenParts[1]));
@@ -48,7 +65,6 @@ const Calendario = () => {
         }
       }
 
-      // Si no pudimos decodificar, obtener del endpoint
       const loginEmail = localStorage.getItem('loginEmail');
       const userResponse = await fetch(`${BACKEND_URL}/user`, {
         method: 'GET',
@@ -88,7 +104,7 @@ const Calendario = () => {
 
       if (res.ok) {
         const data = await res.json();
-        console.log('Events from backend:', data);
+        console.log('📊 Events from backend:', data);
   
         const formatted = data.map((ev) => ({
           id: ev.id,
@@ -114,109 +130,97 @@ const Calendario = () => {
     }
   };
 
-  // ============================================
-  // ✅ Ahora sí enviar userId al crear evento
-  // ============================================
- const addEvent = async (newEvent) => {
-  try {
-    const token = localStorage.getItem('token');
+  const addEvent = async (newEvent) => {
+    try {
+      const token = localStorage.getItem('token');
 
-    if (!token) {
-      router.push('/login');
-      return;
-    }
-
-    if (!userId) {
-      setError('Usuario no identificado');
-      return;
-    }
-
-    console.log('Evento recibido:', newEvent);
-
-    // ============================================
-    // ✅ Mapear el tipo a los valores válidos del enum
-    // ============================================
-    const typeMapping = {
-      'reunión': 'OTHER',
-      'reunion': 'OTHER',
-      'consulta': 'OTHER',
-      'cita': 'OTHER',
-      'diabetes': 'DIABETES',
-      'hipertensión': 'HYPERTENSION',
-      'hipertension': 'HYPERTENSION',
-      'ejercicio': 'EXERCISE',
-      'medicación': 'MEDICATION',
-      'medicacion': 'MEDICATION',
-      'otro': 'OTHER',
-    };
-
-    // Obtener el tipo, normalizarlo y mapearlo
-    let eventType = newEvent.type || 'OTHER';
-    eventType = eventType.toLowerCase().trim();
-    eventType = typeMapping[eventType] || 'OTHER';
-
-    console.log('Tipo mapeado:', eventType);
-
-    const eventData = {
-      event: newEvent.title,
-      description: newEvent.description || '',
-      date: newEvent.date,
-      type: eventType,  // ✅ Usar el tipo mapeado
-      userId: userId,
-    };
-
-    console.log('Enviando al backend:', eventData);
-
-    const res = await fetch(`${BACKEND_URL}/calendar`, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify(eventData)
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      console.error('Error del backend:', errorData);
-      throw new Error(errorData.error || "Error saving event");
-    }
-
-    const savedEvent = await res.json();
-    console.log('Evento guardado:', savedEvent);
-
-    setEvents((prev) => [
-      ...prev,
-      {
-        id: savedEvent.id,
-        date: new Date(savedEvent.date),
-        title: savedEvent.event,
-        description: savedEvent.description,
-        type: savedEvent.type,
-        userId: savedEvent.userId,
+      if (!token) {
+        router.push('/login');
+        return;
       }
-    ]);
 
-    setError('');
-    return savedEvent;
+      if (!userId) {
+        setError('Usuario no identificado');
+        throw new Error('Usuario no identificado');
+      }
 
-  } catch (err) {
-    console.error("Error adding event:", err);
-    setError('Error al guardar el evento');
-    throw err;
-  }
-}; 
+      console.log('➕ Creando evento:', newEvent);
+
+      const eventData = {
+        event: newEvent.title,
+        description: newEvent.description || '',
+        date: newEvent.date,
+        type: normalizeEventType(newEvent.type),
+        userId: userId,
+      };
+
+      console.log('📤 Enviando al backend:', eventData);
+
+      const res = await fetch(`${BACKEND_URL}/calendar`, {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(eventData)
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error('❌ Error del backend:', errorData);
+        throw new Error(errorData.error || errorData.message || "Error saving event");
+      }
+
+      const savedEvent = await res.json();
+      console.log('✅ Evento guardado con ID:', savedEvent.id);
+
+      // Actualizar el estado con el evento que tiene ID del backend
+      setEvents((prev) => [
+        ...prev,
+        {
+          id: savedEvent.id,
+          date: new Date(savedEvent.date),
+          title: savedEvent.event,
+          description: savedEvent.description,
+          type: savedEvent.type,
+          userId: savedEvent.userId,
+        }
+      ]);
+
+      setError('');
+      return savedEvent;
+
+    } catch (err) {
+      console.error("❌ Error adding event:", err);
+      setError(`Error al guardar el evento: ${err.message}`);
+      throw err;
+    }
+  }; 
+
   const updateEvent = async (eventId, updatedData) => {
     try {
       const token = localStorage.getItem('token');
 
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      if (!eventId) {
+        throw new Error('ID de evento inválido');
+      }
+
+      console.log('✏️ Actualizando evento:', eventId, updatedData);
+
       const eventData = {
         event: updatedData.title,
-        description: updatedData.description,
+        description: updatedData.description || '',
         date: updatedData.date,
-        type: updatedData.type,
-        userId: userId, // ✅ Incluir también aquí
+        type: normalizeEventType(updatedData.type),
+        userId: userId,
       };
+
+      console.log('📤 Enviando actualización:', eventData);
 
       const res = await fetch(`${BACKEND_URL}/calendar/${eventId}`, {
         method: "PUT",
@@ -227,19 +231,35 @@ const Calendario = () => {
         body: JSON.stringify(eventData)
       });
 
-      if (!res.ok) throw new Error("Error updating event");
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error('❌ Error al actualizar:', errorData);
+        throw new Error(errorData.error || errorData.message || "Error updating event");
+      }
+
+      const updatedEvent = await res.json();
+      console.log('✅ Evento actualizado:', updatedEvent);
 
       setEvents((prev) =>
         prev.map((ev) => 
           ev.id === eventId 
-            ? { ...ev, ...updatedData, date: new Date(updatedData.date) } 
+            ? { 
+                ...ev, 
+                title: updatedData.title,
+                description: updatedData.description,
+                date: new Date(updatedData.date),
+                type: eventData.type
+              } 
             : ev
         )
       );
 
+      setError('');
+
     } catch (err) {
-      console.error("Error updating event:", err);
-      setError('Error al actualizar el evento');
+      console.error("❌ Error updating event:", err);
+      setError(`Error al actualizar el evento: ${err.message}`);
+      throw err;
     }
   };
 
@@ -247,20 +267,102 @@ const Calendario = () => {
     try {
       const token = localStorage.getItem('token');
 
-      const res = await fetch(`${BACKEND_URL}/calendar/${eventId}`, {
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      // ✅ VALIDACIÓN: Verificar que el ID es válido
+      if (!eventId || eventId === undefined || eventId === null) {
+        console.error('❌ ID de evento inválido:', eventId);
+        throw new Error('ID de evento inválido');
+      }
+
+      // Convertir a número si es string
+      const numericId = typeof eventId === 'string' ? parseInt(eventId, 10) : eventId;
+      
+      if (isNaN(numericId)) {
+        console.error('❌ ID no es un número válido:', eventId);
+        throw new Error('ID no es un número válido');
+      }
+
+      // ✅ Verificar que el evento existe en el estado
+      const eventToDelete = events.find(e => e.id === numericId);
+      if (!eventToDelete) {
+        console.error('❌ Evento no encontrado en el estado:', numericId);
+        console.log('📊 Eventos actuales:', events.map(e => ({ id: e.id, title: e.title })));
+        throw new Error('Evento no encontrado en el estado local');
+      }
+
+      console.log('🗑️ Eliminando evento:', {
+        id: numericId,
+        tipo: typeof numericId,
+        titulo: eventToDelete.title,
+        userId: eventToDelete.userId
+      });
+
+      const url = `${BACKEND_URL}/calendar/${numericId}`;
+      console.log('📤 URL de DELETE:', url);
+
+      const res = await fetch(url, {
         method: "DELETE",
         headers: { 
-          "Authorization": `Bearer ${token}`
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
         }
       });
 
-      if (!res.ok) throw new Error("Error deleting event");
+      console.log('📥 Respuesta del DELETE:', {
+        status: res.status,
+        statusText: res.statusText,
+        ok: res.ok
+      });
 
-      setEvents((prev) => prev.filter((ev) => ev.id !== eventId));
+      if (!res.ok) {
+        let errorData;
+        try {
+          errorData = await res.json();
+        } catch {
+          errorData = { 
+            error: `Error ${res.status}: ${res.statusText}`,
+            message: 'No se pudo parsear la respuesta del servidor'
+          };
+        }
+        
+        console.error('❌ Error del backend:', errorData);
+        
+        // Mostrar info de debug
+        setDebugInfo({
+          eventId: numericId,
+          response: res.status,
+          error: errorData,
+          localEvent: eventToDelete
+        });
+        
+        throw new Error(
+          errorData.message || 
+          errorData.error || 
+          `Error ${res.status} al eliminar evento`
+        );
+      }
+
+      // ✅ Solo actualizar el estado si el backend confirmó la eliminación
+      setEvents((prev) => prev.filter((ev) => ev.id !== numericId));
+      console.log('✅ Evento eliminado exitosamente del estado');
+      
+      setError('');
+      setDebugInfo(null);
 
     } catch (err) {
-      console.error("Error deleting event:", err);
-      setError('Error al eliminar el evento');
+      console.error("❌ Error deleting event:", err);
+      const errorMessage = `Error al eliminar el evento: ${err.message}`;
+      setError(errorMessage);
+      
+      // Log adicional para debugging
+      console.log('📊 Estado actual de eventos:', events);
+      console.log('🔍 Evento que se intentó eliminar:', eventId);
+      
+      throw err;
     }
   };
 
@@ -279,11 +381,49 @@ const Calendario = () => {
   return (
     <main className="flex w-full h-screen overflow-x-auto bg-[#AACBC4] text-white">
       <div className="flex flex-col gap-6 p-6 w-full">
+        {/* Error message */}
         {error && (
-          <div className="bg-red-500 text-white p-4 rounded">
-            {error}
+          <div className="bg-red-500 text-white p-4 rounded flex flex-col gap-2">
+            <div className="flex justify-between items-start">
+              <div className="flex-1">
+                <p className="font-bold">⚠️ Error</p>
+                <p className="text-sm mt-1">{error}</p>
+              </div>
+              <button 
+                onClick={() => {
+                  setError('');
+                  setDebugInfo(null);
+                }}
+                className="ml-4 underline hover:no-underline text-sm"
+              >
+                Cerrar
+              </button>
+            </div>
+            
+            {/* Debug info */}
+            {debugInfo && (
+              <details className="mt-2 bg-red-600 p-2 rounded text-xs">
+                <summary className="cursor-pointer font-semibold">
+                  Ver información técnica
+                </summary>
+                <pre className="mt-2 overflow-auto">
+                  {JSON.stringify(debugInfo, null, 2)}
+                </pre>
+              </details>
+            )}
           </div>
         )}
+
+        {/* Debug panel - solo en desarrollo */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="bg-gray-800 text-white p-3 rounded text-xs">
+            <p><strong>Debug Info:</strong></p>
+            <p>• User ID: {userId}</p>
+            <p>• Total eventos: {events.length}</p>
+            <p>• IDs de eventos: {events.map(e => e.id).join(', ')}</p>
+          </div>
+        )}
+
         <EventCalendar
           events={events}
           onAddEvent={addEvent}
