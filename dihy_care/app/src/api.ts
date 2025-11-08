@@ -1,10 +1,10 @@
 //cliente publico Axios 
 import axios from 'axios';
 import { AxiosInterceptor } from './interceptors/axios.interceptor'; 
- const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://dihycare-backend.vercel.app";
+ const  BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://dihycare-backend.vercel.app";
 
 const api = axios.create({
-  baseURL,
+  baseURL: BASE_URL,
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });
