@@ -89,7 +89,7 @@ const AreaChartComponent = () => {
       <div className="w-full" style={{ height: 260 }}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ right: 30 }}>
-            <YAxis type="number" domain={["dataMin - 10", "dataMax + 10"]} />
+            <YAxis type="number" dataKey="average" />
             <XAxis dataKey="day" />
             <CartesianGrid strokeDasharray="5 5" />
             <Tooltip content={CustomToolTip} />
