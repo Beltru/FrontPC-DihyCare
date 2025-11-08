@@ -27,7 +27,10 @@ const AreaChartComponent = () => {
             const res = await axios.get("/data/glucoseGraphic");
             const payload = Array.isArray(res.data) ? res.data : res.data?.data ?? [];
             console.log("datos recibidos (payload):", payload);
-            if (mounted) setData(payload.length ? payload : mockData);
+
+            // Asegurar que 'average' sea Number (evita strings/NaN)
+            const safe = payload.map(p => ({ ...p, average: Number(p.average) }));
+            if (mounted) setData(safe.length ? safe : mockData);
         } catch (err) {
             console.error("Error cargando datos del gráfico:", err);
             const status = err?.response?.status;
@@ -78,14 +81,15 @@ const AreaChartComponent = () => {
             )}
 
             <div className="w-full h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart width={500} height={400} data={data} margin={{ right: 30 }}>
-                        <YAxis />
+                {/* height fijo evita problemas de cálculo inicial */}
+                <ResponsiveContainer width="100%" height={260}>
+                    <AreaChart data={data} margin={{ right: 30 }}>
+                        <YAxis type="number" domain={['dataMin - 10', 'dataMax + 10']} />
                         <XAxis dataKey="day" />
                         <CartesianGrid strokeDasharray="5 5" />
                         <Tooltip content={CustomToolTip} />
                         <Legend />
-                        <Area type="monotone" dataKey="average" stroke="#7c3aed" fill="#8b5cf6" stackId="1" />
+                        <Area type="monotone" dataKey="average" stroke="#7c3aed" fill="#8b5cf6" strokeWidth={2} />
                     </AreaChart>
                 </ResponsiveContainer>
             </div>
