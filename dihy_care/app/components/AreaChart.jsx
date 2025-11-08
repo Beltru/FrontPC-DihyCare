@@ -9,9 +9,12 @@ const AreaChartComponent = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("/api/area-chart")
+    fetch("/data/glucoseGraphic")
       .then((res) => res.json())
-      .then((json) => setData(json))
+      .then((json) => {
+        console.log("datos recibidos /data/glucoseGraphic:", json);
+        setData(json);
+      })
       .catch((err) => console.error("Error cargando datos del gráfico:", err));
   }, []);
 
@@ -23,7 +26,6 @@ const AreaChartComponent = () => {
         <CartesianGrid strokeDasharray="5 5" />
         <Tooltip content={CustomToolTip} />
         <Legend />
-        <Area type="monotone" dataKey="glucosatisular" stroke="#2563eb" fill="#3b82f6" stackId="1" />
         <Area type="monotone" dataKey="plasmaglucosa" stroke="#7c3aed" fill="#8b5cf6" stackId="1" />
       </AreaChart>
     </ResponsiveContainer>
@@ -35,9 +37,6 @@ const CustomToolTip = ({ active, payload, label }) => {
     return (
       <div className="p-4 bg-slate-900 flex flex-col gap-4 rounded-md">
         <p className="text-medium text-lg">{label}</p>
-        <p className="text-sm text-blue-400">
-          Glucosa-Tisular: <span className="ml-2">g/dl {payload[0].value}</span>
-        </p>
         <p className="text-sm text-blue-400">
           Plasma-Glucosa: <span className="ml-2">g/dl {payload[1].value}</span>
         </p>
