@@ -9,7 +9,7 @@ const AreaChartComponent = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("/data/glucoseGraphic")
+    fetch("https://dihycare-backend.vercel.app/data/glucoseGraphic")
       .then((res) => res.json())
       .then((json) => {
         console.log("datos recibidos /data/glucoseGraphic:", json);
