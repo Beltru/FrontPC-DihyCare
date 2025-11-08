@@ -1,16 +1,27 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import axios from "../src/api"; // usa la instancia con interceptores/autorización
+import axios from "../src/api"; // usa la instancia con interceptors/autorización
 import {
     AreaChart, Area, ResponsiveContainer, YAxis, XAxis, CartesianGrid, Tooltip, Legend
 } from "recharts";
 
 const mockData = [
-  { name: "00:00", glucosatisular: 40, plasmaglucosa: 30 },
-  { name: "01:00", glucosatisular: 50, plasmaglucosa: 20 },
-  { name: "02:00", glucosatisular: 20, plasmaglucosa: 10 },
+  { name: "00:00", plasmaglucosa: 30 },
+  { name: "01:00", plasmaglucosa: 20 },
+  { name: "02:00", plasmaglucosa: 10 },
 ];
+
+const normalize = (raw) => {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((item) => {
+      const name = item.name ?? item.time ?? item.date ?? item.label ?? "";
+      const plasmaglucosa = Number(item.plasmaglucosa ?? item.plasma_glucose ?? item.value ?? item.glucosa ?? NaN);
+      return { name, plasmaglucosa };
+    })
+    .filter((p) => p.name && !Number.isNaN(p.plasmaglucosa));
+};
 
 const AreaChartComponent = () => {
     const [data, setData] = useState([]);
@@ -25,24 +36,15 @@ const AreaChartComponent = () => {
         try {
             console.log("axios.baseURL:", axios.defaults?.baseURL);
             const res = await axios.get("/data/glucoseGraphic");
-            console.log("datos recibidos /data/glucoseGraphic:", res.data);
-            if (mounted) setData(res.data);
+            const normalized = normalize(res.data);
+            console.log("datos normalizados:", normalized);
+            if (mounted) setData(normalized.length ? normalized : mockData);
         } catch (err) {
-            // logs detallados para depuración
             console.error("Error cargando datos del gráfico:", err);
-            console.error("err.message:", err?.message);
-            console.error("err.config:", err?.config);
-            console.error("err.request:", err?.request);
-            console.error("err.response?.status:", err?.response?.status);
-            console.error("err.response?.data:", err?.response?.data);
-
-            // Mensaje de error amigable para mostrar en UI
             const status = err?.response?.status;
             const serverMsg = err?.response?.data?.message || err?.response?.data || err?.message;
             setError({ status, serverMsg });
-
-            // fallback para seguir mostrando algo en el chart
-            setData(mockData);
+            if (mounted) setData(mockData);
         } finally {
             setLoading(false);
         }
@@ -62,40 +64,44 @@ const AreaChartComponent = () => {
         );
     }
 
-    if (error) {
-        return (
-            <div className="w-full h-64 flex flex-col items-center justify-center gap-4 bg-slate-800 rounded-md p-4">
-                <p className="text-red-400 text-sm">Error cargando datos ({error.status}): {String(error.serverMsg)}</p>
-                <div className="flex gap-2">
-                    <button
-                        className="px-3 py-1 bg-indigo-600 text-white rounded"
-                        onClick={() => { setError(null); fetchData(); }}
-                    >
-                        Reintentar
-                    </button>
-                    <button
-                        className="px-3 py-1 bg-gray-600 text-white rounded"
-                        onClick={() => setData(mockData)}
-                    >
-                        Usar datos de prueba
-                    </button>
-                </div>
-                <p className="text-xs text-slate-400 mt-2">Revisa consola y logs del backend si el error persiste.</p>
-            </div>
-        );
-    }
-
+    // Mostrar barra de error con acciones (si hay error) y siempre renderizar el chart con plasmaglucosa
     return (
-        <ResponsiveContainer width="100%" height="100%">
-            <AreaChart width={500} height={400} data={data} margin={{ right: 30 }}>
-                <YAxis />
-                <XAxis dataKey="name" />
-                <CartesianGrid strokeDasharray="5 5" />
-                <Tooltip content={CustomToolTip} />
-                <Legend />
-                <Area type="monotone" dataKey="plasmaglucosa" stroke="#7c3aed" fill="#8b5cf6" stackId="1" />
-            </AreaChart>
-        </ResponsiveContainer>
+        <div>
+            {error && (
+                <div className="w-full mb-4 p-3 rounded-md bg-slate-800 flex items-center justify-between">
+                    <div className="text-sm text-red-300">
+                        Error cargando datos ({error.status}): {String(error.serverMsg)}
+                    </div>
+                    <div className="flex gap-2">
+                        <button
+                            className="px-3 py-1 bg-indigo-600 text-white rounded"
+                            onClick={() => { setError(null); fetchData(); }}
+                        >
+                            Reintentar
+                        </button>
+                        <button
+                            className="px-3 py-1 bg-gray-600 text-white rounded"
+                            onClick={() => { setData(mockData); setError(null); }}
+                        >
+                            Usar datos de prueba
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            <div className="w-full h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart width={500} height={400} data={data} margin={{ right: 30 }}>
+                        <YAxis />
+                        <XAxis dataKey="name" />
+                        <CartesianGrid strokeDasharray="5 5" />
+                        <Tooltip content={CustomToolTip} />
+                        <Legend />
+                        <Area type="monotone" dataKey="plasmaglucosa" stroke="#7c3aed" fill="#8b5cf6" stackId="1" />
+                    </AreaChart>
+                </ResponsiveContainer>
+            </div>
+        </div>
     );
 };
 
