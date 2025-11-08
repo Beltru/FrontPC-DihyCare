@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "../src/api";
 import {
     AreaChart, Area, ResponsiveContainer, YAxis, XAxis, CartesianGrid, Tooltip, Legend
@@ -16,6 +16,7 @@ const AreaChartComponent = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const wrapperRef = useRef(null);
 
     const fetchData = useCallback(async () => {
         let mounted = true;
@@ -28,7 +29,7 @@ const AreaChartComponent = () => {
             const payload = Array.isArray(res.data) ? res.data : res.data?.data ?? [];
             console.log("datos recibidos (payload):", payload);
 
-            // Asegurar que 'average' sea Number (evita strings/NaN)
+            // Asegurar que 'average' sea Number
             const safe = payload.map(p => ({ ...p, average: Number(p.average) }));
             if (mounted) setData(safe.length ? safe : mockData);
         } catch (err) {
@@ -47,6 +48,24 @@ const AreaChartComponent = () => {
     useEffect(() => {
         fetchData();
     }, [fetchData]);
+
+    // debug: log del state data
+    useEffect(() => {
+        console.log("state data:", data);
+        // esperar render y medir SVG
+        const t = setTimeout(() => {
+            try {
+                const svg = document.querySelector('.recharts-surface svg') || document.querySelector('.recharts-wrapper svg') || wrapperRef.current?.querySelector('svg');
+                const wrapperRect = wrapperRef.current?.getBoundingClientRect?.();
+                const svgRect = svg?.getBoundingClientRect?.();
+                console.log("wrapper rect:", wrapperRect);
+                console.log("svg rect:", svgRect);
+            } catch (e) {
+                console.warn("Error midiendo SVG:", e);
+            }
+        }, 200);
+        return () => clearTimeout(t);
+    }, [data]);
 
     if (loading) {
         return (
@@ -80,8 +99,17 @@ const AreaChartComponent = () => {
                 </div>
             )}
 
-            <div className="w-full" style={{ height: 260, minHeight: 260 }}>
-                {/* ResponsiveContainer usa 100% de la altura del padre */}
+            {/* contenedor con altura explícita y ref */}
+            <div ref={wrapperRef} className="w-full" style={{ height: 260, minHeight: 260, border: 'none' }}>
+                {/* Estilos temporales para forzar que el SVG ocupe todo el contenedor.
+                    Si esto soluciona el problema, mueve las reglas a CSS global o ajusta tu CSS que causa 26x26. */}
+                <style>{`
+                    /* reglas temporales de depuración */
+                    .recharts-wrapper, .recharts-wrapper * { box-sizing: border-box; }
+                    .recharts-wrapper svg { width: 100% !important; height: 100% !important; display: block !important; }
+                    .recharts-surface { width: 100% !important; height: 100% !important; }
+                `}</style>
+
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={data} margin={{ right: 30 }}>
                         <YAxis type="number" domain={['dataMin - 10', 'dataMax + 10']} />
