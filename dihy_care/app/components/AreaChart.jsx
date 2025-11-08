@@ -80,9 +80,9 @@ const AreaChartComponent = () => {
                 </div>
             )}
 
-            <div className="w-full h-64">
-                {/* height fijo evita problemas de cálculo inicial */}
-                <ResponsiveContainer width="100%" height={260}>
+            <div className="w-full" style={{ height: 260, minHeight: 260 }}>
+                {/* ResponsiveContainer usa 100% de la altura del padre */}
+                <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={data} margin={{ right: 30 }}>
                         <YAxis type="number" domain={['dataMin - 10', 'dataMax + 10']} />
                         <XAxis dataKey="day" />
