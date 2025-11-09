@@ -1,58 +1,45 @@
 "use client";
 import { useState } from 'react';
 import React from "react";
-import Link from 'next/link';
-import { HiMenuAlt3 } from "react-icons/hi";
-import { AiOutlineHeart } from "react-icons/ai";
-import { RiSettings4Line } from "react-icons/ri";
-import { TbReportAnalytics } from "react-icons/tb";
-import { FiMessageSquare } from "react-icons/fi";
-import { FaCalendarAlt, FaWpforms } from "react-icons/fa";
-import { GiForkKnifeSpoon } from "react-icons/gi";
 import AreaChartComponent from '../components/AreaChart';
 import LineChartComponent from '../components/LineChart';
-import BarChartComponent from '../components/BarChart';
 import MiniCalendar from '../components/MiniCalendario';
-
-import RightSideBar from '../components/RightSidebar';
-import { subDays } from 'date-fns';
 
 const Home = () => {
   const [open, setOpen] = useState(true);
   const [dataOpen, setDataOpen] = useState(false);
   const [events, setEvents] = useState([]);
 
- 
-
   return (
-    <main className="flex h-screen overflow-hidden bg-[#d9d9d9]">
-     
-      {/* Main Content */}
-      <div className="flex flex-grow overflow-hidden ml-6 p-2 w-[50vw]">
-        {/* LEFT CONTENT */}
-        <div className="flex flex-col flex-1 gap-6 overflow-hidden">
-          <h1 className="text-3xl text-black font-bold">Welcome!</h1>
+    <main className="h-screen bg-[#d9d9d9] p-6">
+      <div className="h-full flex gap-6">
+        {/* COLUMNA IZQUIERDA - GRÁFICOS */}
+        <div className="flex-1 flex flex-col h-full">
+          {/* Título */}
+          <h1 className="text-2xl text-black font-bold mb-4">Welcome!</h1>
+          
+          {/* Contenedor de gráficos con altura controlada */}
+          <div className="flex-1 flex flex-col gap-4 max-h-[calc(100vh-120px)]">
+            {/* Gráfico 1 */}
+            <div className="bg-[#5bbec3] rounded-xl flex-1 min-h-0">
+              <div className="w-full h-full p-4">
+                <AreaChartComponent/>
+              </div>
+            </div>
 
-          {/* Main Graph */}
-        <div className='flex flex-wrap gap-4 justify-center items-center w-[90%]'>
-          <div className="bg-[#5bbec3] rounded-xl flex items-center justify-center h-[40vh] w-full">
-            <div className="w-full h-full px-2 py-2">
-              <AreaChartComponent />
+            {/* Gráfico 2 */}
+            <div className="bg-[#5bbec3] rounded-xl flex-1 min-h-0">
+              <div className="w-full h-full p-4">
+                <LineChartComponent />
+              </div>
             </div>
           </div>
-
-         <div className="bg-[#5bbec3] rounded-xl flex items-center justify-center h-[40vh] w-full">
-            <div className="w-full h-full px-2 py-2">
-              <LineChartComponent />
-            </div>
-          </div>
-      </div>
         </div>
-        {/* RIGHT CONTENT: AGENDA */}
-        <div className="flex flex-col bg-gradient-to-b bg-[#AACBC4] rounded-xl p-4 w-[55%] overflow-y-auto gap-0">
+
+        {/* COLUMNA DERECHA - CALENDARIO */}
+        <div className="bg-[#AACBC4] rounded-xl p-6 w-[400px] flex-shrink-0 overflow-y-auto">
           <MiniCalendar/>
         </div>
-
       </div>
     </main>
   );

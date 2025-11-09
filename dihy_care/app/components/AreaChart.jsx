@@ -27,64 +27,58 @@ const AreaChartComponent = () => {
   }, []);
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <h2 className="text-lg font-bold mb-4 text-center text-gray-800 dark:text-gray-200">
-        Promedios diarios de glucosa
-      </h2>
-
-      <div className="w-full max-w-5xl h-[300px] sm:h-[350px] md:h-[400px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
-            data={data}
-            margin={{ top: 10, right: 30, left: 0, bottom: 10 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
-            <XAxis
-              dataKey="day"
-              tickFormatter={(str) =>
-                new Date(str).toLocaleDateString("es-AR", {
-                  day: "2-digit",
-                  month: "2-digit",
-                })
-              }
-              tick={{ fontSize: 12 }}
-              tickMargin={8}
-            />
-            <YAxis
-              tick={{ fontSize: 12 }}
-              tickLine={false}
-              axisLine={false}
-            />
-            <Tooltip
-              formatter={(value) => `${value.toFixed(2)} mg/dl`}
-              labelFormatter={(label) =>
-                new Date(label).toLocaleDateString("es-AR", {
-                  weekday: "short",
-                  day: "2-digit",
-                  month: "2-digit",
-                })
-              }
-              contentStyle={{
-                backgroundColor: "#1e293b",
-                borderRadius: "8px",
-                border: "none",
-                color: "white",
-              }}
-            />
-            <Legend />
-            <Area
-              type="monotone"
-              dataKey="average"
-              stroke="#7c3aed"
-              fill="#8b5cf6"
-              fillOpacity={0.25}
-              strokeWidth={2}
-              dot={{ r: 4, stroke: "#fff", strokeWidth: 2 }}
-              activeDot={{ r: 6 }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
+    <div className="w-full h-full flex flex-col">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart
+          data={data}
+          margin={{ top: 10, right: 20, left: -10, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray="5 5" strokeOpacity={0.5} />
+          <XAxis
+            dataKey="day"
+            tickFormatter={(str) =>
+              new Date(str).toLocaleDateString("es-AR", {
+                day: "2-digit",
+                month: "2-digit",
+              })
+            }
+            tick={{ fontSize: 11 }}
+            tickMargin={5}
+          />
+          <YAxis
+            tick={{ fontSize: 11 }}
+            tickLine={false}
+            axisLine={false}
+          />
+          <Tooltip
+            formatter={(value) => `${value.toFixed(2)} mg/dl`}
+            labelFormatter={(label) =>
+              new Date(label).toLocaleDateString("es-AR", {
+                weekday: "short",
+                day: "2-digit",
+                month: "2-digit",
+              })
+            }
+            contentStyle={{
+              backgroundColor: "#1e293b",
+              borderRadius: "8px",
+              border: "none",
+              color: "white",
+            }}
+          />
+          <Legend wrapperStyle={{ fontSize: '12px' }} />
+          <Area
+            type="monotone"
+            dataKey="average"
+            stroke="#7c3aed"
+            fill="#8b5cf6"
+            fillOpacity={0.25}
+            strokeWidth={2}
+            dot={{ r: 3, stroke: "#fff", strokeWidth: 2 }}
+            activeDot={{ r: 5 }}
+          />
+        </AreaChart>
+      </ResponsiveContainer>
     </div>
   );
 };

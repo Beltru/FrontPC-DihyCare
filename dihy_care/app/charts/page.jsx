@@ -11,7 +11,7 @@ export default function Charts() {
   return (
     <main className="flex min-h-screen bg-radial from-[#254A7F] to-[#140850]">
       <div className="grid items-center xl:grid-cols-3 lg:grid-cols-2 w-full gap-10 max-w-[1400px] m-10">
-        <GridItem title="Glucosa en Sangre">
+        <GridItem title="Promedios diarios de glucosa">
           <AreaChartComponent />
         </GridItem>
 
