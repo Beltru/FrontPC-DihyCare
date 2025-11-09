@@ -12,7 +12,7 @@ import {
   Legend,
 } from "recharts";
 
-const AreaChartComponent = () => {
+const AreaChartComponent = ({ onDataLoad }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -22,9 +22,10 @@ const AreaChartComponent = () => {
         const payload = Array.isArray(res.data) ? res.data : res.data?.data ?? [];
         console.log("📊 Datos usados en gráfico:", payload);
         setData(payload);
+        if (onDataLoad) onDataLoad(payload); // Enviar datos al padre
       })
       .catch((err) => console.error("❌ Error cargando datos del gráfico:", err));
-  }, []);
+  }, [onDataLoad]);
 
   return (
     <div className="w-full h-full flex flex-col">
