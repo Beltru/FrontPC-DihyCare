@@ -72,6 +72,7 @@ const AreaChartComponent = ({ onDataLoad }) => {
             type="monotone"
             dataKey="average"
             stroke="#7c3aed"
+            fill="#7c3aed"
             strokeWidth={2}
             dot={{ r: 3, stroke: "#fff", strokeWidth: 2 }}
             activeDot={{ r: 5 }}
