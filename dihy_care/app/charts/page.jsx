@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import AreaChartComponent from "../components/GlucosaChart";
-import LineChartComponent from "../components/presionChart";
+import LineChartComponent from "../components/PresionChart";
 import React from "react";
 import { FiActivity, FiDroplet, FiHeart, FiThermometer } from "react-icons/fi";
 

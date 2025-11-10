@@ -8,7 +8,7 @@ import Aurora from ".//reactbits/aurora";
 import GlareHover from ".//reactbits/glare";
 import GradientText from ".//reactbits/gradientext";
 import AreaChartComponent from "./components/GlucosaChart";
-import LineChartComponent from "./components/presionChart";
+import LineChartComponent from "./components/PresionChart";
 
 export default function Landing2() {
   const footerRef = useRef(null);
