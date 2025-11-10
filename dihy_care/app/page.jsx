@@ -7,8 +7,8 @@ import Particles from ".//reactbits/particles";
 import Aurora from ".//reactbits/aurora";
 import GlareHover from ".//reactbits/glare";
 import GradientText from ".//reactbits/gradientext";
-import AreaChartComponent from "./components/AreaChart";
-import LineChartComponent from "./components/LineChart";
+import AreaChartComponent from "./components/GlucosaChart";
+import LineChartComponent from "./components/presionChart";
 
 export default function Landing2() {
   const footerRef = useRef(null);

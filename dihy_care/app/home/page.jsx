@@ -1,8 +1,8 @@
 "use client";
 import { useState } from 'react';
 import React from "react";
-import AreaChartComponent from '../components/AreaChart';
-import LineChartComponent from '../components/LineChart';
+import AreaChartComponent from '../components/GlucosaChart';
+import LineChartComponent from '../components/presionChart';
 import MiniCalendar from '../components/MiniCalendario';
 
 const Home = () => {

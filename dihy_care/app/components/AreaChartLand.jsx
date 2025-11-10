@@ -43,7 +43,6 @@ const AreaChartComponentLand = () => {
             type="monotone"
             dataKey="glucosatisular"
             stroke="#2563eb"
-            fill="#3b82f6"
             stackId="1"
           />
           <Area
