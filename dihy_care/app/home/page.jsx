@@ -3,6 +3,7 @@ import { useState } from 'react';
 import React from "react";
 import AreaChartComponent from '../components/GlucosaChart';
 import LineChartComponent from '../components/PresionChart';
+import BarChartComponent from '../components/BarChart';
 import MiniCalendar from '../components/MiniCalendario';
 
 const Home = () => {
@@ -30,7 +31,7 @@ const Home = () => {
             {/* Gráfico 2 */}
             <div className="bg-[#5bbec3] rounded-xl flex-1 min-h-0">
               <div className="w-full h-full p-4">
-                <LineChartComponent />
+                <BarChartComponent />
               </div>
             </div>
           </div>

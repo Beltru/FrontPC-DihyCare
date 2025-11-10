@@ -9,6 +9,7 @@ import GlareHover from ".//reactbits/glare";
 import GradientText from ".//reactbits/gradientext";
 import AreaChartComponent from "./components/GlucosaChart";
 import LineChartComponent from "./components/PresionChart";
+import BarChartComponent from "./components/BarChart";
 
 export default function Landing2() {
   const footerRef = useRef(null);
@@ -63,7 +64,7 @@ export default function Landing2() {
         </GridItem>
 
         <GridItem title="Presión">
-          <LineChartComponent />
+          <BarChartComponent />
         </GridItem>
             </div>
           </div>
