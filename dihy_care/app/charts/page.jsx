@@ -13,7 +13,13 @@ export default function Charts() {
   const [pressureData, setPressureData] = useState([]);
 
   return (
-    <main className="flex min-h-screen bg-radial from-[#254A7F] to-[#140850]">
+
+    
+
+    <main className="flex min-h-screen bg-[#AACBC4]">
+      
+      {/*bg-radial from-[#254A7F] to-[#140850]*/}
+
       <div className="grid items-center xl:grid-cols-3 lg:grid-cols-2 w-full gap-10 max-w-[1400px] m-10">
         <GridItem title="Promedios diarios de glucosa">
           <AreaChartComponent onDataLoad={setGlucoseData} />
@@ -33,7 +39,7 @@ export default function Charts() {
 
 function GridItem({ title, children }) {
   return (
-    <div className="p-4 bg-slate-800 text-white rounded-lg shadow-md w-full h-[350px] flex flex-col">
+    <div className="p-4 bg-sky-950 text-white rounded-lg shadow-md w-full h-[350px] flex flex-col">
       <h2 className="text-lg font-semibold mb-2">{title}</h2>
       <div className="flex-1 flex items-center justify-center">{children}</div>
     </div>
