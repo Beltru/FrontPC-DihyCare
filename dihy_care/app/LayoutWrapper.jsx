@@ -7,7 +7,7 @@ export default function LayoutWrapper({ children }) {
   const pathname = usePathname();
 
   // 🔹 Rutas donde NO queremos mostrar la Sidebar
-  const exclude = ["/", "/login", "/register", "/form"];
+  const exclude = ["/", "/login", "/register", "/form", "/landing"];
   const hideSidebar = exclude.includes(pathname);
 
   if (hideSidebar) {

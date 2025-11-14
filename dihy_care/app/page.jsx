@@ -57,9 +57,9 @@ export default function Landing2() {
          
         <section className="w-full h-[100vh] flex items-center justify-center">
           <div className="flex-col flex">
-            <div className="mb-2 bg-slate-600/30 rounded-2xl p-3"><p className="text-7xl">Charts to display information</p></div>
+            <div className="flex items-center justify-center mb-2 bg-slate-600/30 rounded-2xl p-2"><p className="flex justify-center text-7xl">Charts to display information</p></div>
             <div className="flex flex-row gap-4 items-center justify-center m-6 w-[80vw]">
-            <GridItem title="Glucosa en Sangre">
+            <GridItem title="Glucosa en Sangre ">
           <AreaChartComponent />
         </GridItem>
 
@@ -166,7 +166,7 @@ export default function Landing2() {
 }
 function GridItem({ title, children }) {
   return (
-    <div className="p-4 bg-slate-800 text-white rounded-lg shadow-md w-full h-[350px] flex flex-col">
+    <div className="p-4 bg-sky-950 text-white rounded-lg shadow-md w-full h-[350px] flex flex-col">
       <h2 className="text-lg font-semibold mb-2">{title}</h2>
       <div className="flex-1 flex items-center justify-center">{children}</div>
     </div>

@@ -392,15 +392,6 @@ export default function SettingsPage() {
                         <p className="text-xs text-gray-500 mt-1">El email no se puede modificar</p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Edad</label>
-                      <input
-                        type="number"
-                        value={settings.age}
-                        onChange={(e) => handleChange('age', e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Peso (kg)</label>
                       <input
                         type="number"

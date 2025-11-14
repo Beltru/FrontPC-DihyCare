@@ -1,25 +1,16 @@
 import Link from "next/link"
-
+import Navbar from "../components/Navbar"
 const Landing = () => {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-radial from-[#6bb4bc] to-[#228eb9]">
-      <div className="flex flex-col items-center gap-6">
-        <img src="/CorazonOscuro.png" alt="" className="h-[30vh]"/>
-        
-        <div className="flex gap-6">
-          <Link
-            href="/register"
-            className="bg-[#D9D9D9] text-black px-10 py-2 rounded-full font-bold hover:cursor-pointer hover:bg-[#909697]"
-          >
-            Sign Up
-          </Link>
-          <Link
-            href="/login"
-            className="bg-[#377A95] text-black px-10 py-2 rounded-full font-bold hover:cursor-pointer hover:bg-[#067787]"
-          >
-            Login
-          </Link>
-        </div>
+    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <Navbar />
+      <div className="bg-gray-200">
+        <section className="h-[100vh] w-[100vw]">
+
+        </section>
+        <section className="h-[100vh] w-[100vw]">
+
+        </section>
       </div>
     </main>
   );
