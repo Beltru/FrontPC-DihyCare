@@ -12,8 +12,9 @@ export default function GradientText({
 
   return (
     <div
-      className={`relative mx-auto flex max-w-fit flex-row items-center justify-center transition-shadow duration-500 overflow-hidden ${className}`}
+      className={`relative flex max-w-fit flex-row items-start justify-start transition-shadow duration-500 overflow-hidden ${className}`}
     >
+
       {showBorder && (
         <div
           className="absolute inset-0 bg-cover z-0 pointer-events-none animate-gradient"
