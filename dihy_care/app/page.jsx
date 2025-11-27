@@ -1,174 +1,208 @@
 "use client";
-
-import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import Particles from ".//reactbits/particles";
-import Aurora from ".//reactbits/aurora";
-import GlareHover from ".//reactbits/glare";
-import GradientText from ".//reactbits/gradientext";
-import AreaChartComponent from "./components/GlucosaChart";
-import LineChartComponent from "./components/PresionChart";
-import BarChartComponent from "./components/BarChart";
+import Navbar from "./components/Navbar";
+import GradientText from "./reactbits/gradientext";
+import React from "react";
+import AreaChartComponentLand from "./components/AreaChartLand";
 
-export default function Landing2() {
-  const footerRef = useRef(null);
-    
-  const [active, setActive] = useState("left");
-  
-  const items = [
-    { label: "Login", href: "/login" },
-    { label: "Sign Up", href: "/register" },
-    { label: "Contact", href: "#" },
-  ];
-
+const Landing = () => {
   return (
-    <div>
-      
-      {/* FONDO GENERAL: se mantiene solo para el main */}
-      <div className="absolute max-w-screen inset-0 z-[-20] bg-gradient-to-b from-[#07df9b] via-[#07a49c] to-[#069bd6] overflow-x-hidden" />
-       {/*<header>
-          
-           <div style={{  position: 'relative' }}>
-             <GooeyNav items={items} particleCount={15} particleDistances={[90, 10]} particleR={100} initialActiveIndex={0} animationTime={600} timeVariance={300} colors={[1, 2, 3, 1, 2, 3, 1, 4]}/>
-           </div>
-        </header> */} 
-      {/* PARTICULAS EN TODA LA PÁGINA */}
-      {/* MAIN */}
-      <main className="relative z-10 flex min-h-screen flex-col bg-gradient-to-b from-[#07df9b] via-[#07a49c] to-[#069bd6]">
-        {/* HERO */}<div className="absolute inset-0 z-[-10] pointer-events-none">
-        <Particles particleColors={["#ffffff", "#ffffff"]} particleCount={200} particleSpread={10} speed={0.3} particleBaseSize={80} moveParticlesOnHover={true} alphaParticles={false} disableRotation={true} />
-      </div>
-        <section className="mt-10 w-full h-[100vh] flex items-center flex-col mb-[10vw]">
-          <div className="flex flex-col items-center w-full h-full mt-30">
-            <h1 className="text-5xl text-white font-bold mb-4">Welcome to Dihy Care</h1>
-            <p className="text-xl text-gray-300 mb-8">Your health, our priority.</p>
-            <div>
-              <GlareHover glareColor="#ffffff" glareOpacity={0.3} glareAngle={-30} glareSize={300} transitionDuration={800}playOnce={false}>
-                  <Link href="/register">
-                    <button className="px-6 py-3 bg-[#066ccc] text-white rounded-lg hover:cursor-pointer">
-                      Get Started
-                    </button>
-                  </Link>
-              </GlareHover>
-            </div>
-          </div>
-        </section>
-         
-        <section className="w-full h-[100vh] flex items-center justify-center">
-          <div className="flex-col flex">
-            <div className="flex items-center justify-center mb-2 bg-slate-600/30 rounded-2xl p-2"><p className="flex justify-center text-7xl">Charts to display information</p></div>
-            <div className="flex flex-row gap-4 items-center justify-center m-6 w-[80vw]">
-            <GridItem title="Glucosa en Sangre ">
-          <AreaChartComponent />
-        </GridItem>
+    <main className="bg-white flex flex-col items-center justify-center">
+      <Navbar />
 
-        <GridItem title="Presión">
-          <BarChartComponent />
-        </GridItem>
-            </div>
-          </div>
-            
-          </section>
-          
-          
-   <section className="w-full h-[100vh] flex items-center justify-center px-8 gap-2">
-      {/* ====== Carta Izquierda ====== */}
-      <div onMouseEnter={() => setActive("left")} onMouseLeave={() => setActive(null)} className={`h-[80vh] rounded-2xl transition-all duration-500 flex flex-col items-center justify-center bg-slate-900 overflow-hidden ${  active === "left" ? "flex-[7]"  : active === "right"  ? "flex-[2]"  : "flex-[1]" }`}>
-        {/* Título (siempre visible) */}
-        <h1 className="text-4xl font-semibold text-white text-center mb-6">
-          Left Title
-        </h1>
+      {/* ========================= HERO ========================= */}
+      <section className="w-full bg-white py-24 flex flex-col lg:flex-row items-center justify-between px-10 lg:px-32">
+        
+        {/* LEFT TEXT */}
+        <div className="flex-1 flex flex-col gap-6">
+          <h1 className="text-5xl lg:text-6xl font-semibold text-gray-900 leading-tight">
+            Monitor Your Health with
+          </h1>
 
-        {/* Contenido visible sólo al hover */}
-        <div className="flex flex-col items-center text-center px-6 transition-all duration-500 overflow-hidden" style={{ maxHeight: active === "left" ? "1000px" : "0px",  opacity: active === "left" ? 1 : 0, }}>
-          <img  src="/example-left.png"  alt="Left"  className="w-48 h-auto rounded-xl mb-4 transition-transform duration-500"  style={{
-              transform: active === "left" ? "scale(1)" : "scale(0.8)",
-            }}
-          />
-          <p className="text-gray-300 text-lg leading-relaxed w-3/4">
-            Information about the left card’s content. This section expands
-            smoothly when hovered, but the card’s outer position stays fixed.
+          <GradientText
+            colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+            animationSpeed={3}
+            showBorder={false}
+          >
+            <h1 className="text-5xl lg:text-6xl font-semibold">DiHy Care</h1>
+          </GradientText>
+
+          <p className="text-gray-700 text-lg lg:text-xl max-w-xl">
+            Advanced diabetes and hypertension management platform with
+            real-time monitoring, data analytics, and personalized insights.
           </p>
-        </div>
-      </div>
 
-      {/* ====== Carta Derecha ====== */}
-      <div onMouseEnter={() => setActive("right")} onMouseLeave={() => setActive(null)} className={`h-[80vh] rounded-2xl transition-all duration-500 flex flex-col items-center justify-center bg-white/90 overflow-hidden ${  active === "right"   ? "flex-[7]"  : active === "left"  ? "flex-[2]" : "flex-[1]" }`}>
-        {/* Título (siempre visible) */}
-        <h1 className="text-4xl font-semibold text-slate-800 text-center mb-6">
-          Dr. Gabriel Lijteroff
-        </h1>
+          <div className="flex gap-4 mt-4">
+            <Link
+              href="register"
+              className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+            >
+              Start Free
+            </Link>
 
-        {/* Contenido visible sólo al hover */}
-        <div className="flex flex-col items-center text-center px-6 transition-all duration-500 overflow-hidden"  style={{  maxHeight: active === "right" ? "1000px" : "0px",  opacity: active === "right" ? 1 : 0,}} >
-          <img
-            src="/gabriel.png"
-            alt="Dr. Gabriel Lijteroff"
-            className="w-40 h-auto rounded-xl mb-4 transition-transform duration-500"
-            style={{
-              transform: active === "right" ? "scale(1)" : "scale(0.8)",
-            }}
-          />
-          <p className="text-gray-800 text-xl leading-relaxed w-3/4">
-            Endocrinology and diabetes specialist with over 15 years of
-            experience helping patients manage their health conditions.
-            Passionate about patient education and empowerment.
-          </p>
-        </div>
-      </div>
-    </section>
-
-
-        {/* TRANSICIÓN SUAVE ENTRE MAIN Y FOOTER */}
-        <div className="w-full h-[12vh] bg-gradient-to-b from-transparent to-[#069bd6]" />
-      </main>
-
-      {/* FOOTER */}
-      <footer
-        ref={footerRef}
-        className="relative flex flex-row items-center justify-center w-full bg-slate-900 h-[100vh] px-[4%] py-[10%] overflow-hidden "
-      >
-        {/* AURORA VISUAL DESDE DENTRO DEL FOOTER */}
-        <div className="absolute top-0 left-0 w-full h-[40vh] z-0">
-          <Aurora colorStops={["#069bd6", "#07a49c", "#07df9b"]} blend={1.2} amplitude={0.5} speed={0.8}/>
-        </div>
-
-        {/* PARTICULAS EN FOOTER */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-           <Particles particleColors={["#ffffff", "#ffffff"]} particleCount={200} particleSpread={10} speed={0.3} particleBaseSize={80} moveParticlesOnHover={true} alphaParticles={false} disableRotation={true} />
-        </div>
-
-        {/* CONTENIDO */}
-        <div className="relative z-10 m-4 w-[70%] h-[75vh] rounded-md p-10">
-          <GradientText colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]} animationSpeed={3} showBorder={false} className="custom-class">
-            <p className="text-[4.1vw] leading-[0.7] flex flex-row items-center justify-center">
-                        The best way to track
-                        </p>
-            <p className="text-[4.1vw]">Your health</p>
-          </GradientText>         
-          
-          <div className="flex items-center justify-around mt-28 border border-gray-600 hover:border-gray-400 duration-300 h-[30%]">
-            <p className="text-3xl">Start here</p>
-            <Link href="./register">
-              <button className="px-6 py-4 border border-neutral-900 bg-neutral-900 rounded-full text-xl hover:bg-neutral-700 hover:cursor-pointer transition-all duration-300">
-                Create your account ➞
-              </button>
+            <Link
+              href="login"
+              className="px-6 py-3 rounded-xl border border-gray-300 text-blue-600 font-semibold hover:bg-gray-100 transition"
+            >
+              Login
             </Link>
           </div>
         </div>
-        <div className="relative z-10 m-4 flex items-center justify-center w-[45%] h-[70vh] rounded-md p-10">
-          <Image src={"/CorazonClaro.png"} alt="" width={500} height={500} />
+
+        {/* RIGHT CHART */}
+        <div className="flex-1 mt-12 lg:mt-0 w-full flex justify-center">
+          <div className="bg-slate-800 shadow-xl border border-gray-200 rounded-2xl p-6 w-[420px]">
+            <h2 className="text-gray-200 font-semibold mb-4">
+              Health Data Overview
+            </h2>
+            <AreaChartComponentLand />
+          </div>
         </div>
+      </section>
+
+      {/* ========================= FEATURES ========================= */}
+      <section className="w-full bg-gray-50 py-24 px-8 lg:px-32 text-center">
+        <h2 className="text-3xl font-semibold text-gray-900">
+          Powerful Health Management Features
+        </h2>
+        <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
+          Developed from medical experience, designed for diabetes and hypertension.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-14">
+          <FeatureItem
+            title="Real-time Analytics"
+            description="Monitor glucose, blood pressure, and trends instantly."
+            icon="📊"
+          />
+          <FeatureItem
+            title="Easy Upload"
+            description="Store lab reports, prescriptions, and medical documents."
+            icon="📁"
+          />
+          <FeatureItem
+            title="Smart Alerts"
+            description="Receive critical notifications instantly."
+            icon="🔔"
+          />
+        </div>
+      </section>
+
+      {/* ========================= METRICS ========================= */}
+      <section className="w-full bg-gradient-to-r from-[#12ed8b] to-[#4079ff] text-white py-24 px-8 lg:px-32">
+        <div className="grid grid-cols-1 md:grid-cols-4 text-center gap-12">
+          <Metric number="50K+" label="Active Users" />
+          <Metric number="2M+" label="Records Uploaded" />
+          <Metric number="98%" label="Accuracy" />
+          <Metric number="24/7" label="Monitoring" />
+        </div>
+      </section>
+
+      {/* ========================= HEALTHCARE PRO SECTION ========================= */}
+      <section className="w-full bg-white py-24 px-8 lg:px-32 flex flex-col lg:flex-row items-center gap-16">
+        <div className="flex-1">
+          <h2 className="text-3xl font-semibold text-gray-900">
+            Designed for Healthcare Professionals
+          </h2>
+          <p className="text-gray-600 mt-4 max-w-lg">
+            Provide better patient care through advanced monitoring tools,
+            medical-grade analytics, and centralized history tracking.
+          </p>
+
+          <ul className="mt-6 space-y-3 text-gray-700">
+            <li>• Patient dashboards</li>
+            <li>• Automatic report generation</li>
+            <li>• Early detection alerts</li>
+          </ul>
+        </div>
+
+        <div className="flex-1 flex justify-center">
+          <img
+            src="/doctor.png"
+            className="rounded-xl shadow-xl w-[420px]"
+            alt="Doctor"
+          />
+        </div>
+      </section>
+
+      {/* ========================= CTA ========================= */}
+      <section className="w-full bg-gray-50 py-24 text-center px-8 lg:px-32">
+        <h2 className="text-3xl font-semibold text-gray-900">
+          Ready to Transform Your Health Management?
+        </h2>
+
+        <p className="text-gray-600 mt-2">
+          Start improving your health today with DiHy Care.
+        </p>
+
+        <Link
+          href="register"
+          className="mt-8 inline-block px-8 py-4 bg-gradient-to-r from-[#07df9b] to-teal-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition"
+        >
+          Start Free
+        </Link>
+      </section>
+
+      {/* ========================= FOOTER ========================= */}
+      <footer className="w-full bg-gray-900 text-gray-300 py-12 px-8 lg:px-32">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+          <FooterSection title="DiHy Care">
+            <p>Advanced health monitoring for chronic conditions.</p>
+          </FooterSection>
+
+          <FooterSection title="Product">
+            <p>Features</p>
+            <p>Analytics</p>
+            <p>Monitoring</p>
+          </FooterSection>
+
+          <FooterSection title="Company">
+            <p>About</p>
+            <p>Blog</p>
+            <p>Careers</p>
+          </FooterSection>
+
+          <FooterSection title="Support">
+            <p>Help Center</p>
+            <p>Contact</p>
+            <p>Terms</p>
+          </FooterSection>
+        </div>
+
+        <p className="text-center text-gray-500 mt-10 text-sm">
+          © 2025 DiHy Care — All Rights Reserved.
+        </p>
       </footer>
-    </div>
+    </main>
   );
-}
-function GridItem({ title, children }) {
+};
+
+function FeatureItem({ title, description, icon }) {
   return (
-    <div className="p-4 bg-sky-950 text-white rounded-lg shadow-md w-full h-[350px] flex flex-col">
-      <h2 className="text-lg font-semibold mb-2">{title}</h2>
-      <div className="flex-1 flex items-center justify-center">{children}</div>
+    <div className="bg-white shadow-md rounded-xl p-8 border hover:shadow-lg transition">
+      <div className="text-4xl mb-3">{icon}</div>
+      <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
+      <p className="text-gray-600 mt-2">{description}</p>
     </div>
   );
 }
+
+function Metric({ number, label }) {
+  return (
+    <div>
+      <h3 className="text-4xl font-bold">{number}</h3>
+      <p className="text-gray-200 mt-1">{label}</p>
+    </div>
+  );
+}
+
+function FooterSection({ title, children }) {
+  return (
+    <div>
+      <h4 className="text-white font-semibold mb-3">{title}</h4>
+      <div className="space-y-2 text-gray-400">{children}</div>
+    </div>
+  );
+}
+
+export default Landing;

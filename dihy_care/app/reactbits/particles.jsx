@@ -1,7 +1,8 @@
+"use client";
 import { useEffect, useRef } from "react";
 import { Renderer, Camera, Geometry, Program, Mesh } from "ogl";
 
-const defaultColors = ["#ffffff", "#ffffff", "#ffffff"];
+const defaultColors = ["#0df8a9"];
 
 const hexToRgb = (hex) => {
   hex = hex.replace(/^#/, "");
@@ -93,10 +94,23 @@ const Particles = ({
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container) {
+      console.warn("Particles: no containerRef");
+      return;
+    }
 
+    // renderer + gl
     const renderer = new Renderer({ depth: false, alpha: true });
     const gl = renderer.gl;
+
+    // ensure canvas styles so it displays correctly
+    gl.canvas.style.display = "block";
+    gl.canvas.style.position = "absolute";
+    gl.canvas.style.top = "0";
+    gl.canvas.style.left = "0";
+    gl.canvas.style.width = "100%";
+    gl.canvas.style.height = "100%";
+
     container.appendChild(gl.canvas);
     gl.clearColor(0, 0, 0, 0);
 
@@ -104,12 +118,19 @@ const Particles = ({
     camera.position.set(0, 0, cameraDistance);
 
     const resize = () => {
-      const width = container.clientWidth;
-      const height = container.clientHeight;
+      const width = container.clientWidth || window.innerWidth;
+      const height = container.clientHeight || window.innerHeight;
+      // if zero, try fallback
+      if (width === 0 || height === 0) {
+        // don't set 0 sizes
+        return;
+      }
       renderer.setSize(width, height);
       camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
     };
+
     window.addEventListener("resize", resize, false);
+    // call resize after appending canvas
     resize();
 
     const handleMouseMove = (e) => {
@@ -123,11 +144,11 @@ const Particles = ({
       container.addEventListener("mousemove", handleMouseMove);
     }
 
-    const count = particleCount;
+    const count = Math.max(1, particleCount);
     const positions = new Float32Array(count * 3);
     const randoms = new Float32Array(count * 4);
     const colors = new Float32Array(count * 3);
-    const palette = particleColors && particleColors.length > 0 ? particleColors : defaultColors;
+    const palette = Array.isArray(particleColors) && particleColors.length > 0 ? particleColors : defaultColors;
 
     for (let i = 0; i < count; i++) {
       let x, y, z, len;
@@ -140,7 +161,8 @@ const Particles = ({
       const r = Math.cbrt(Math.random());
       positions.set([x * r, y * r, z * r], i * 3);
       randoms.set([Math.random(), Math.random(), Math.random(), Math.random()], i * 4);
-      const col = hexToRgb(palette[Math.floor(Math.random() * palette.length)]);
+      const colHex = palette[Math.floor(Math.random() * palette.length)] || palette[0];
+      const col = hexToRgb(colHex);
       colors.set(col, i * 3);
     }
 
@@ -224,7 +246,7 @@ const Particles = ({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full h-full ${className}`}
+      className={`relative w-full h-full ${className ?? ""}`}
     />
   );
 };
