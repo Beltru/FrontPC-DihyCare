@@ -20,8 +20,6 @@ const Sidebar = () => {
   const menus = [
     { name: "Charts", link: "/charts", icon: TbReportAnalytics },
     { name: "Calendar", link: "/calendario", icon: FaCalendarAlt },
-    { name: "Nutrition", link: "/recetas", icon: GiForkKnifeSpoon },
-    { name: "Exercise", link: "/ejercicio", icon: AiOutlineHeart },
     { name: "Settings", link: "/configuracion", icon: RiSettings4Line },
   ];
 
