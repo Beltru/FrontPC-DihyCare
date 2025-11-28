@@ -19,13 +19,35 @@ const AreaChartComponent = ({ onDataLoad }) => {
     axios
       .get("/data/glucoseGraphic")
       .then((res) => {
-        const payload = Array.isArray(res.data) ? res.data : res.data?.data ?? [];
+        const raw = Array.isArray(res.data) ? res.data : res.data?.data ?? [];
+
+        // Normalizar fecha y evitar timezone
+        const payload = raw.map((item) => ({
+          ...item,
+          day: item.day.split("T")[0], // "2025-11-28"
+        }));
+
         console.log("📊 Datos usados en gráfico:", payload);
         setData(payload);
-        if (onDataLoad) onDataLoad(payload); // Enviar datos al padre
+
+        if (onDataLoad) onDataLoad(payload);
       })
-      .catch((err) => console.error("❌ Error cargando datos del gráfico:", err));
+      .catch((err) =>
+        console.error("❌ Error cargando datos del gráfico:", err)
+      );
   }, [onDataLoad]);
+
+  // Formatear manualmente DD/MM
+  const formatDay = (str) => {
+    const [y, m, d] = str.split("-");
+    return `${d}/${m}`;
+  };
+
+  // Formato Tooltip: día completo
+  const formatLabel = (str) => {
+    const [y, m, d] = str.split("-");
+    return `${d}/${m}/${y}`;
+  };
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -35,31 +57,23 @@ const AreaChartComponent = ({ onDataLoad }) => {
           margin={{ top: 10, right: 20, left: -10, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="5 5" strokeOpacity={0.5} />
+
           <XAxis
             dataKey="day"
-            tickFormatter={(str) =>
-              new Date(str).toLocaleDateString("es-AR", {
-                day: "2-digit",
-                month: "2-digit",
-              })
-            }
+            tickFormatter={formatDay} // SIN new Date()
             tick={{ fontSize: 11 }}
             tickMargin={5}
           />
+
           <YAxis
             tick={{ fontSize: 11 }}
             tickLine={false}
             axisLine={false}
           />
+
           <Tooltip
             formatter={(value) => `${value.toFixed(2)} mg/dl`}
-            labelFormatter={(label) =>
-              new Date(label).toLocaleDateString("es-AR", {
-                weekday: "short",
-                day: "2-digit",
-                month: "2-digit",
-              })
-            }
+            labelFormatter={formatLabel} // SIN new Date()
             contentStyle={{
               backgroundColor: "#1e293b",
               borderRadius: "8px",
@@ -67,7 +81,9 @@ const AreaChartComponent = ({ onDataLoad }) => {
               color: "white",
             }}
           />
-          <Legend wrapperStyle={{ fontSize: '12px' }} />
+
+          <Legend wrapperStyle={{ fontSize: "12px" }} />
+
           <Area
             type="monotone"
             dataKey="average"
