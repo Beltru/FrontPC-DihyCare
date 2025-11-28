@@ -1,7 +1,13 @@
 //interceptior para la llamada del backend
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import {
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+  AxiosError, 
+} from 'axios'; 
 
 export const AxiosInterceptor = (instance: AxiosInstance) => {
+
+  // Lógica del Interceptor de Solicitud (Request) - (SIN CAMBIOS)
   const updateHeader = (request: InternalAxiosRequestConfig) => {
     // localStorage solo está disponible en el cliente
     const token =
@@ -24,14 +30,56 @@ export const AxiosInterceptor = (instance: AxiosInstance) => {
     updateHeader,
     (error) => Promise.reject(error)
   );
-
   instance.interceptors.response.use(
     (response) => {
-      console.log('Respuesta interceptada', response);
+      console.log('Respuesta interceptada exitosa', response);
       return response;
     },
-    (error) => {
-      console.error('Error interceptado', error);
+    (error: AxiosError) => {
+      const Dihy_Care = '[API INTERCEPTOR]';
+
+      if (error.response) {
+        const status = error.response.status;
+        const message = error.response.data || 'Error desconocido';
+
+      
+        if (status === 401) {
+          console.error(
+            `${Dihy_Care} ERROR 401: Sesión expirada o token inválido. Mensaje:`, 
+            message
+          );
+        
+        }
+
+        else if (status === 403) {
+          console.error(
+            `${Dihy_Care} ERROR 403: Acceso denegado. Mensaje:`, 
+            message
+          );
+        }
+        
+        // manejo errores de server 500+
+      
+        else if (status >= 500) {
+          console.error(
+            `${Dihy_Care} ERROR ${status}: Error interno del servidor. Mensaje:`, 
+            message
+          );
+        }
+        
+        // no manejados 
+        else {
+            console.warn(
+                `${Dihy_Care} ERROR ${status}: Error HTTP no manejado. Mensaje:`, 
+                message
+            );
+        }
+
+      } else {
+          // 
+          console.error(`${Dihy_Care} ERROR DE RED:`, error.message);
+      }
+      
       return Promise.reject(error);
     }
   );
