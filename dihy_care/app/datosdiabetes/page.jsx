@@ -2,19 +2,29 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@nextui-org/react";
-import api from '../src/api'; 
+
+const BACKEND_URL = "https://dihycare-backend.vercel.app";
 
 const DatosDiabetes = () => {
   const router = useRouter();
 
+  // ============================================
+  // STEP 1: States for each input
+  // ============================================
   const [glucosa, setGlucosa] = useState("");
   const [carbohidratos, setCarbohidratos] = useState("");
   const [insulina, setInsulina] = useState("");
 
+  // ============================================
+  // STEP 2: States for feedback and loading
+  // ============================================
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // ============================================
+  // STEP 3: Submit handler
+  // ============================================
   const handleForm = async (event) => {
     event.preventDefault();
     setError("");
@@ -22,6 +32,7 @@ const DatosDiabetes = () => {
     setLoading(true);
   
     try {
+      // Token del usuario
       const token = localStorage.getItem("token");
       if (!token) {
         setError("Por favor, inicia sesión primero.");
@@ -38,33 +49,43 @@ const DatosDiabetes = () => {
       console.log("Enviando:", dataToSend);
   
       for (const dataItem of dataToSend) {
-        const response = await api.post('/data', dataItem);
+        const response = await fetch(`${BACKEND_URL}/data`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(dataItem),
+        });
+  
+        const responseData = await response.json();
+  
+        if (!response.ok) {
+          console.error("Error del servidor:", responseData);
+          setError(responseData.error || "Error al guardar los datos");
+          if (response.status === 401) {
+            localStorage.removeItem("token");
+            router.push("/login");
+          }
+          return; // detener si uno falla
+        }
       }
   
+      // Si todos los fetch salieron bien:
       setSuccess("¡Datos guardados exitosamente!");
       setTimeout(() => handleReset(), 2000);
-      
     } catch (err) {
-      if (err.response) {
-        const status = err.response.status;
-        const responseData = err.response.data;
-        
-        setError(responseData.error || `Error ${status} al guardar los datos`);
-
-        if (status === 401) {
-          localStorage.removeItem("token");
-          router.push("/login");
-        }
-      } else {
-        console.error("Error al guardar:", err);
-        setError("Error de conexión. Por favor intenta de nuevo.");
-      }
+      console.error("Error al guardar:", err);
+      setError("Error de conexión. Por favor intenta de nuevo.");
     } finally {
       setLoading(false);
     }
   };
   
 
+  // ============================================
+  // STEP 4: Reset form
+  // ============================================
   const handleReset = () => {
     setGlucosa("");
     setCarbohidratos("");
@@ -73,11 +94,15 @@ const DatosDiabetes = () => {
     setSuccess("");
   };
 
+  // ============================================
+  // STEP 5: Render UI
+  // ============================================
   return (
     <main className="flex gap-6 min-h-screen bg-[#AACBC4]">
       <div className="flex flex-col m-3 text-slate-900 items-center justify-center min-h-screen w-full overflow-hidden">
         <h1 className="text-2xl font-bold mb-4">Datos Diabetes</h1>
 
+        {/* Mensajes de error o éxito */}
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 max-w-md">
             {error}
@@ -94,6 +119,7 @@ const DatosDiabetes = () => {
           className="flex flex-col gap-4 max-w-md mx-auto mt-10 w-full items-center"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            {/* Glucosa */}
             <input
               id="glucosa"
               className="bg-gray-200 border-2 border-black rounded px-2 py-1"
@@ -104,6 +130,7 @@ const DatosDiabetes = () => {
               required
             />
 
+            {/* Carbohidratos */}
             <input
               id="carbohidratos"
               className="bg-gray-200 border-2 border-black rounded px-2 py-1"
@@ -113,6 +140,7 @@ const DatosDiabetes = () => {
               onChange={(e) => setCarbohidratos(e.target.value)}
             />
 
+            {/* Insulina */}
             <input
               id="insulina"
               className="bg-gray-200 border-2 border-black rounded px-2 py-1"
@@ -123,6 +151,7 @@ const DatosDiabetes = () => {
             />
           </div>
 
+          {/* Botones */}
           <div className="flex gap-4 mt-6 justify-center w-full">
             <button
               type="submit"

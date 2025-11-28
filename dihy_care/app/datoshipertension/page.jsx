@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import api from '../src/api'; 
+
+const BACKEND_URL = "https://dihycare-backend.vercel.app";
 
 const DatosHipertension = () => {
   const router = useRouter();
@@ -32,31 +33,42 @@ const DatosHipertension = () => {
         { dataType: "HEART_RATE", value: parseFloat(frecuencia) },
       ];
 
-      console.log("Datos listos para enviar al backend:", dataToSend);
+      console.log("📤 Datos listos para enviar al backend:");
+      console.table(dataToSend);
 
       for (const dataItem of dataToSend) {
-        await api.post('/data', dataItem);
+        console.log(`➡️ Enviando al backend:`, dataItem);
+
+        const response = await fetch(`${BACKEND_URL}/data`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(dataItem),
+        });
+
+        const responseData = await response.json();
+
+        console.log("⬅️ Respuesta del backend:", responseData);
+
+        if (!response.ok) {
+          console.error("❌ Error del servidor:", responseData);
+          setError(responseData.error || "Error al guardar los datos");
+          if (response.status === 401) {
+            localStorage.removeItem("token");
+            router.push("/login");
+          }
+          return;
+        }
       }
 
       setSuccess("¡Datos guardados exitosamente!");
-      console.log("Todos los datos se enviaron correctamente.");
+      console.log("✅ Todos los datos se enviaron correctamente.");
       setTimeout(() => handleReset(), 2000);
-      
     } catch (err) {
-      if (err.response) {
-        const status = err.response.status;
-        const responseData = err.response.data;
-        
-        setError(responseData.error || `Error ${status} al guardar los datos`);
-
-        if (status === 401) {
-          localStorage.removeItem("token");
-          router.push("/login");
-        }
-      } else {
-        console.error("Error al guardar:", err);
-        setError("Error de conexión. Por favor intenta de nuevo.");
-      }
+      console.error("💥 Error al guardar:", err);
+      setError("Error de conexión. Por favor intenta de nuevo.");
     } finally {
       setLoading(false);
     }
