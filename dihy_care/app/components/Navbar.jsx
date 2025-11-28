@@ -13,7 +13,7 @@ export default function Navbar() {
 
         {/* ========== LOGO ========== */}
         <Link
-          href="/landing"
+          href="/"
           className="flex flex-row items-center gap-2 font-semibold text-gray-900 text-xl"
         >
           <img src="/nav.png" width={40} height={40} alt="logo" />
@@ -33,7 +33,7 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href="/signup"
+            href="/register"
             className="px-5 py-2 rounded-lg bg-gradient-to-r from-[#07df9b] to-teal-600  text-white font-semibold shadow hover:opacity-90 transition"
           >
             Sign Up
