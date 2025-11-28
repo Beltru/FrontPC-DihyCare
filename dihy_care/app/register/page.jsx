@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import api from '../src/api';
+
+const BACKEND_URL = 'https://dihycare-backend.vercel.app';
 
 export default function Register() {
   const router = useRouter();
@@ -22,25 +23,25 @@ export default function Register() {
     setLoading(true);
 
     try {
-      const response = await api.post('/auth/register', formData);
+      const response = await fetch(`${BACKEND_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
 
-      const data = response.data; 
+      const data = await response.json();
 
-      console.log('User registered successfully!', data);
-      router.push('/login');
-      
-    } catch (err) {
-      if (err.response && err.response.data) {
-        if (err.response.data.error) {
-            setErrorMsg(err.response.data.error);
-        } else {
-             setErrorMsg(`Error ${err.response.status}: Registration failed. Please try again.`);
-        }
+      if (response.ok) {
+        console.log('User registered successfully!', data);
+        router.push('/login');
       } else {
-        console.error('Registration failed:', err);
-        setErrorMsg('Connection error. Please check your internet and try again.');
+        setErrorMsg(data.error || 'Registration failed. Please try again.');
       }
-      
+    } catch (err) {
+      console.error('Registration failed:', err);
+      setErrorMsg('Connection error. Please check your internet and try again.');
     } finally {
       setLoading(false);
     }

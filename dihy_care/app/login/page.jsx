@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import api from '../src/api';
+
+const BACKEND_URL = 'https://dihycare-backend.vercel.app';
 
 export default function Login() {
   const router = useRouter();
@@ -13,35 +14,39 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    
-    try {
-      const response = await api.post('/auth/login', {
+  e.preventDefault();
+  setError('');
+  setLoading(true);
+  
+  try {
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         email: email,
         password: password
-      });
+      })
+    });
 
-      const data = response.data;
+    const data = await response.json();
 
+    if (response.ok) {
       localStorage.setItem('token', data.token);
-      localStorage.setItem('loginEmail', email);
+      localStorage.setItem('loginEmail', email);  // ✅ Guardar el email!
       console.log('Login successful!');
       router.push('/home');
-      
-    } catch (err) {
-      if (err.response && err.response.data) {
-        setError(err.response.data.error || 'Invalid email or password');
-      } else {
-        console.error('Login error:', err);
-        setError('Connection error. Please check your internet and try again.');
-      }
-      
-    } finally {
-      setLoading(false);
+    } else {
+      setError(data.error || 'Invalid email or password');
     }
-  };
+  } catch (err) {
+    console.error('Login error:', err);
+    setError('Connection error. Please check your internet and try again.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-[#2c6d8d] to-[#1a235e] overflow-hidden font-['Raleway']">
@@ -57,6 +62,7 @@ export default function Login() {
             <h2 className="text-[2vw] mb-[0.5vw] text-black font-normal">Login</h2>
             
             <div>
+              {/* Email Input Field */}
               <div className="relative border-b-[0.1vw] border-black mb-[1.5vw]">
                 <input
                   type="email"
@@ -72,6 +78,7 @@ export default function Login() {
                 </label>
               </div>
 
+              {/* Password Input Field */}
               <div className="relative border-b-[0.1vw] border-black mb-[1.5vw]">
                 <input
                   type="password"
@@ -87,6 +94,7 @@ export default function Login() {
                 </label>
               </div>
 
+              {/* Remember me & Forgot password */}
               <div className="flex items-center justify-between my-[0.8vw] mb-[1.2vw] text-black">
                 <label htmlFor="remember" className="flex items-center cursor-pointer">
                   <input 
@@ -100,9 +108,11 @@ export default function Login() {
               </div>
             </div>
 
+            {/* Error Message */}
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
             <div className="flex justify-center items-center flex-col w-[100%]">
+              {/* Login Button */}
               <button 
                 type="submit" 
                 className="bg-white text-black font-semibold border-none py-[0.6vw] px-[1vw] cursor-pointer rounded-[0.1vw] text-[0.9vw] transition-all duration-300 w-[20vw] hover:text-black hover:bg-white/15 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -111,6 +121,7 @@ export default function Login() {
                 {loading ? 'Logging in...' : 'Next'}
               </button>
               
+              {/* Register Link */}
               <div className="text-center mt-[30px] text-black">
                 <p className="inline">Don't have an account? </p>
                 <a href="/register" className="hover:text-white transition-all duration-300 ml-1">
